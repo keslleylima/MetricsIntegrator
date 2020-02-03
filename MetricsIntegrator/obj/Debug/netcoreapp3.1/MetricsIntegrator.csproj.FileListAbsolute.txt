@@ -1,0 +1,11 @@
+D:\GitHub\MetricsIntegrator\MetricsIntegrator\bin\Debug\netcoreapp3.1\MetricsIntegrator.exe
+D:\GitHub\MetricsIntegrator\MetricsIntegrator\bin\Debug\netcoreapp3.1\MetricsIntegrator.deps.json
+D:\GitHub\MetricsIntegrator\MetricsIntegrator\bin\Debug\netcoreapp3.1\MetricsIntegrator.runtimeconfig.json
+D:\GitHub\MetricsIntegrator\MetricsIntegrator\bin\Debug\netcoreapp3.1\MetricsIntegrator.runtimeconfig.dev.json
+D:\GitHub\MetricsIntegrator\MetricsIntegrator\bin\Debug\netcoreapp3.1\MetricsIntegrator.dll
+D:\GitHub\MetricsIntegrator\MetricsIntegrator\bin\Debug\netcoreapp3.1\MetricsIntegrator.pdb
+D:\GitHub\MetricsIntegrator\MetricsIntegrator\obj\Debug\netcoreapp3.1\MetricsIntegrator.csprojAssemblyReference.cache
+D:\GitHub\MetricsIntegrator\MetricsIntegrator\obj\Debug\netcoreapp3.1\MetricsIntegrator.AssemblyInfoInputs.cache
+D:\GitHub\MetricsIntegrator\MetricsIntegrator\obj\Debug\netcoreapp3.1\MetricsIntegrator.AssemblyInfo.cs
+D:\GitHub\MetricsIntegrator\MetricsIntegrator\obj\Debug\netcoreapp3.1\MetricsIntegrator.dll
+D:\GitHub\MetricsIntegrator\MetricsIntegrator\obj\Debug\netcoreapp3.1\MetricsIntegrator.pdb
