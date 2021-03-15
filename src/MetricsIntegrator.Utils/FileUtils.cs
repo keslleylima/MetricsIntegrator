@@ -5,18 +5,19 @@ using System.Text;
 
 namespace MetricsIntegrator.Utils
 {
-    class FileUtils
+    public class FileUtils
     {
-        public static string[] ReadAllLines(string path)
-        {
-            if (path.Length == 0)
-                return new string[0];
-
-            return File.ReadAllLines(path);
-        }
-
         public static string[] GetAllFilesFromDirectoryEndingWith(string directoryPath, string extensionName)
         {
+            if (directoryPath == null)
+                throw new ArgumentException("Directory path cannot be null");
+
+            if (!Directory.Exists(directoryPath))
+                throw new ArgumentException("Directory path does not exist or it is a file path");
+
+            if ((extensionName == null) || (extensionName.Length == 0))
+                throw new ArgumentException("Extension name cannot be empty");
+
             return Directory.GetFiles(
                 directoryPath,
                 $"*.{extensionName}",

@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\william\\Documents\\workspace\\vsstudio\\MetricsIntegrator\\src\\src\\MetricsIntegrator.csproj": {}
+    "C:\\Users\\william\\Documents\\workspace\\vsstudio\\MetricsIntegrator\\src\\MetricsIntegrator.csproj": {}
   },
   "projects": {
-    "C:\\Users\\william\\Documents\\workspace\\vsstudio\\MetricsIntegrator\\src\\src\\MetricsIntegrator.csproj": {
+    "C:\\Users\\william\\Documents\\workspace\\vsstudio\\MetricsIntegrator\\src\\MetricsIntegrator.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\william\\Documents\\workspace\\vsstudio\\MetricsIntegrator\\src\\src\\MetricsIntegrator.csproj",
+        "projectUniqueName": "C:\\Users\\william\\Documents\\workspace\\vsstudio\\MetricsIntegrator\\src\\MetricsIntegrator.csproj",
         "projectName": "MetricsIntegrator",
-        "projectPath": "C:\\Users\\william\\Documents\\workspace\\vsstudio\\MetricsIntegrator\\src\\src\\MetricsIntegrator.csproj",
+        "projectPath": "C:\\Users\\william\\Documents\\workspace\\vsstudio\\MetricsIntegrator\\src\\MetricsIntegrator.csproj",
         "packagesPath": "C:\\Users\\william\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\william\\Documents\\workspace\\vsstudio\\MetricsIntegrator\\src\\src\\obj\\",
+        "outputPath": "C:\\Users\\william\\Documents\\workspace\\vsstudio\\MetricsIntegrator\\src\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\william\\AppData\\Roaming\\NuGet\\NuGet.Config",

@@ -35,7 +35,7 @@ namespace MetricsIntegrator
             }
 
             Dictionary<string, string[]> mapping = new Dictionary<string, string[]>();
-            string[] metricsMappingFile = FileUtils.ReadAllLines(mapPath);
+            string[] metricsMappingFile = File.ReadAllLines(mapPath);
 
             foreach (string line in metricsMappingFile)
             {
@@ -45,7 +45,7 @@ namespace MetricsIntegrator
             }
 
             List<TestPathMetrics> listTestPath = new List<TestPathMetrics>();
-            string[] testPathMetricsFile = FileUtils.ReadAllLines(testPathsPath);
+            string[] testPathMetricsFile = File.ReadAllLines(testPathsPath);
             foreach (string line in testPathMetricsFile.Skip(1).ToArray())
             {
                 TestPathMetrics testPath = new TestPathMetrics();
@@ -55,7 +55,7 @@ namespace MetricsIntegrator
             }
 
             List<TestCaseMetrics> listTestCase = new List<TestCaseMetrics>();
-            string[] testCaseMetricsFile = FileUtils.ReadAllLines(testCasePath);
+            string[] testCaseMetricsFile = File.ReadAllLines(testCasePath);
             foreach (string line in testCaseMetricsFile.Skip(1).ToArray())
             {
                 TestCaseMetrics testCase = new TestCaseMetrics();
@@ -66,7 +66,7 @@ namespace MetricsIntegrator
 
             Dictionary<string, SourceCodeMetrics> dictSourceCode = new Dictionary<string, SourceCodeMetrics>();
             Dictionary<string, SourceTestMetrics> dictSourceTest = new Dictionary<string, SourceTestMetrics>();
-            string[] sourceMetricsFile = FileUtils.ReadAllLines(smPath);
+            string[] sourceMetricsFile = File.ReadAllLines(smPath);
 
             foreach (string line in sourceMetricsFile.Skip(1).ToArray())
             {
