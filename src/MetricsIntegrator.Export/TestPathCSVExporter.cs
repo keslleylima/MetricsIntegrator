@@ -7,12 +7,19 @@ namespace MetricsIntegrator.Export
 {
     class TestPathCSVExporter
     {
+        //---------------------------------------------------------------------
+        //		Attributes
+        //---------------------------------------------------------------------
         private string outputPath;
         private Dictionary<string, string[]> mapping;
         private Dictionary<string, SourceCodeMetrics> dictSourceCode;
         private Dictionary<string, SourceTestMetrics> dictSourceTest;
         private List<TestPathMetrics> listTestPath;
 
+
+        //---------------------------------------------------------------------
+        //		Constructor
+        //----------------------------------------------------------------------
         public TestPathCSVExporter(string outputPath,
                                     Dictionary<string, string[]> mapping,
                                     Dictionary<string, SourceCodeMetrics> dictSourceCode,
@@ -26,6 +33,10 @@ namespace MetricsIntegrator.Export
             this.listTestPath = listTestPath;
         }
 
+
+        //---------------------------------------------------------------------
+        //		Methods
+        //---------------------------------------------------------------------
         public void Export()
         {
 
@@ -46,23 +57,23 @@ namespace MetricsIntegrator.Export
                     "countReqEcCovered;EdgeCoverage;countnewReqPpcCovered;countReqPcCovered;primePathCoverage" + "\n");
             foreach (KeyValuePair<string, string[]> kvp in mapping)
             {
-                string KeyCode = kvp.Key;
-                string[] keysTest = kvp.Value;
+                string testedMethod = kvp.Key;
+                string[] testMethods = kvp.Value;
 
-                dictSourceCode.TryGetValue(KeyCode, out SourceCodeMetrics metricsSourceCode);
+                dictSourceCode.TryGetValue(testedMethod, out SourceCodeMetrics metricsSourceCode);
 
-                foreach (string keyTest in keysTest)
+                foreach (string testMethod in testMethods)
                 {
 
-                    dictSourceTest.TryGetValue(keyTest, out SourceTestMetrics metricsSourceTest);
+                    dictSourceTest.TryGetValue(testMethod, out SourceTestMetrics metricsSourceTest);
 
                     foreach (TestPathMetrics tpMetrics in listTestPath)
                     {
-                        if (tpMetrics.id == keyTest)
+                        if (tpMetrics.id == testMethod)
                         {
 
 
-                            sb.Append(KeyCode + delimiter + metricsSourceCode.countInput + delimiter + metricsSourceCode.countLineCode
+                            sb.Append(testedMethod + delimiter + metricsSourceCode.countInput + delimiter + metricsSourceCode.countLineCode
                             + delimiter + metricsSourceCode.countLineCodeDecl + delimiter + metricsSourceCode.countLineCodeExe
                             + delimiter + metricsSourceCode.countOutput + delimiter + metricsSourceCode.countPath
                             + delimiter + metricsSourceCode.countPathLog + delimiter + metricsSourceCode.countStmt + delimiter + metricsSourceCode.countStmtDecl
@@ -72,7 +83,7 @@ namespace MetricsIntegrator.Export
                             + delimiter + metricsSourceCode.maxEssentialKnots + delimiter + metricsSourceCode.maxNesting
                             + delimiter + metricsSourceCode.minEssentialKnots + delimiter);
 
-                            sb.Append(keyTest + delimiter + metricsSourceTest.countInput + delimiter + metricsSourceTest.countLineCode
+                            sb.Append(testMethod + delimiter + metricsSourceTest.countInput + delimiter + metricsSourceTest.countLineCode
                             + delimiter + metricsSourceTest.countLineCodeDecl + delimiter + metricsSourceTest.countLineCodeExe
                             + delimiter + metricsSourceTest.countOutput + delimiter + metricsSourceTest.countPath
                             + delimiter + metricsSourceTest.countPathLog + delimiter + metricsSourceTest.countStmt + delimiter + metricsSourceTest.countStmtDecl

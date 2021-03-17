@@ -8,16 +8,31 @@ namespace MetricsIntegrator.Parser
 {
     class SourceCodeMetricsParser
     {
+        //---------------------------------------------------------------------
+        //		Attributes
+        //---------------------------------------------------------------------
         private readonly string filepath;
-        
+
+
+        //---------------------------------------------------------------------
+        //		Constructor
+        //---------------------------------------------------------------------
         public SourceCodeMetricsParser(string filepath)
         {
             this.filepath = filepath;
         }
 
+
+        //---------------------------------------------------------------------
+        //		Properties
+        //---------------------------------------------------------------------
         public Dictionary<string, SourceCodeMetrics> DictSourceCode { get; private set; }
         public Dictionary<string, SourceTestMetrics> DictSourceTest { get; private set; }
 
+
+        //---------------------------------------------------------------------
+        //		Methods
+        //---------------------------------------------------------------------
         public void Parse()
         {
             DictSourceCode = new Dictionary<string, SourceCodeMetrics>();
@@ -27,13 +42,13 @@ namespace MetricsIntegrator.Parser
             {
                 string[] column;
                 column = line.Split(";");
-                if (mapping.ContainsKey(column[1]))
+                if (mapping.ContainsKey(column[1])) // column[1]: Name  }-> if (current method is a tested method)
                 {
                     SourceCodeMetrics metricsSourceCode = new SourceCodeMetrics();
                     SetSourceCodeMetrics(metricsSourceCode, column);
                     DictSourceCode.Add(column[1], metricsSourceCode);
                 }
-                else
+                else // else current method is a test method
                 {
                     foreach (KeyValuePair<string, string[]> kvp in mapping)
                     {

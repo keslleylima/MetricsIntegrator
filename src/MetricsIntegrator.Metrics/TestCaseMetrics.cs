@@ -6,6 +6,9 @@ namespace MetricsIntegrator
 {
     public class TestCaseMetrics
     {
+        //---------------------------------------------------------------------
+        //		Attributes
+        //---------------------------------------------------------------------
         public string id;
         public double avgPathLength;
         public int hasLoop;

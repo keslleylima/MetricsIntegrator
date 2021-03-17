@@ -6,6 +6,9 @@ namespace MetricsIntegrator
 {
     public class TestPathMetrics
     {
+        //---------------------------------------------------------------------
+        //		Attributes
+        //---------------------------------------------------------------------
         public string id;
         public string testPath;
         public int pathLength;

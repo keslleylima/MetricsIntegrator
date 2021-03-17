@@ -6,6 +6,9 @@ namespace MetricsIntegrator
 {
     public class SourceCodeMetrics
     {
+        //---------------------------------------------------------------------
+        //		Attributes
+        //---------------------------------------------------------------------
         public int countInput;
         public int countLineCode;
         public int countLineCodeDecl;

@@ -8,13 +8,24 @@ namespace MetricsIntegrator.Parser
 {
     class TestPathMetricsParser
     {
+        //---------------------------------------------------------------------
+        //		Attributes
+        //---------------------------------------------------------------------
         private string filepath;
 
+
+        //---------------------------------------------------------------------
+        //		Constructor
+        //---------------------------------------------------------------------
         public TestPathMetricsParser(string filepath)
         {
             this.filepath = filepath;
         }
 
+
+        //---------------------------------------------------------------------
+        //		Methods
+        //---------------------------------------------------------------------
         public List<TestPathMetrics> Parse()
         {
             List<TestPathMetrics> metrics = new List<TestPathMetrics>();

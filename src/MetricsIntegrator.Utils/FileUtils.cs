@@ -7,6 +7,9 @@ namespace MetricsIntegrator.Utils
 {
     public class FileUtils
     {
+        //---------------------------------------------------------------------
+        //		Methods
+        //---------------------------------------------------------------------
         public static string[] GetAllFilesFromDirectoryEndingWith(string directoryPath, string extensionName)
         {
             if (directoryPath == null)

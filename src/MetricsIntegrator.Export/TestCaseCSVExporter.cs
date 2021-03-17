@@ -7,6 +7,9 @@ namespace MetricsIntegrator.Export
 {
     class TestCaseCSVExporter
     {
+        //---------------------------------------------------------------------
+        //		Attributes
+        //---------------------------------------------------------------------
         private string outputPath;
         private Dictionary<string, string[]> mapping;
         private Dictionary<string, SourceCodeMetrics> dictSourceCode;
@@ -26,6 +29,10 @@ namespace MetricsIntegrator.Export
             this.listTestCase = listTestCase;
         }
 
+
+        //---------------------------------------------------------------------
+        //		Methods
+        //---------------------------------------------------------------------
         public void Export()
         {
             if (File.Exists(outputPath))
@@ -41,20 +48,22 @@ namespace MetricsIntegrator.Export
                     "maxEssentialKnots;maxNesting;minEssentialKnots;ID;countInput;countLineCode;countLineCodeDecl;" +
                     "countLineCodeExe;countOutput;countPath;countPathLog;countStmt;countStmtDec;" +
                     "countStmtExe;cyclomatic;cyclomaticModified;cyclomaticStrict;essential;knots;maxEssentialKnots;" +
-                    "maxNesting;minEssentialKnots;Id;AvgPathLength;HasLoop;AvgCountLoop;CountReqEcCovered;EdgeCoverage;CountReqPcCovered;PrimePathCoverage\n");
+                    "maxNesting;minEssentialKnots;Id;AvgPathLength;HasLoop;AvgCountLoop;CountReqEcCovered;EdgeCoverage;" +
+                    "CountReqPcCovered;PrimePathCoverage\n");
 
             foreach (KeyValuePair<string, string[]> kvp in mapping)
             {
-                string KeyCode = kvp.Key;
-                string[] keysTest = kvp.Value;
+                string testedMethod = kvp.Key;
+                string[] testMethods = kvp.Value;
 
-                dictSourceCode.TryGetValue(KeyCode, out SourceCodeMetrics metricsSourceCode);
+                dictSourceCode.TryGetValue(testedMethod, out SourceCodeMetrics metricsSourceCode);
 
-                foreach (string keyTest in keysTest)
+                foreach (string testMethod in testMethods)
                 {
 
-                    dictSourceTest.TryGetValue(keyTest, out SourceTestMetrics metricsSourceTest);
+                    dictSourceTest.TryGetValue(testMethod, out SourceTestMetrics metricsSourceTest);
 
+                    // ???
                     //if (metricsSourceTest == null)
                     //{
                     //    Console.WriteLine("Warning: metrics source test is null");
@@ -63,11 +72,9 @@ namespace MetricsIntegrator.Export
 
                     foreach (TestCaseMetrics tcMetrics in listTestCase)
                     {
-                        if (tcMetrics.id == keyTest)
+                        if (tcMetrics.id == testMethod)
                         {
-
-
-                            sb.Append(KeyCode + delimiter + metricsSourceCode.countInput + delimiter + metricsSourceCode.countLineCode
+                            sb.Append(testedMethod + delimiter + metricsSourceCode.countInput + delimiter + metricsSourceCode.countLineCode
                             + delimiter + metricsSourceCode.countLineCodeDecl + delimiter + metricsSourceCode.countLineCodeExe
                             + delimiter + metricsSourceCode.countOutput + delimiter + metricsSourceCode.countPath
                             + delimiter + metricsSourceCode.countPathLog + delimiter + metricsSourceCode.countStmt + delimiter + metricsSourceCode.countStmtDecl
@@ -77,7 +84,7 @@ namespace MetricsIntegrator.Export
                             + delimiter + metricsSourceCode.maxEssentialKnots + delimiter + metricsSourceCode.maxNesting
                             + delimiter + metricsSourceCode.minEssentialKnots + delimiter);
 
-                            sb.Append(keyTest + delimiter + metricsSourceTest.countInput + delimiter + metricsSourceTest.countLineCode
+                            sb.Append(testMethod + delimiter + metricsSourceTest.countInput + delimiter + metricsSourceTest.countLineCode
                             + delimiter + metricsSourceTest.countLineCodeDecl + delimiter + metricsSourceTest.countLineCodeExe
                             + delimiter + metricsSourceTest.countOutput + delimiter + metricsSourceTest.countPath
                             + delimiter + metricsSourceTest.countPathLog + delimiter + metricsSourceTest.countStmt + delimiter + metricsSourceTest.countStmtDecl
