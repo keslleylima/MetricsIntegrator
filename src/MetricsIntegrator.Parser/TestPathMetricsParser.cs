@@ -1,8 +1,7 @@
-﻿using System;
+﻿using MetricsIntegrator.Metric;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
 
 namespace MetricsIntegrator.Parser
 {
@@ -11,49 +10,48 @@ namespace MetricsIntegrator.Parser
         //---------------------------------------------------------------------
         //		Attributes
         //---------------------------------------------------------------------
-        private string filepath;
+        private readonly string filepath;
+        private readonly string delimiter;
 
 
         //---------------------------------------------------------------------
         //		Constructor
         //---------------------------------------------------------------------
-        public TestPathMetricsParser(string filepath)
+        public TestPathMetricsParser(string filepath, string delimiter)
         {
             this.filepath = filepath;
+            this.delimiter = delimiter;
         }
 
 
         //---------------------------------------------------------------------
         //		Methods
         //---------------------------------------------------------------------
-        public List<TestPathMetrics> Parse()
+        public List<MetricsContainer> Parse()
         {
-            List<TestPathMetrics> metrics = new List<TestPathMetrics>();
+            List<MetricsContainer> metrics = new List<MetricsContainer>();
+
             string[] testPathMetricsFile = File.ReadAllLines(filepath);
+            string[] fields = testPathMetricsFile[0].Split(delimiter);
+
             foreach (string line in testPathMetricsFile.Skip(1).ToArray())
             {
-                TestPathMetrics testPath = new TestPathMetrics();
-                metrics.Add(SetTestPathMetrics(testPath, line.Split(";")));
+                metrics.Add(CreateTestPathMetrics(line.Split(delimiter), fields));
             }
 
             return metrics;
         }
 
-        private TestPathMetrics SetTestPathMetrics(TestPathMetrics tpm, string[] row)
+        private MetricsContainer CreateTestPathMetrics(string[] row, string[] fields)
         {
-            tpm.id = row[0];
-            tpm.testPath = row[1];
-            tpm.pathLength = Int32.Parse(row[2]);
-            tpm.hasLoop = Int32.Parse(row[3]);
-            tpm.countLoop = Int32.Parse(row[4]);
-            tpm.countnewReqNcCovered = Int32.Parse(row[5]);
-            tpm.countReqNcCovered = Int32.Parse(row[6]);
-            tpm.nodeCoverage = Double.Parse(row[7]);
-            tpm.countnewReqPpcCovered = Int32.Parse(row[8]);
-            tpm.countReqPcCovered = Int32.Parse(row[9]);
-            tpm.primePathCoverage = Double.Parse(row[10]);
+            MetricsContainer testPath = new MetricsContainer();
 
-            return tpm;
+            for (int i = 0; i < fields.Length; i++)
+            {
+                testPath.AddMetric(fields[i], row[i]);
+            }
+
+            return testPath;
         }
     }
 }

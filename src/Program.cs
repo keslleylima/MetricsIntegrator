@@ -1,4 +1,5 @@
 ﻿using MetricsIntegrator.Export;
+using MetricsIntegrator.Metric;
 using MetricsIntegrator.Parser;
 using MetricsIntegrator.Utils;
 using System.Collections.Generic;
@@ -37,23 +38,13 @@ namespace MetricsIntegrator
             MappingMetricsParser mapParser = new MappingMetricsParser(mapPath);
             Dictionary<string, string[]> mapping = mapParser.Parse();
 
-            TestPathMetricsParser tpParser = new TestPathMetricsParser(testPathsPath);
-            List<TestPathMetrics> listTestPath = tpParser.Parse();
+            string tpDelimiter = ";";
+            TestPathMetricsParser tpParser = new TestPathMetricsParser(testPathsPath, tpDelimiter);
+            List<MetricsContainer> listTestPath = tpParser.Parse();
 
-            string[] tcFields = new string[]
-            {
-                "ID",
-                "avgPathLength",
-                "hasLoop",
-                "avgCountLoop",
-                "countReqEcCovered",
-                "edgeCoverage",
-                "countReqPcCovered",
-                "primePathCoverage"
-            };
             string tcDelimiter = ";";
-            TestCaseMetricsParser tcParser = new TestCaseMetricsParser(testCasePath, tcDelimiter, tcFields);
-            List<TestCaseMetrics> listTestCase = tcParser.Parse();
+            TestCaseMetricsParser tcParser = new TestCaseMetricsParser(testCasePath, tcDelimiter);
+            List<MetricsContainer> listTestCase = tcParser.Parse();
 
             SourceCodeMetricsParser scmParser = new SourceCodeMetricsParser(smPath);
             scmParser.Parse();
@@ -64,7 +55,8 @@ namespace MetricsIntegrator
             tpCSVExporter.Export();
 
             string TestCaseFilePath = basePath + @"\TC_dataset_resulting_" + projectPath.Substring(projectPath.LastIndexOf(@"\") + 1) + ".csv";
-            TestCaseCSVExporter tcCSVExporter = new TestCaseCSVExporter(TestCaseFilePath, mapping, scmParser.DictSourceCode, scmParser.DictSourceTest, listTestCase);
+            string delimiter = ";";
+            TestCaseCSVExporter tcCSVExporter = new TestCaseCSVExporter(TestCaseFilePath, mapping, scmParser.DictSourceCode, scmParser.DictSourceTest, listTestCase, delimiter);
             tcCSVExporter.Export();
         }
     }

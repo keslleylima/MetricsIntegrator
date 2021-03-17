@@ -13,10 +13,11 @@ namespace MetricsIntegrator.Export
         //---------------------------------------------------------------------
         private string outputPath;
         private Dictionary<string, string[]> mapping;
-        private Dictionary<string, SourceCodeMetrics> dictSourceCode;
-        private Dictionary<string, Metrics> dictSourceTest;
-        private List<TestCaseMetrics> listTestCase;
+        private Dictionary<string, MetricsContainer> dictSourceCode;
+        private Dictionary<string, MetricsContainer> dictSourceTest;
+        private List<MetricsContainer> listTestCase;
         private string delimiter;
+        private StringBuilder lines;
 
 
         //---------------------------------------------------------------------
@@ -24,9 +25,9 @@ namespace MetricsIntegrator.Export
         //---------------------------------------------------------------------
         public TestCaseCSVExporter(string outputPath,
                                     Dictionary<string, string[]> mapping,
-                                    Dictionary<string, SourceCodeMetrics> dictSourceCode,
-                                    Dictionary<string, Metrics> dictSourceTest,
-                                    List<TestCaseMetrics> listTestCase,
+                                    Dictionary<string, MetricsContainer> dictSourceCode,
+                                    Dictionary<string, MetricsContainer> dictSourceTest,
+                                    List<MetricsContainer> listTestCase,
                                     string delimiter)
         {
             this.outputPath = outputPath;
@@ -35,6 +36,8 @@ namespace MetricsIntegrator.Export
             this.dictSourceTest = dictSourceTest;
             this.listTestCase = listTestCase;
             this.delimiter = delimiter;
+            
+            lines = new StringBuilder();
         }
 
 
@@ -43,60 +46,51 @@ namespace MetricsIntegrator.Export
         //---------------------------------------------------------------------
         public void Export()
         {
-            if (File.Exists(outputPath))
-                File.Delete(outputPath);
+            WriteHeader();
+            WriteBody();
+            SaveFile();
+        }
 
-            string delimiter = ";";
-            StringBuilder sb = new StringBuilder();
-
-            if (!File.Exists(outputPath))
-                WriteHeader(sb);
-
+        private void WriteBody()
+        {
             foreach (KeyValuePair<string, string[]> kvp in mapping)
             {
                 string testedMethod = kvp.Key;
                 string[] testMethods = kvp.Value;
 
-                dictSourceCode.TryGetValue(testedMethod, out SourceCodeMetrics metricsSourceCode);
+                dictSourceCode.TryGetValue(testedMethod, out MetricsContainer metricsSourceCode);
 
                 foreach (string testMethod in testMethods)
                 {
-                    dictSourceTest.TryGetValue(testMethod, out Metrics metricsSourceTest);
+                    dictSourceTest.TryGetValue(testMethod, out MetricsContainer metricsSourceTest);
 
-                    // ???
-                    //if (metricsSourceTest == null)
-                    //{
-                    //    Console.WriteLine("Warning: metrics source test is null");
-                    //    metricsSourceTest = new SourceTestMetrics();
-                    //}
-
-                    foreach (TestCaseMetrics tcMetrics in listTestCase)
+                    foreach (MetricsContainer tcMetrics in listTestCase)
                     {
-                        if (tcMetrics.id == testMethod)
-                        {
-                            WriteMetricsOfTestedMethod(sb, testedMethod, metricsSourceCode);
-                            WriteMetricsOfTestMethod(sb, testMethod, metricsSourceTest);
-                            WriteMetricsOfTestCase(sb, tcMetrics);
-                        }
+                        if (!tcMetrics.GetID().Equals(testMethod))
+                            continue;
+
+                        WriteMetricsOfTestedMethod(metricsSourceCode);
+                        WriteMetricsOfTestMethod(metricsSourceTest);
+                        WriteMetricsOfTestCase(tcMetrics);
+                        WriteBreakLine();
                     }
                 }
             }
-            File.WriteAllText(outputPath, sb.ToString());
         }
 
-        private void WriteHeader(StringBuilder sb)
+        private void WriteHeader()
         {
-            WriteTestedMethodMetrics(sb);
-            WriteTestMethodMetrics(sb);
-            WriteTestCaseMetrics(sb);
+            WriteTestedMethodMetrics();
+            WriteTestMethodMetrics();
+            WriteTestCaseMetrics();
         }
 
-        private void WriteTestedMethodMetrics(StringBuilder sb)
+        private void WriteTestedMethodMetrics()
         {
             foreach (string metric in GetTestedMethodMetrics())
             {
-                sb.Append(metric);
-                sb.Append(delimiter);
+                lines.Append(metric);
+                lines.Append(delimiter);
             }
         }
 
@@ -105,7 +99,7 @@ namespace MetricsIntegrator.Export
             return GetFirstMetricFrom(dictSourceTest).GetMetrics();
         }
 
-        private Metrics GetFirstMetricFrom(Dictionary<string, Metrics> dictionary)
+        private MetricsContainer GetFirstMetricFrom(Dictionary<string, MetricsContainer> dictionary)
         {
             var dictEnum = dictionary.GetEnumerator();
             dictEnum.MoveNext();
@@ -113,12 +107,12 @@ namespace MetricsIntegrator.Export
             return dictEnum.Current.Value;
         }
 
-        private void WriteTestMethodMetrics(StringBuilder sb)
+        private void WriteTestMethodMetrics()
         {
             foreach (string metric in GetTestMethodMetrics())
             {
-                sb.Append(metric);
-                sb.Append(delimiter);
+                lines.Append(metric);
+                lines.Append(delimiter);
             }
         }
 
@@ -127,12 +121,12 @@ namespace MetricsIntegrator.Export
             return GetFirstMetricFrom(dictSourceTest).GetMetrics();
         }
 
-        private void WriteTestCaseMetrics(StringBuilder sb)
+        private void WriteTestCaseMetrics()
         {
             foreach (string metric in GetTestCaseMetrics())
             {
-                sb.Append(metric);
-                sb.Append(delimiter);
+                lines.Append(metric);
+                lines.Append(delimiter);
             }
         }
 
@@ -141,34 +135,44 @@ namespace MetricsIntegrator.Export
             return listTestCase[0].GetMetrics();
         }
 
-        private void WriteMetricsOfTestedMethod(StringBuilder sb, string testedMethod, SourceCodeMetrics metricsSourceCode)
+        private void WriteMetricsOfTestedMethod(MetricsContainer metricsSourceCode)
         {
-            sb.Append(testedMethod + delimiter + metricsSourceCode.countInput + delimiter + metricsSourceCode.countLineCode
-            + delimiter + metricsSourceCode.countLineCodeDecl + delimiter + metricsSourceCode.countLineCodeExe
-            + delimiter + metricsSourceCode.countOutput + delimiter + metricsSourceCode.countPath
-            + delimiter + metricsSourceCode.countPathLog + delimiter + metricsSourceCode.countStmt + delimiter + metricsSourceCode.countStmtDecl
-            + delimiter + metricsSourceCode.countStmtExe + delimiter + metricsSourceCode.cyclomatic
-            + delimiter + metricsSourceCode.cyclomaticModified + delimiter + metricsSourceCode.cyclomaticStrict
-            + delimiter + metricsSourceCode.essential + delimiter + metricsSourceCode.knots
-            + delimiter + metricsSourceCode.maxEssentialKnots + delimiter + metricsSourceCode.maxNesting
-            + delimiter + metricsSourceCode.minEssentialKnots + delimiter);
-        }
-
-        private void WriteMetricsOfTestMethod(StringBuilder sb, string testMethod, Metrics metricsSourceTest)
-        {
-            foreach (string metricValue in metricsSourceTest.GetAllMetricValues())
+            foreach (string metricValue in metricsSourceCode.GetAllMetricValues())
             {
-                sb.Append(metricValue);
-                sb.Append(delimiter);
+                lines.Append(metricValue);
+                lines.Append(delimiter);
             }
         }
 
-        private void WriteMetricsOfTestCase(StringBuilder sb, TestCaseMetrics tcMetrics)
+        private void WriteMetricsOfTestMethod(MetricsContainer metricsSourceTest)
         {
-            sb.Append(tcMetrics.id + delimiter + tcMetrics.avgPathLength + delimiter
-                        + tcMetrics.hasLoop + delimiter + tcMetrics.avgCountLoop + delimiter
-                        + tcMetrics.countReqEcCovered + delimiter + tcMetrics.edgeCoverage + delimiter
-                        + tcMetrics.countReqPcCovered + delimiter + tcMetrics.primePathCoverage + delimiter + "\n");
+            foreach (string metricValue in metricsSourceTest.GetAllMetricValues())
+            {
+                lines.Append(metricValue);
+                lines.Append(delimiter);
+            }
+        }
+
+        private void WriteMetricsOfTestCase(MetricsContainer tcMetrics)
+        {
+            foreach (string metricValue in tcMetrics.GetAllMetricValues())
+            {
+                lines.Append(metricValue);
+                lines.Append(delimiter);
+            }
+        }
+
+        private void WriteBreakLine()
+        {
+            lines.Append("\n");
+        }
+
+        private void SaveFile()
+        {
+            if (File.Exists(outputPath))
+                File.Delete(outputPath);
+
+            File.WriteAllText(outputPath, lines.ToString());
         }
     }
 }

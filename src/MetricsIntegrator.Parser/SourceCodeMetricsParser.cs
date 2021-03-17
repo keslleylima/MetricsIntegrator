@@ -28,8 +28,8 @@ namespace MetricsIntegrator.Parser
         //---------------------------------------------------------------------
         //		Properties
         //---------------------------------------------------------------------
-        public Dictionary<string, SourceCodeMetrics> DictSourceCode { get; private set; }
-        public Dictionary<string, Metrics> DictSourceTest { get; private set; }
+        public Dictionary<string, MetricsContainer> DictSourceCode { get; private set; }
+        public Dictionary<string, MetricsContainer> DictSourceTest { get; private set; }
 
 
         //---------------------------------------------------------------------
@@ -37,8 +37,8 @@ namespace MetricsIntegrator.Parser
         //---------------------------------------------------------------------
         public void Parse()
         {
-            DictSourceCode = new Dictionary<string, SourceCodeMetrics>();
-            DictSourceTest = new Dictionary<string, Metrics>();
+            DictSourceCode = new Dictionary<string, MetricsContainer>();
+            DictSourceTest = new Dictionary<string, MetricsContainer>();
             string[] sourceMetricsFile = File.ReadAllLines(filepath);
             string[] fields = sourceMetricsFile[0].Split(";");
 
@@ -48,9 +48,7 @@ namespace MetricsIntegrator.Parser
                 column = line.Split(";");
                 if (mapping.ContainsKey(column[0])) // column[1]: Name  }-> if (current method is a tested method)
                 {
-                    SourceCodeMetrics metricsSourceCode = new SourceCodeMetrics();
-                    SetSourceCodeMetrics(metricsSourceCode, column);
-                    DictSourceCode.Add(column[0], metricsSourceCode);
+                    DictSourceCode.Add(column[0], CreateMetricsContainer(column, fields));
                 }
                 else // else current method is a test method
                 {
@@ -61,7 +59,7 @@ namespace MetricsIntegrator.Parser
                         {
                             if (key == column[0])
                             {
-                                DictSourceTest.Add(column[0], SetSourceTestMetrics(column, fields));
+                                DictSourceTest.Add(column[0], CreateMetricsContainer(column, fields));
                             }
                         }
 
@@ -71,30 +69,9 @@ namespace MetricsIntegrator.Parser
             }
         }
 
-        private void SetSourceCodeMetrics(SourceCodeMetrics msc, string[] row)
+        private MetricsContainer CreateMetricsContainer(string[] row, string[] fields)
         {
-            msc.countInput = Int32.Parse(row[2]);
-            msc.countLineCode = Int32.Parse(row[3]);
-            msc.countLineCodeDecl = Int32.Parse(row[4]);
-            msc.countLineCodeExe = Int32.Parse(row[5]);
-            msc.countOutput = Int32.Parse(row[6]);
-            msc.countPath = Int32.Parse(row[7]);
-            msc.countPathLog = Int32.Parse(row[8]);
-            msc.countStmt = Int32.Parse(row[9]);
-            msc.countStmtDecl = Int32.Parse(row[10]);
-            msc.countStmtExe = Int32.Parse(row[11]);
-            msc.cyclomatic = Int32.Parse(row[12]);
-            msc.cyclomaticModified = Int32.Parse(row[13]);
-            msc.cyclomaticStrict = Int32.Parse(row[14]);
-            msc.essential = Int32.Parse(row[15]);
-            msc.knots = Int32.Parse(row[16]);
-            msc.maxEssentialKnots = Int32.Parse(row[17]);
-            msc.maxNesting = Int32.Parse(row[18]);
-            msc.minEssentialKnots = Int32.Parse(row[19]);
-        }
-        private Metrics SetSourceTestMetrics(string[] row, string[] fields)
-        {
-            Metrics metricsSourceTest = new Metrics();
+            MetricsContainer metricsSourceTest = new MetricsContainer();
 
             for (int i = 0; i < fields.Length; i++)
             {

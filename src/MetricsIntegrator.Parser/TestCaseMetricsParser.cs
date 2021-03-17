@@ -1,8 +1,7 @@
-﻿using System;
+﻿using MetricsIntegrator.Metric;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
 
 namespace MetricsIntegrator.Parser
 {
@@ -11,41 +10,41 @@ namespace MetricsIntegrator.Parser
         //---------------------------------------------------------------------
         //		Attributes
         //---------------------------------------------------------------------
-        private string filepath;
-        private string delimiter;
-        private string[] fields;
+        private readonly string filepath;
+        private readonly string delimiter;
 
 
         //---------------------------------------------------------------------
         //		Constructor
         //---------------------------------------------------------------------
-        public TestCaseMetricsParser(string filepath, string delimiter, string[] fields)
+        public TestCaseMetricsParser(string filepath, string delimiter)
         {
             this.filepath = filepath;
             this.delimiter = delimiter;
-            this.fields = fields;
         }
 
 
         //---------------------------------------------------------------------
         //		Methods
         //---------------------------------------------------------------------
-        public List<TestCaseMetrics> Parse()
+        public List<MetricsContainer> Parse()
         {
-            List<TestCaseMetrics> metrics = new List<TestCaseMetrics>();
+            List<MetricsContainer> metrics = new List<MetricsContainer>();
 
             string[] testCaseMetricsFile = File.ReadAllLines(filepath);
+            string[] fields = testCaseMetricsFile[0].Split(delimiter);
+
             foreach (string line in testCaseMetricsFile.Skip(1).ToArray())
             {
-                metrics.Add(SetTestCaseMetrics(line.Split(delimiter)));
+                metrics.Add(CreateTestCaseMetrics(line.Split(delimiter), fields));
             }
 
             return metrics;
         }
 
-        private TestCaseMetrics SetTestCaseMetrics(string[] row)
+        private MetricsContainer CreateTestCaseMetrics(string[] row, string[] fields)
         {
-            TestCaseMetrics testCase = new TestCaseMetrics();
+            MetricsContainer testCase = new MetricsContainer();
 
             for (int i = 0; i < fields.Length; i++)
             {

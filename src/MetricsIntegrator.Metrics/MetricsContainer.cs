@@ -4,7 +4,7 @@ using System.Text;
 
 namespace MetricsIntegrator.Metric
 {
-    public class Metrics
+    public class MetricsContainer
     {
         //---------------------------------------------------------------------
         //		Attributes
@@ -15,7 +15,7 @@ namespace MetricsIntegrator.Metric
         //---------------------------------------------------------------------
         //		Constructor
         //---------------------------------------------------------------------
-        public Metrics()
+        public MetricsContainer()
         {
             metrics = new Dictionary<string, string>();
         }
@@ -58,6 +58,14 @@ namespace MetricsIntegrator.Metric
             metrics.Values.CopyTo(metricValues, 0);
 
             return metricValues;
+        }
+
+        public string GetID()
+        {
+            var iterator = metrics.GetEnumerator();
+            iterator.MoveNext();
+
+            return iterator.Current.Value;
         }
     }
 }
