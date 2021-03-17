@@ -47,13 +47,21 @@ namespace MetricsIntegrator.Export
             StringBuilder sb = new StringBuilder();
 
             if (!File.Exists(outputPath))
-                sb.Append("ID;countInput;countLineCode;countLineCodeDecl;countLineCodeExe;" +
+                sb.Append(
+                    // METRICAS METODO TESTADO
+                    "ID;countInput;countLineCode;countLineCodeDecl;countLineCodeExe;" +
                     "countOutput;countPath;countPathLog;countStmt;countStmtDec;" +
                     "countStmtExe;cyclomatic;cyclomaticModified;cyclomaticStrict;essential;knots;" +
-                    "maxEssentialKnots;maxNesting;minEssentialKnots;ID;countInput;countLineCode;countLineCodeDecl;" +
+                    "maxEssentialKnots;maxNesting;minEssentialKnots;" +
+
+                    // METRICAS METODO QUE O TESTA
+                    "ID;countInput;countLineCode;countLineCodeDecl;" +
                     "countLineCodeExe;countOutput;countPath;countPathLog;countStmt;countStmtDec;" +
                     "countStmtExe;cyclomatic;cyclomaticModified;cyclomaticStrict;essential;knots;maxEssentialKnots;" +
-                    "maxNesting;minEssentialKnots;id;testPath;pathLength;hasLoop;countLoop;countnewReqEcCovered;" +
+                    "maxNesting;minEssentialKnots;" +
+
+                    // METRICAS TEST CASE
+                    "id;testPath;pathLength;hasLoop;countLoop;countnewReqEcCovered;" +
                     "countReqEcCovered;EdgeCoverage;countnewReqPpcCovered;countReqPcCovered;primePathCoverage" + "\n");
             foreach (KeyValuePair<string, string[]> kvp in mapping)
             {

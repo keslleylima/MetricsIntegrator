@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MetricsIntegrator.Metric;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
@@ -13,20 +14,27 @@ namespace MetricsIntegrator.Export
         private string outputPath;
         private Dictionary<string, string[]> mapping;
         private Dictionary<string, SourceCodeMetrics> dictSourceCode;
-        private Dictionary<string, SourceTestMetrics> dictSourceTest;
+        private Dictionary<string, Metrics> dictSourceTest;
         private List<TestCaseMetrics> listTestCase;
+        private string delimiter;
 
+
+        //---------------------------------------------------------------------
+        //		Constructor
+        //---------------------------------------------------------------------
         public TestCaseCSVExporter(string outputPath,
                                     Dictionary<string, string[]> mapping,
                                     Dictionary<string, SourceCodeMetrics> dictSourceCode,
-                                    Dictionary<string, SourceTestMetrics> dictSourceTest,
-                                    List<TestCaseMetrics> listTestCase)
+                                    Dictionary<string, Metrics> dictSourceTest,
+                                    List<TestCaseMetrics> listTestCase,
+                                    string delimiter)
         {
             this.outputPath = outputPath;
             this.mapping = mapping;
             this.dictSourceCode = dictSourceCode;
             this.dictSourceTest = dictSourceTest;
             this.listTestCase = listTestCase;
+            this.delimiter = delimiter;
         }
 
 
@@ -42,14 +50,7 @@ namespace MetricsIntegrator.Export
             StringBuilder sb = new StringBuilder();
 
             if (!File.Exists(outputPath))
-                sb.Append("ID;countInput;countLineCode;countLineCodeDecl;countLineCodeExe;" +
-                    "countOutput;countPath;countPathLog;countStmt;countStmtDec;" +
-                    "countStmtExe;cyclomatic;cyclomaticModified;cyclomaticStrict;essential;knots;" +
-                    "maxEssentialKnots;maxNesting;minEssentialKnots;ID;countInput;countLineCode;countLineCodeDecl;" +
-                    "countLineCodeExe;countOutput;countPath;countPathLog;countStmt;countStmtDec;" +
-                    "countStmtExe;cyclomatic;cyclomaticModified;cyclomaticStrict;essential;knots;maxEssentialKnots;" +
-                    "maxNesting;minEssentialKnots;Id;AvgPathLength;HasLoop;AvgCountLoop;CountReqEcCovered;EdgeCoverage;" +
-                    "CountReqPcCovered;PrimePathCoverage\n");
+                WriteHeader(sb);
 
             foreach (KeyValuePair<string, string[]> kvp in mapping)
             {
@@ -60,8 +61,7 @@ namespace MetricsIntegrator.Export
 
                 foreach (string testMethod in testMethods)
                 {
-
-                    dictSourceTest.TryGetValue(testMethod, out SourceTestMetrics metricsSourceTest);
+                    dictSourceTest.TryGetValue(testMethod, out Metrics metricsSourceTest);
 
                     // ???
                     //if (metricsSourceTest == null)
@@ -74,35 +74,101 @@ namespace MetricsIntegrator.Export
                     {
                         if (tcMetrics.id == testMethod)
                         {
-                            sb.Append(testedMethod + delimiter + metricsSourceCode.countInput + delimiter + metricsSourceCode.countLineCode
-                            + delimiter + metricsSourceCode.countLineCodeDecl + delimiter + metricsSourceCode.countLineCodeExe
-                            + delimiter + metricsSourceCode.countOutput + delimiter + metricsSourceCode.countPath
-                            + delimiter + metricsSourceCode.countPathLog + delimiter + metricsSourceCode.countStmt + delimiter + metricsSourceCode.countStmtDecl
-                            + delimiter + metricsSourceCode.countStmtExe + delimiter + metricsSourceCode.cyclomatic
-                            + delimiter + metricsSourceCode.cyclomaticModified + delimiter + metricsSourceCode.cyclomaticStrict
-                            + delimiter + metricsSourceCode.essential + delimiter + metricsSourceCode.knots
-                            + delimiter + metricsSourceCode.maxEssentialKnots + delimiter + metricsSourceCode.maxNesting
-                            + delimiter + metricsSourceCode.minEssentialKnots + delimiter);
-
-                            sb.Append(testMethod + delimiter + metricsSourceTest.countInput + delimiter + metricsSourceTest.countLineCode
-                            + delimiter + metricsSourceTest.countLineCodeDecl + delimiter + metricsSourceTest.countLineCodeExe
-                            + delimiter + metricsSourceTest.countOutput + delimiter + metricsSourceTest.countPath
-                            + delimiter + metricsSourceTest.countPathLog + delimiter + metricsSourceTest.countStmt + delimiter + metricsSourceTest.countStmtDecl
-                            + delimiter + metricsSourceTest.countStmtExe + delimiter + metricsSourceTest.cyclomatic
-                            + delimiter + metricsSourceTest.cyclomaticModified + delimiter + metricsSourceTest.cyclomaticStrict
-                            + delimiter + metricsSourceTest.essential + delimiter + metricsSourceTest.knots
-                            + delimiter + metricsSourceTest.maxEssentialKnots + delimiter + metricsSourceTest.maxNesting
-                            + delimiter + metricsSourceTest.minEssentialKnots + delimiter);
-
-                            sb.Append(tcMetrics.id + delimiter + tcMetrics.avgPathLength + delimiter
-                                + tcMetrics.hasLoop + delimiter + tcMetrics.avgCountLoop + delimiter
-                                + tcMetrics.countReqEcCovered + delimiter + tcMetrics.edgeCoverage + delimiter
-                                + tcMetrics.countReqPcCovered + delimiter + tcMetrics.primePathCoverage + delimiter + "\n");
+                            WriteMetricsOfTestedMethod(sb, testedMethod, metricsSourceCode);
+                            WriteMetricsOfTestMethod(sb, testMethod, metricsSourceTest);
+                            WriteMetricsOfTestCase(sb, tcMetrics);
                         }
                     }
                 }
             }
             File.WriteAllText(outputPath, sb.ToString());
+        }
+
+        private void WriteHeader(StringBuilder sb)
+        {
+            WriteTestedMethodMetrics(sb);
+            WriteTestMethodMetrics(sb);
+            WriteTestCaseMetrics(sb);
+        }
+
+        private void WriteTestedMethodMetrics(StringBuilder sb)
+        {
+            foreach (string metric in GetTestedMethodMetrics())
+            {
+                sb.Append(metric);
+                sb.Append(delimiter);
+            }
+        }
+
+        private string[] GetTestedMethodMetrics()
+        {
+            return GetFirstMetricFrom(dictSourceTest).GetMetrics();
+        }
+
+        private Metrics GetFirstMetricFrom(Dictionary<string, Metrics> dictionary)
+        {
+            var dictEnum = dictionary.GetEnumerator();
+            dictEnum.MoveNext();
+            
+            return dictEnum.Current.Value;
+        }
+
+        private void WriteTestMethodMetrics(StringBuilder sb)
+        {
+            foreach (string metric in GetTestMethodMetrics())
+            {
+                sb.Append(metric);
+                sb.Append(delimiter);
+            }
+        }
+
+        private string[] GetTestMethodMetrics()
+        {
+            return GetFirstMetricFrom(dictSourceTest).GetMetrics();
+        }
+
+        private void WriteTestCaseMetrics(StringBuilder sb)
+        {
+            foreach (string metric in GetTestCaseMetrics())
+            {
+                sb.Append(metric);
+                sb.Append(delimiter);
+            }
+        }
+
+        private string[] GetTestCaseMetrics()
+        {
+            return listTestCase[0].GetMetrics();
+        }
+
+        private void WriteMetricsOfTestedMethod(StringBuilder sb, string testedMethod, SourceCodeMetrics metricsSourceCode)
+        {
+            sb.Append(testedMethod + delimiter + metricsSourceCode.countInput + delimiter + metricsSourceCode.countLineCode
+            + delimiter + metricsSourceCode.countLineCodeDecl + delimiter + metricsSourceCode.countLineCodeExe
+            + delimiter + metricsSourceCode.countOutput + delimiter + metricsSourceCode.countPath
+            + delimiter + metricsSourceCode.countPathLog + delimiter + metricsSourceCode.countStmt + delimiter + metricsSourceCode.countStmtDecl
+            + delimiter + metricsSourceCode.countStmtExe + delimiter + metricsSourceCode.cyclomatic
+            + delimiter + metricsSourceCode.cyclomaticModified + delimiter + metricsSourceCode.cyclomaticStrict
+            + delimiter + metricsSourceCode.essential + delimiter + metricsSourceCode.knots
+            + delimiter + metricsSourceCode.maxEssentialKnots + delimiter + metricsSourceCode.maxNesting
+            + delimiter + metricsSourceCode.minEssentialKnots + delimiter);
+        }
+
+        private void WriteMetricsOfTestMethod(StringBuilder sb, string testMethod, Metrics metricsSourceTest)
+        {
+            foreach (string metricValue in metricsSourceTest.GetAllMetricValues())
+            {
+                sb.Append(metricValue);
+                sb.Append(delimiter);
+            }
+        }
+
+        private void WriteMetricsOfTestCase(StringBuilder sb, TestCaseMetrics tcMetrics)
+        {
+            sb.Append(tcMetrics.id + delimiter + tcMetrics.avgPathLength + delimiter
+                        + tcMetrics.hasLoop + delimiter + tcMetrics.avgCountLoop + delimiter
+                        + tcMetrics.countReqEcCovered + delimiter + tcMetrics.edgeCoverage + delimiter
+                        + tcMetrics.countReqPcCovered + delimiter + tcMetrics.primePathCoverage + delimiter + "\n");
         }
     }
 }

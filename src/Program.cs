@@ -14,6 +14,8 @@ namespace MetricsIntegrator
             
             string[] csvFilesPath = FileUtils.GetAllFilesFromDirectoryEndingWith(projectPath, "csv");
             string smPath = string.Empty;
+            
+            
             string mapPath = string.Empty;
             string testPathsPath = string.Empty;
             string testCasePath = string.Empty;
@@ -38,11 +40,24 @@ namespace MetricsIntegrator
             TestPathMetricsParser tpParser = new TestPathMetricsParser(testPathsPath);
             List<TestPathMetrics> listTestPath = tpParser.Parse();
 
-            TestCaseMetricsParser tcParser = new TestCaseMetricsParser(testCasePath);
+            string[] tcFields = new string[]
+            {
+                "ID",
+                "avgPathLength",
+                "hasLoop",
+                "avgCountLoop",
+                "countReqEcCovered",
+                "edgeCoverage",
+                "countReqPcCovered",
+                "primePathCoverage"
+            };
+            string tcDelimiter = ";";
+            TestCaseMetricsParser tcParser = new TestCaseMetricsParser(testCasePath, tcDelimiter, tcFields);
             List<TestCaseMetrics> listTestCase = tcParser.Parse();
 
             SourceCodeMetricsParser scmParser = new SourceCodeMetricsParser(smPath);
             scmParser.Parse();
+
 
             string TestPathFilePath = basePath + @"\TP_dataset_resulting_" + projectPath.Substring(projectPath.LastIndexOf(@"\") + 1) + ".csv";
             TestPathCSVExporter tpCSVExporter = new TestPathCSVExporter(TestPathFilePath, mapping, scmParser.DictSourceCode, scmParser.DictSourceTest, listTestPath);

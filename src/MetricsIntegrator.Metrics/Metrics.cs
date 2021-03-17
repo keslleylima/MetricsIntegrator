@@ -2,29 +2,20 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace MetricsIntegrator
+namespace MetricsIntegrator.Metric
 {
-    public class TestCaseMetrics
+    public class Metrics
     {
         //---------------------------------------------------------------------
         //		Attributes
         //---------------------------------------------------------------------
-        Dictionary<string, string> metrics;
-        /*
-        public string id;
-        public double avgPathLength;
-        public int hasLoop;
-        public double avgCountLoop;
-        public int countReqEcCovered;
-        public double edgeCoverage;
-        public int countReqPcCovered;
-        public double primePathCoverage;
-        */
+        private Dictionary<string, string> metrics;
+
 
         //---------------------------------------------------------------------
         //		Constructor
         //---------------------------------------------------------------------
-        public TestCaseMetrics()
+        public Metrics()
         {
             metrics = new Dictionary<string, string>();
         }
@@ -42,15 +33,6 @@ namespace MetricsIntegrator
         //---------------------------------------------------------------------
         //		Getters
         //---------------------------------------------------------------------
-        public string GetValueFromMetric(string metric)
-        {
-            string value;
-            
-            metrics.TryGetValue(metric, out value);
-
-            return (value == null) ? "" : value;
-        }
-
         public string[] GetMetrics()
         {
             string[] metricKeys = new string[metrics.Count];
@@ -58,6 +40,24 @@ namespace MetricsIntegrator
             metrics.Keys.CopyTo(metricKeys, 0);
 
             return metricKeys;
+        }
+
+        public string GetValueFromMetric(string metric)
+        {
+            string value;
+
+            metrics.TryGetValue(metric, out value);
+
+            return (value == null) ? "" : value;
+        }
+
+        public string[] GetAllMetricValues()
+        {
+            string[] metricValues = new string[metrics.Count];
+
+            metrics.Values.CopyTo(metricValues, 0);
+
+            return metricValues;
         }
     }
 }
