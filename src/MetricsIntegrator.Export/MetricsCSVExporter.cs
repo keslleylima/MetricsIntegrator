@@ -5,7 +5,7 @@ using System.Text;
 
 namespace MetricsIntegrator.Export
 {
-    public abstract class MetricsCSVExporter
+    public class MetricsCSVExporter
     {
         //---------------------------------------------------------------------
         //		Attributes
@@ -16,6 +16,7 @@ namespace MetricsIntegrator.Export
         private Dictionary<string, MetricsContainer> dictSourceTest;
         private string delimiter;
         private StringBuilder lines;
+        private List<MetricsContainer> listBaseMetrics;
 
 
         //---------------------------------------------------------------------
@@ -25,6 +26,7 @@ namespace MetricsIntegrator.Export
                                     Dictionary<string, string[]> mapping,
                                     Dictionary<string, MetricsContainer> dictSourceCode,
                                     Dictionary<string, MetricsContainer> dictSourceTest,
+                                    List<MetricsContainer> baseMetrics,
                                     string delimiter)
         {
             this.outputPath = outputPath;
@@ -32,7 +34,7 @@ namespace MetricsIntegrator.Export
             this.dictSourceCode = dictSourceCode;
             this.dictSourceTest = dictSourceTest;
             this.delimiter = delimiter;
-
+            listBaseMetrics = baseMetrics;
             lines = new StringBuilder();
         }
 
@@ -60,14 +62,14 @@ namespace MetricsIntegrator.Export
                 {
                     dictSourceTest.TryGetValue(testMethod, out MetricsContainer metricsSourceTest);
 
-                    foreach (MetricsContainer tcMetrics in listTestCase)
+                    foreach (MetricsContainer baseMetrics in listBaseMetrics)
                     {
-                        if (!tcMetrics.GetID().Equals(testMethod))
+                        if (!baseMetrics.GetID().Equals(testMethod))
                             continue;
 
                         WriteMetricsOfTestedMethod(metricsSourceCode);
                         WriteMetricsOfTestMethod(metricsSourceTest);
-                        WriteMetricsOfTestCase(tcMetrics);
+                        WriteMetricsOfBaseMetrics(baseMetrics);
                         WriteBreakLine();
                     }
                 }
@@ -78,7 +80,7 @@ namespace MetricsIntegrator.Export
         {
             WriteTestedMethodMetrics();
             WriteTestMethodMetrics();
-            WriteTestCaseMetrics();
+            WriteBaseMetrics();
         }
 
         private void WriteTestedMethodMetrics()
@@ -117,6 +119,20 @@ namespace MetricsIntegrator.Export
             return GetFirstMetricFrom(dictSourceTest).GetMetrics();
         }
 
+        private void WriteBaseMetrics()
+        {
+            foreach (string metric in GetBaseMetrics())
+            {
+                lines.Append(metric);
+                lines.Append(delimiter);
+            }
+        }
+
+        private string[] GetBaseMetrics()
+        {
+            return listBaseMetrics[0].GetMetrics();
+        }
+
         private void WriteMetricsOfTestedMethod(MetricsContainer metricsSourceCode)
         {
             foreach (string metricValue in metricsSourceCode.GetAllMetricValues())
@@ -129,6 +145,15 @@ namespace MetricsIntegrator.Export
         private void WriteMetricsOfTestMethod(MetricsContainer metricsSourceTest)
         {
             foreach (string metricValue in metricsSourceTest.GetAllMetricValues())
+            {
+                lines.Append(metricValue);
+                lines.Append(delimiter);
+            }
+        }
+
+        private void WriteMetricsOfBaseMetrics(MetricsContainer baseMetrics)
+        {
+            foreach (string metricValue in baseMetrics.GetAllMetricValues())
             {
                 lines.Append(metricValue);
                 lines.Append(delimiter);

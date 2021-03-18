@@ -49,14 +49,14 @@ namespace MetricsIntegrator
             SourceCodeMetricsParser scmParser = new SourceCodeMetricsParser(smPath);
             scmParser.Parse();
 
+            string delimiter = ";";
 
             string TestPathFilePath = basePath + @"\TP_dataset_resulting_" + projectPath.Substring(projectPath.LastIndexOf(@"\") + 1) + ".csv";
-            TestPathCSVExporter tpCSVExporter = new TestPathCSVExporter(TestPathFilePath, mapping, scmParser.DictSourceCode, scmParser.DictSourceTest, listTestPath);
+            MetricsCSVExporter tpCSVExporter = new MetricsCSVExporter(TestPathFilePath, mapping, scmParser.DictSourceCode, scmParser.DictSourceTest, listTestPath, delimiter);
             tpCSVExporter.Export();
 
             string TestCaseFilePath = basePath + @"\TC_dataset_resulting_" + projectPath.Substring(projectPath.LastIndexOf(@"\") + 1) + ".csv";
-            string delimiter = ";";
-            TestCaseCSVExporter tcCSVExporter = new TestCaseCSVExporter(TestCaseFilePath, mapping, scmParser.DictSourceCode, scmParser.DictSourceTest, listTestCase, delimiter);
+            MetricsCSVExporter tcCSVExporter = new MetricsCSVExporter(TestCaseFilePath, mapping, scmParser.DictSourceCode, scmParser.DictSourceTest, listTestCase, delimiter);
             tcCSVExporter.Export();
         }
     }
