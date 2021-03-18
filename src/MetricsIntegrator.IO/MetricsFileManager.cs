@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Text.RegularExpressions;
 
 namespace MetricsIntegrator.IO
 {
@@ -31,7 +32,7 @@ namespace MetricsIntegrator.IO
         //---------------------------------------------------------------------
         //		Methods
         //---------------------------------------------------------------------
-        public void FindAll(string basePath)
+        public void FindAllFromDirectory(string basePath)
         {
             string[] csvFilesPath = FileUtils.GetAllFilesFromDirectoryEndingWith(basePath, "csv");
             
@@ -49,6 +50,41 @@ namespace MetricsIntegrator.IO
                 if (csvPath.Contains("TestCase_"))
                     TestCasePath = csvPath;
             }
+        }
+
+        public void SetFilesFromCLI(string[] args)
+        {
+            for (int i = 1; i < args.Length; i++)
+            {
+                if (IsFlag(args[i]))
+                {
+                    string flag = args[i];
+                    i++;
+
+                    switch (flag)
+                    {
+                        case "-scm":
+                            SmPath = args[i];
+                            break;
+                        case "-map":
+                            MapPath = args[i];
+                            break;
+                        case "-tc":
+                            TestCasePath = args[i];
+                            break;
+                        case "-tp":
+                            TestPathsPath = args[i];
+                            break;
+                    }
+                }
+            }
+        }
+
+        private bool IsFlag(string arg)
+        {
+            Regex regex = new Regex("-(scm|map|tc|tp)");
+
+            return regex.IsMatch(arg);
         }
     }
 }

@@ -14,14 +14,24 @@ namespace MetricsIntegrator.Parser
         //		Attributes
         //---------------------------------------------------------------------
         private readonly string filepath;
+        private readonly Dictionary<string, string[]> mapping;
+        private readonly string delimiter;
 
 
         //---------------------------------------------------------------------
         //		Constructor
         //---------------------------------------------------------------------
-        public SourceCodeMetricsParser(string filepath)
+        public SourceCodeMetricsParser(string filepath, Dictionary<string, string[]> mapping,
+                                       string delimiter)
         {
             this.filepath = filepath;
+            this.mapping = mapping;
+            this.delimiter = delimiter;
+        }
+
+        public SourceCodeMetricsParser(string filepath, Dictionary<string, string[]> mapping)
+            : this(filepath, mapping, ";")
+        {
         }
 
 
@@ -40,12 +50,12 @@ namespace MetricsIntegrator.Parser
             DictSourceCode = new Dictionary<string, MetricsContainer>();
             DictSourceTest = new Dictionary<string, MetricsContainer>();
             string[] sourceMetricsFile = File.ReadAllLines(filepath);
-            string[] fields = sourceMetricsFile[0].Split(";");
+            string[] fields = sourceMetricsFile[0].Split(delimiter);
 
             foreach (string line in sourceMetricsFile.Skip(1).ToArray())
             {
                 string[] column;
-                column = line.Split(";");
+                column = line.Split(delimiter);
                 if (mapping.ContainsKey(column[0])) // column[1]: Name  }-> if (current method is a tested method)
                 {
                     DictSourceCode.Add(column[0], CreateMetricsContainer(column, fields));

@@ -3,36 +3,36 @@ using MetricsIntegrator.IO;
 using MetricsIntegrator.Metric;
 using MetricsIntegrator.Parser;
 using MetricsIntegrator.Utils;
+using System;
 using System.Collections.Generic;
+using System.IO;
+using System.Text.RegularExpressions;
 
 namespace MetricsIntegrator
 {
     class Program
     {
+        /// <param name="args">-scm path -map path -tc path -tp path</param>
         static void Main(string[] args)
         {
-            string basePath = @"C:\Users\william\Documents\workspace\vsstudio\MetricsIntegrator";
-            string projectPath = basePath + @"\jopt"; //For example, @"D:\GitHub\TCmetricsGenerator\Projects\Cli"
-
+            // Find files
             MetricsFileManager metricsFileManager = new MetricsFileManager();
-            metricsFileManager.FindAll(projectPath);
 
-            MappingMetricsParser mapParser = new MappingMetricsParser(metricsFileManager.MapPath);
-            Dictionary<string, string[]> mapping = mapParser.Parse();
+            if (args.Length > 1)
+                metricsFileManager.SetFilesFromCLI(args);
+            else
+                metricsFileManager.FindAllFromDirectory(Directory.GetCurrentDirectory());
 
-            string tpDelimiter = ";";
-            TestPathMetricsParser tpParser = new TestPathMetricsParser(metricsFileManager.TestPathsPath, tpDelimiter);
-            List<MetricsContainer> listTestPath = tpParser.Parse();
+            MetricsParseManager metricsParseManager = new MetricsParseManager(metricsFileManager);
+            metricsParseManager.Parse();
 
-            string tcDelimiter = ";";
-            TestCaseMetricsParser tcParser = new TestCaseMetricsParser(metricsFileManager.TestCasePath, tcDelimiter);
-            List<MetricsContainer> listTestCase = tcParser.Parse();
+            // Export
+            DoExportation(basePath, projectPath, mapping, listTestPath, listTestCase, scmParser);
+        }
 
-            SourceCodeMetricsParser scmParser = new SourceCodeMetricsParser(metricsFileManager.SmPath);
-            scmParser.Parse();
-
+        private static void DoExportation(string basePath, string projectPath, Dictionary<string, string[]> mapping, List<MetricsContainer> listTestPath, List<MetricsContainer> listTestCase, SourceCodeMetricsParser scmParser)
+        {
             string delimiter = ";";
-
             string TestPathFilePath = basePath + @"\TP_dataset_resulting_" + projectPath.Substring(projectPath.LastIndexOf(@"\") + 1) + ".csv";
             MetricsCSVExporter tpCSVExporter = new MetricsCSVExporter(TestPathFilePath, mapping, scmParser.DictSourceCode, scmParser.DictSourceTest, listTestPath, delimiter);
             tpCSVExporter.Export();

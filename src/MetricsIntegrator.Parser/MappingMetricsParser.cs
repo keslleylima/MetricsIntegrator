@@ -15,14 +15,20 @@ namespace MetricsIntegrator.Parser
         //		Attributes
         //---------------------------------------------------------------------
         private readonly string filepath;
+        private readonly string delimiter;
 
 
         //---------------------------------------------------------------------
         //		Constructor
         //---------------------------------------------------------------------
-        public MappingMetricsParser(string filepath)
+        public MappingMetricsParser(string filepath, string delimiter)
         {
             this.filepath = filepath;
+            this.delimiter = delimiter;
+        }
+
+        public MappingMetricsParser(string filepath) : this(filepath, ";")
+        {
         }
 
 
@@ -36,7 +42,7 @@ namespace MetricsIntegrator.Parser
             foreach (string line in File.ReadAllLines(filepath))
             {
                 string[] column;
-                column = line.Split(";");
+                column = line.Split(delimiter);
                 string testedMethod = column[0];
                 string[] testMethods = column[1..column.Length];
                 
