@@ -1,4 +1,5 @@
 ﻿using MetricsIntegrator.Export;
+using MetricsIntegrator.IO;
 using MetricsIntegrator.Metric;
 using MetricsIntegrator.Parser;
 using MetricsIntegrator.Utils;
@@ -12,41 +13,22 @@ namespace MetricsIntegrator
         {
             string basePath = @"C:\Users\william\Documents\workspace\vsstudio\MetricsIntegrator";
             string projectPath = basePath + @"\jopt"; //For example, @"D:\GitHub\TCmetricsGenerator\Projects\Cli"
-            
-            string[] csvFilesPath = FileUtils.GetAllFilesFromDirectoryEndingWith(projectPath, "csv");
-            string smPath = string.Empty;
-            
-            
-            string mapPath = string.Empty;
-            string testPathsPath = string.Empty;
-            string testCasePath = string.Empty;
-            foreach (string csvPath in csvFilesPath)
-            {
-                if (csvPath.Contains("SCM_"))
-                    smPath = csvPath;
 
-                if (csvPath.Contains("MAP_"))
-                    mapPath = csvPath;
+            MetricsFileManager metricsFileManager = new MetricsFileManager();
+            metricsFileManager.FindAll(projectPath);
 
-                if (csvPath.Contains("TestPath_"))
-                    testPathsPath = csvPath;
-
-                if (csvPath.Contains("TestCase_"))
-                    testCasePath = csvPath;
-            }
-
-            MappingMetricsParser mapParser = new MappingMetricsParser(mapPath);
+            MappingMetricsParser mapParser = new MappingMetricsParser(metricsFileManager.MapPath);
             Dictionary<string, string[]> mapping = mapParser.Parse();
 
             string tpDelimiter = ";";
-            TestPathMetricsParser tpParser = new TestPathMetricsParser(testPathsPath, tpDelimiter);
+            TestPathMetricsParser tpParser = new TestPathMetricsParser(metricsFileManager.TestPathsPath, tpDelimiter);
             List<MetricsContainer> listTestPath = tpParser.Parse();
 
             string tcDelimiter = ";";
-            TestCaseMetricsParser tcParser = new TestCaseMetricsParser(testCasePath, tcDelimiter);
+            TestCaseMetricsParser tcParser = new TestCaseMetricsParser(metricsFileManager.TestCasePath, tcDelimiter);
             List<MetricsContainer> listTestCase = tcParser.Parse();
 
-            SourceCodeMetricsParser scmParser = new SourceCodeMetricsParser(smPath);
+            SourceCodeMetricsParser scmParser = new SourceCodeMetricsParser(metricsFileManager.SmPath);
             scmParser.Parse();
 
             string delimiter = ";";
