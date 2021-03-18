@@ -1,7 +1,4 @@
 ﻿using MetricsIntegrator.Utils;
-using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Text.RegularExpressions;
 
 namespace MetricsIntegrator.IO
@@ -13,7 +10,7 @@ namespace MetricsIntegrator.IO
         //---------------------------------------------------------------------
         public MetricsFileManager()
         {
-            SmPath = string.Empty;
+            SourceCodePath = string.Empty;
             MapPath = string.Empty;
             TestPathsPath = string.Empty;
             TestCasePath = string.Empty;
@@ -23,7 +20,7 @@ namespace MetricsIntegrator.IO
         //---------------------------------------------------------------------
         //		Properties
         //---------------------------------------------------------------------
-        public string SmPath { get; set; }
+        public string SourceCodePath { get; set; }
         public string MapPath { get; set; }
         public string TestPathsPath { get; set; }
         public string TestCasePath { get; set; }
@@ -38,23 +35,25 @@ namespace MetricsIntegrator.IO
             
             foreach (string csvPath in csvFilesPath)
             {
-                if (csvPath.Contains("SCM_"))
-                    SmPath = csvPath;
+                if (csvPath.Contains("SC_"))
+                    SourceCodePath = csvPath;
 
                 if (csvPath.Contains("MAP_"))
                     MapPath = csvPath;
 
-                if (csvPath.Contains("TestPath_"))
+                if (csvPath.Contains("TP_"))
                     TestPathsPath = csvPath;
 
-                if (csvPath.Contains("TestCase_"))
+                if (csvPath.Contains("TC_"))
                     TestCasePath = csvPath;
             }
         }
 
         public void SetFilesFromCLI(string[] args)
         {
-            for (int i = 1; i < args.Length; i++)
+            int idxParamStart = IsFlag(args[0]) ? 0 : 1;
+
+            for (int i = idxParamStart; i < args.Length; i++)
             {
                 if (IsFlag(args[i]))
                 {
@@ -63,8 +62,8 @@ namespace MetricsIntegrator.IO
 
                     switch (flag)
                     {
-                        case "-scm":
-                            SmPath = args[i];
+                        case "-sc":
+                            SourceCodePath = args[i];
                             break;
                         case "-map":
                             MapPath = args[i];
@@ -82,7 +81,7 @@ namespace MetricsIntegrator.IO
 
         private bool IsFlag(string arg)
         {
-            Regex regex = new Regex("-(scm|map|tc|tp)");
+            Regex regex = new Regex("-(sc|map|tc|tp)");
 
             return regex.IsMatch(arg);
         }

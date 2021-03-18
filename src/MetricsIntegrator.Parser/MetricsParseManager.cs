@@ -84,7 +84,7 @@ namespace MetricsIntegrator.Parser
         private void DoSourceCodeMetricsParsing(Dictionary<string, string[]> mapping)
         {
             SourceCodeMetricsParser scmParser = new SourceCodeMetricsParser(
-                metricsFileManager.SmPath, 
+                metricsFileManager.SourceCodePath, 
                 mapping, 
                 delimiter
             );

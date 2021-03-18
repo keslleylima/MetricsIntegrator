@@ -9,10 +9,10 @@ namespace MetricsIntegrator
     {
         /// <summary>
         ///     If no parameter is passed, a search will be made for the files in 
-        ///     the current directory, looking for files with the prefixes 'SCM_',
+        ///     the current directory, looking for files with the prefixes 'SC_',
         ///     'TP_', 'TC_' and 'MAP_'. 
         /// </summary>
-        /// <param name="args">-scm path -map path -tc path -tp path</param>
+        /// <param name="args">-sc path -map path -tc path -tp path</param>
         static void Main(string[] args)
         {
             MetricsIntegrationManager integrator = new MetricsIntegrationManager(

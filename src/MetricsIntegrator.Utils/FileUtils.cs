@@ -16,7 +16,7 @@ namespace MetricsIntegrator.Utils
                 throw new ArgumentException("Directory path cannot be null");
 
             if (!Directory.Exists(directoryPath))
-                throw new ArgumentException("Directory path does not exist or it is a file path");
+                throw new ArgumentException("Directory path does not exist or it is a file path.\n" + directoryPath);
 
             if ((extensionName == null) || (extensionName.Length == 0))
                 throw new ArgumentException("Extension name cannot be empty");
