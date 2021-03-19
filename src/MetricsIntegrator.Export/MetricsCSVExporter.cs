@@ -11,7 +11,7 @@ namespace MetricsIntegrator.Export
         //		Attributes
         //---------------------------------------------------------------------
         private string outputPath;
-        private Dictionary<string, string[]> mapping;
+        private Dictionary<string, List<string>> mapping;
         private Dictionary<string, MetricsContainer> dictSourceCode;
         private Dictionary<string, MetricsContainer> dictSourceTest;
         private string delimiter;
@@ -23,7 +23,7 @@ namespace MetricsIntegrator.Export
         //		Constructor
         //---------------------------------------------------------------------
         public MetricsCSVExporter(string outputPath,
-                                    Dictionary<string, string[]> mapping,
+                                    Dictionary<string, List<string>> mapping,
                                     Dictionary<string, MetricsContainer> dictSourceCode,
                                     Dictionary<string, MetricsContainer> dictSourceTest,
                                     List<MetricsContainer> baseMetrics,
@@ -51,10 +51,10 @@ namespace MetricsIntegrator.Export
 
         private void WriteBody()
         {
-            foreach (KeyValuePair<string, string[]> kvp in mapping)
+            foreach (KeyValuePair<string, List<string>> kvp in mapping)
             {
                 string testedMethod = kvp.Key;
-                string[] testMethods = kvp.Value;
+                List<string> testMethods = kvp.Value;
 
                 dictSourceCode.TryGetValue(testedMethod, out MetricsContainer metricsSourceCode);
 

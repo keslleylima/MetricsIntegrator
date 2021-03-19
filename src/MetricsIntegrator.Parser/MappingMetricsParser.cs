@@ -9,7 +9,7 @@ namespace MetricsIntegrator.Parser
     ///     Mapping containing tested methods along with the test methods that
     ///     test them.
     /// </summary>
-    class MappingMetricsParser
+    public class MappingMetricsParser
     {
         //---------------------------------------------------------------------
         //		Attributes
@@ -35,21 +35,43 @@ namespace MetricsIntegrator.Parser
         //---------------------------------------------------------------------
         //		Methods
         //---------------------------------------------------------------------
-        public Dictionary<string, string[]> Parse()
+        public Dictionary<string, List<string>> Parse()
         {
-            Dictionary<string, string[]> mapping = new Dictionary<string, string[]>();
+            Dictionary<string, List<string>> mapping = new Dictionary<string, List<string>>();
 
             foreach (string line in File.ReadAllLines(filepath))
             {
-                string[] column;
-                column = line.Split(delimiter);
-                string testedMethod = column[0];
-                string[] testMethods = column[1..column.Length];
-                
+                if (IsBlank(line))
+                    continue;
+
+                string[] columns = line.Split(delimiter);
+                string testedMethod = columns[0];
+                List<string> testMethods = ExtractTestMethods(columns);
+
                 mapping.Add(testedMethod, testMethods);
             }
 
             return mapping;
+        }
+
+        private bool IsBlank(string line)
+        {
+            return line.Trim().Equals("");
+        }
+
+        private List<string> ExtractTestMethods(string[] columns)
+        {
+            List<string> testMethods = new List<string>();
+
+            foreach (string column in columns[1..columns.Length])
+            {
+                if (column.Length == 0)
+                    continue;
+
+                testMethods.Add(column);
+            }
+
+            return testMethods;
         }
     }
 }

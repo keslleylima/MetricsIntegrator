@@ -14,14 +14,14 @@ namespace MetricsIntegrator.Parser
         //		Attributes
         //---------------------------------------------------------------------
         private readonly string filepath;
-        private readonly Dictionary<string, string[]> mapping;
+        private readonly Dictionary<string, List<string>> mapping;
         private readonly string delimiter;
 
 
         //---------------------------------------------------------------------
         //		Constructor
         //---------------------------------------------------------------------
-        public SourceCodeMetricsParser(string filepath, Dictionary<string, string[]> mapping,
+        public SourceCodeMetricsParser(string filepath, Dictionary<string, List<string>> mapping,
                                        string delimiter)
         {
             this.filepath = filepath;
@@ -29,7 +29,7 @@ namespace MetricsIntegrator.Parser
             this.delimiter = delimiter;
         }
 
-        public SourceCodeMetricsParser(string filepath, Dictionary<string, string[]> mapping)
+        public SourceCodeMetricsParser(string filepath, Dictionary<string, List<string>> mapping)
             : this(filepath, mapping, ";")
         {
         }
@@ -62,9 +62,9 @@ namespace MetricsIntegrator.Parser
                 }
                 else // else current method is a test method
                 {
-                    foreach (KeyValuePair<string, string[]> kvp in mapping)
+                    foreach (KeyValuePair<string, List<string>> kvp in mapping)
                     {
-                        string[] keysTest = kvp.Value;
+                        List<string> keysTest = kvp.Value;
                         foreach (string key in keysTest)
                         {
                             if (key == column[0])

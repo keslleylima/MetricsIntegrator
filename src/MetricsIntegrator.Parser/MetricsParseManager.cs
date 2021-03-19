@@ -35,7 +35,7 @@ namespace MetricsIntegrator.Parser
         //---------------------------------------------------------------------
         public Dictionary<string, MetricsContainer> DictSourceCode { get; private set; }
         public Dictionary<string, MetricsContainer> DictSourceTest { get; private set; }
-        public Dictionary<string, string[]> Mapping { get; private set; }
+        public Dictionary<string, List<string>> Mapping { get; private set; }
         public List<MetricsContainer> ListTestPath { get; private set; }
         public List<MetricsContainer> ListTestCase { get; private set; }
 
@@ -81,7 +81,7 @@ namespace MetricsIntegrator.Parser
             ListTestCase = tcParser.Parse();
         }
 
-        private void DoSourceCodeMetricsParsing(Dictionary<string, string[]> mapping)
+        private void DoSourceCodeMetricsParsing(Dictionary<string, List<string>> mapping)
         {
             SourceCodeMetricsParser scmParser = new SourceCodeMetricsParser(
                 metricsFileManager.SourceCodePath, 

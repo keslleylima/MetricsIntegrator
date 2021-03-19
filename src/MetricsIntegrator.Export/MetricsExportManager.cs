@@ -13,7 +13,7 @@ namespace MetricsIntegrator.Export
         private readonly string outputDir;
         private readonly string projectName;
         private readonly string delimiter;
-        private Dictionary<string, string[]> mapping;
+        private Dictionary<string, List<string>> mapping;
         private Dictionary<string, MetricsContainer> dictSourceCode;
         private Dictionary<string, MetricsContainer> dictSourceTest;
 
@@ -23,7 +23,7 @@ namespace MetricsIntegrator.Export
         //---------------------------------------------------------------------
         public MetricsExportManager(string outputDir, string projectName, 
                                     string delimiter, 
-                                    Dictionary<string, string[]> mapping,
+                                    Dictionary<string, List<string>> mapping,
                                     Dictionary<string, MetricsContainer> dictSourceCode,
                                     Dictionary<string, MetricsContainer> dictSourceTest)
         {
