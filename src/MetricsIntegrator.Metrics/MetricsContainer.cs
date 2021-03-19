@@ -1,15 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
 
-namespace MetricsIntegrator.Metric
+namespace MetricsIntegrator.Metrics
 {
+    /// <summary>
+    ///     Responsible for storing metrics.
+    /// </summary>
     public class MetricsContainer
     {
         //---------------------------------------------------------------------
         //		Attributes
         //---------------------------------------------------------------------
-        private Dictionary<string, string> metrics;
+        private readonly Dictionary<string, string> metrics;
 
 
         //---------------------------------------------------------------------
@@ -24,6 +26,16 @@ namespace MetricsIntegrator.Metric
         //---------------------------------------------------------------------
         //		Methods
         //---------------------------------------------------------------------
+        /// <summary>
+        ///     Stores a metric with its value.
+        /// </summary>
+        /// 
+        /// <param name="metric">Metric name</param>
+        /// <param name="value">Metric value</param>
+        /// 
+        /// <exception cref="System.ArgumentException">
+        ///     If metrics or value is null or empty.
+        /// </exception>
         public void AddMetric(string metric, string value)
         {
             metrics.Add(metric, value);
@@ -42,7 +54,7 @@ namespace MetricsIntegrator.Metric
             return metricKeys;
         }
 
-        public string GetValueFromMetric(string metric)
+        public string GetMetric(string metric)
         {
             string value;
 
@@ -60,6 +72,11 @@ namespace MetricsIntegrator.Metric
             return metricValues;
         }
 
+        /// <summary>
+        ///     Gets metrics identifier.
+        /// </summary>
+        /// 
+        /// <returns>Value associated with the first metric found</returns>
         public string GetID()
         {
             var iterator = metrics.GetEnumerator();

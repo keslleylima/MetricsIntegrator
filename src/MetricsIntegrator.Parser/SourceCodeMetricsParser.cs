@@ -4,7 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using MetricsIntegrator.Export;
-using MetricsIntegrator.Metric;
+using MetricsIntegrator.Metrics;
 
 namespace MetricsIntegrator.Parser
 {

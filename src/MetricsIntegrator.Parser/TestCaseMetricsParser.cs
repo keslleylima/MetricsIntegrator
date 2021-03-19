@@ -1,4 +1,4 @@
-﻿using MetricsIntegrator.Metric;
+﻿using MetricsIntegrator.Metrics;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
