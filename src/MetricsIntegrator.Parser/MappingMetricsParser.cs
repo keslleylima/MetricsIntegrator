@@ -1,7 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
-using System.Text;
 
 namespace MetricsIntegrator.Parser
 {
@@ -35,6 +33,15 @@ namespace MetricsIntegrator.Parser
         //---------------------------------------------------------------------
         //		Methods
         //---------------------------------------------------------------------
+        /// <summary>
+        ///     Analyzes the file and converts its information into a dictionary
+        ///     containing tested invoked + test methods that test it.
+        /// </summary>
+        /// 
+        /// <returns>
+        ///     Dictionary whose keys are the tested methods and whose values
+        ///     are the test methods that test it.
+        /// </returns>
         public Dictionary<string, List<string>> Parse()
         {
             Dictionary<string, List<string>> mapping = new Dictionary<string, List<string>>();
