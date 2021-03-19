@@ -38,6 +38,12 @@ namespace MetricsIntegrator.Metrics
         /// </exception>
         public void AddMetric(string metric, string value)
         {
+            if ((metric == null) || metric.Length == 0)
+                throw new ArgumentException("Metric cannot be empty");
+
+            if ((value == null) || value.Length == 0)
+                throw new ArgumentException("Value cannot be empty");
+
             metrics.Add(metric, value);
         }
 
@@ -45,22 +51,13 @@ namespace MetricsIntegrator.Metrics
         //---------------------------------------------------------------------
         //		Getters
         //---------------------------------------------------------------------
-        public string[] GetMetrics()
+        public string[] GetAllMetrics()
         {
             string[] metricKeys = new string[metrics.Count];
 
             metrics.Keys.CopyTo(metricKeys, 0);
 
             return metricKeys;
-        }
-
-        public string GetMetric(string metric)
-        {
-            string value;
-
-            metrics.TryGetValue(metric, out value);
-
-            return (value == null) ? "" : value;
         }
 
         public string[] GetAllMetricValues()
@@ -70,6 +67,15 @@ namespace MetricsIntegrator.Metrics
             metrics.Values.CopyTo(metricValues, 0);
 
             return metricValues;
+        }
+
+        public string GetMetric(string metric)
+        {
+            string value;
+
+            metrics.TryGetValue(metric, out value);
+
+            return (value == null) ? "" : value;
         }
 
         /// <summary>

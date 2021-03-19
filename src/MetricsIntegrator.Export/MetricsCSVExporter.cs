@@ -94,7 +94,7 @@ namespace MetricsIntegrator.Export
 
         private string[] GetTestedMethodMetrics()
         {
-            return GetFirstMetricFrom(dictSourceTest).GetMetrics();
+            return GetFirstMetricFrom(dictSourceTest).GetAllMetrics();
         }
 
         private MetricsContainer GetFirstMetricFrom(Dictionary<string, MetricsContainer> dictionary)
@@ -116,7 +116,7 @@ namespace MetricsIntegrator.Export
 
         private string[] GetTestMethodMetrics()
         {
-            return GetFirstMetricFrom(dictSourceTest).GetMetrics();
+            return GetFirstMetricFrom(dictSourceTest).GetAllMetrics();
         }
 
         private void WriteBaseMetrics()
@@ -130,7 +130,7 @@ namespace MetricsIntegrator.Export
 
         private string[] GetBaseMetrics()
         {
-            return listBaseMetrics[0].GetMetrics();
+            return listBaseMetrics[0].GetAllMetrics();
         }
 
         private void WriteMetricsOfTestedMethod(MetricsContainer metricsSourceCode)
