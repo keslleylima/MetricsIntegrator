@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 
 namespace MetricsIntegrator.Parser
@@ -21,6 +22,15 @@ namespace MetricsIntegrator.Parser
         //---------------------------------------------------------------------
         public MappingMetricsParser(string filepath, string delimiter)
         {
+            if ((filepath == null) || filepath.Length == 0)
+                throw new ArgumentException("File path cannot be empty");
+
+            if ((delimiter == null) || delimiter.Length == 0)
+                throw new ArgumentException("Delimiter cannot be empty");
+
+            if (!File.Exists(filepath))
+                throw new ArgumentException("File path does not exist: " + filepath);
+
             this.filepath = filepath;
             this.delimiter = delimiter;
         }

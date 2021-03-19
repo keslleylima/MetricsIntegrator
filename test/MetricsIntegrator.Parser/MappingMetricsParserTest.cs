@@ -1,4 +1,5 @@
 ﻿using MetricsIntegratorTest;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using Xunit;
@@ -46,6 +47,51 @@ namespace MetricsIntegrator.Parser
             DoParsing();
 
             AssertParseIsCorrect();
+        }
+
+        [Fact]
+        public void TestConstructorWithNullFilePath()
+        {
+            Assert.Throws<ArgumentException>(() => 
+            {
+                new MappingMetricsParser(null, ";");
+            });
+        }
+
+        [Fact]
+        public void TestConstructorWithEmptyFilePath()
+        {
+            Assert.Throws<ArgumentException>(() =>
+            {
+                new MappingMetricsParser("", ";");
+            });
+        }
+
+        [Fact]
+        public void TestConstructorWithNonExistentFilePath()
+        {
+            Assert.Throws<ArgumentException>(() =>
+            {
+                new MappingMetricsParser("foo/bar.txt");
+            });
+        }
+
+        [Fact]
+        public void TestConstructorWithNullDelimiter()
+        {
+            Assert.Throws<ArgumentException>(() =>
+            {
+                new MappingMetricsParser(basePath + "map-test.csv", null);
+            });
+        }
+
+        [Fact]
+        public void TestConstructorWithEmptyDelimiter()
+        {
+            Assert.Throws<ArgumentException>(() =>
+            {
+                new MappingMetricsParser(basePath + "map-test.csv", "");
+            });
         }
 
 
