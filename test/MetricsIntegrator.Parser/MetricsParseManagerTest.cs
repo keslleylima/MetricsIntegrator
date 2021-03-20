@@ -91,6 +91,33 @@ namespace MetricsIntegrator.Parser
             AssertTestPathMetricsAreCorrect();
         }
 
+        [Fact]
+        public void TestConstructorWithNullMetricsParseManager()
+        {
+            Assert.Throws<ArgumentException>(() => 
+            {
+                new MetricsParseManager(null);
+            });
+        }
+
+        [Fact]
+        public void TestConstructorWithNullDelimiter()
+        {
+            Assert.Throws<ArgumentException>(() =>
+            {
+                new MetricsParseManager(new MetricsFileManager(), null);
+            });
+        }
+
+        [Fact]
+        public void TestConstructorWithEmptyDelimiter()
+        {
+            Assert.Throws<ArgumentException>(() =>
+            {
+                new MetricsParseManager(new MetricsFileManager(), "");
+            });
+        }
+
 
         //---------------------------------------------------------------------
         //		Methods
@@ -191,6 +218,8 @@ namespace MetricsIntegrator.Parser
             metrics.Add(testedInvoked, expectedMetrics[0]);
 
             Assert.Equal(metrics, sourceCodeMetricsObtained);
+
+            expectedMetrics = new List<MetricsContainer>();
         }
 
         private void WithTestMethod(string signature)
@@ -204,6 +233,8 @@ namespace MetricsIntegrator.Parser
             metrics.Add(testMethod, expectedMetrics[0]);
 
             Assert.Equal(metrics, testCodeMetricsObtained);
+
+            expectedMetrics = new List<MetricsContainer>();
         }
 
         private void BindTestMethods(params string[] testMethods)
