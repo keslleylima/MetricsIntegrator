@@ -79,7 +79,7 @@ namespace MetricsIntegrator.Parser
                         List<string> keysTest = kvp.Value;
                         foreach (string key in keysTest)
                         {
-                            if (key == column[0])
+                            if (key == column[0] && !DictSourceTest.ContainsKey(column[0]))
                             {
                                 DictSourceTest.Add(column[0], CreateMetricsContainer(column, fields));
                             }
