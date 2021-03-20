@@ -9,7 +9,7 @@ namespace MetricsIntegrator.Utils
     public class FileUtils
     {
         //---------------------------------------------------------------------
-        //		Constructir
+        //		Constructor
         //---------------------------------------------------------------------
         private FileUtils()
         {
