@@ -1,5 +1,7 @@
-﻿using System;
+﻿using MetricsIntegrator.Utils;
+using System;
 using System.Collections.Generic;
+using System.Text;
 
 namespace MetricsIntegrator.Metrics
 {
@@ -45,6 +47,27 @@ namespace MetricsIntegrator.Metrics
                 throw new ArgumentException("Value cannot be empty");
 
             metrics.Add(metric, value);
+        }
+
+        public override string ToString()
+        {
+            return $"MetricsContainer [ {DictionaryUtils.DictionaryToString(metrics)} ]";
+        }
+
+        public override int GetHashCode()
+        {
+            return ToString().GetHashCode();
+        }
+
+        public override bool Equals(object other)
+        {
+            if (other == null)
+                return false;
+            
+            if (other == this)
+                return true;
+
+            return (other.GetHashCode() == GetHashCode());
         }
 
 

@@ -8,7 +8,7 @@ using MetricsIntegrator.Metrics;
 
 namespace MetricsIntegrator.Parser
 {
-    class SourceCodeMetricsParser
+    public class SourceCodeMetricsParser
     {
         //---------------------------------------------------------------------
         //		Attributes
@@ -24,6 +24,18 @@ namespace MetricsIntegrator.Parser
         public SourceCodeMetricsParser(string filepath, Dictionary<string, List<string>> mapping,
                                        string delimiter)
         {
+            if ((filepath == null) || filepath.Length == 0)
+                throw new ArgumentException("File path cannot be empty");
+
+            if (!File.Exists(filepath))
+                throw new ArgumentException("File does not exist: " + filepath);
+
+            if (mapping == null)
+                throw new ArgumentException("Mapping cannot be null");
+
+            if ((delimiter == null) || delimiter.Length == 0)
+                throw new ArgumentException("Delimiter cannot be empty");
+
             this.filepath = filepath;
             this.mapping = mapping;
             this.delimiter = delimiter;
@@ -56,7 +68,7 @@ namespace MetricsIntegrator.Parser
             {
                 string[] column;
                 column = line.Split(delimiter);
-                if (mapping.ContainsKey(column[0])) // column[1]: Name  }-> if (current method is a tested method)
+                if (mapping.ContainsKey(column[0])) // column[0]: Name  }-> if (current method is a tested method)
                 {
                     DictSourceCode.Add(column[0], CreateMetricsContainer(column, fields));
                 }
@@ -83,7 +95,7 @@ namespace MetricsIntegrator.Parser
         {
             MetricsContainer metricsSourceTest = new MetricsContainer();
 
-            for (int i = 0; i < fields.Length; i++)
+            for (int i = 1; i < fields.Length; i++)
             {
                 metricsSourceTest.AddMetric(fields[i], row[i]);
             }

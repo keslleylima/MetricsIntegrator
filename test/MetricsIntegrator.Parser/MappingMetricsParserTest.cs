@@ -113,7 +113,7 @@ namespace MetricsIntegrator.Parser
 
         private void WithTestedInvoked(string signature)
         {
-            this.testedInvoked = signature;
+            testedInvoked = signature;
         }
 
         private void BindTestMethods(params string[] testMethods)
