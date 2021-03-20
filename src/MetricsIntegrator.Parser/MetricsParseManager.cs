@@ -1,5 +1,5 @@
 ﻿using MetricsIntegrator.IO;
-using MetricsIntegrator.Metrics;
+using MetricsIntegrator.Data;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -69,11 +69,11 @@ namespace MetricsIntegrator.Parser
         //---------------------------------------------------------------------
         //		Properties
         //---------------------------------------------------------------------
-        public Dictionary<string, MetricsContainer> DictSourceCode { get; private set; }
-        public Dictionary<string, MetricsContainer> DictSourceTest { get; private set; }
+        public Dictionary<string, Metrics> DictSourceCode { get; private set; }
+        public Dictionary<string, Metrics> DictSourceTest { get; private set; }
         public Dictionary<string, List<string>> Mapping { get; private set; }
-        public List<MetricsContainer> ListTestPath { get; private set; }
-        public List<MetricsContainer> ListTestCase { get; private set; }
+        public List<Metrics> ListTestPath { get; private set; }
+        public List<Metrics> ListTestCase { get; private set; }
 
 
         //---------------------------------------------------------------------

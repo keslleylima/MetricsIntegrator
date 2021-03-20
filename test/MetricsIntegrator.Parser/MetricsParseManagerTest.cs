@@ -1,5 +1,5 @@
 ﻿using MetricsIntegrator.IO;
-using MetricsIntegrator.Metrics;
+using MetricsIntegrator.Data;
 using MetricsIntegratorTest;
 using System;
 using System.Collections.Generic;
@@ -20,14 +20,14 @@ namespace MetricsIntegrator.Parser
         private string scFile;
         private string tpFile;
         private string tcFile;
-        private Dictionary<string, MetricsContainer> sourceCodeMetricsObtained;
-        private Dictionary<string, MetricsContainer> testCodeMetricsObtained;
+        private Dictionary<string, Metrics> sourceCodeMetricsObtained;
+        private Dictionary<string, Metrics> testCodeMetricsObtained;
         private Dictionary<string, List<string>> expectedMapping;
         private Dictionary<string, List<string>> mappingObtained;
-        private List<MetricsContainer> testPathMetricsObtained;
-        private List<MetricsContainer> testCaseMetricsObtained;
-        private List<MetricsContainer> expectedMetrics;
-        private MetricsContainer metrics;
+        private List<Metrics> testPathMetricsObtained;
+        private List<Metrics> testCaseMetricsObtained;
+        private List<Metrics> expectedMetrics;
+        private Metrics metrics;
 
 
         //---------------------------------------------------------------------
@@ -36,8 +36,8 @@ namespace MetricsIntegrator.Parser
         public MetricsParseManagerTest()
         {
             expectedMapping = new Dictionary<string, List<string>>();
-            expectedMetrics = new List<MetricsContainer>();
-            metrics = new MetricsContainer();
+            expectedMetrics = new List<Metrics>();
+            metrics = new Metrics();
             basePath = GenerateBasePath();
         }
 
@@ -185,14 +185,14 @@ namespace MetricsIntegrator.Parser
         {
             Assert.Equal(expectedMetrics, testCaseMetricsObtained);
 
-            expectedMetrics = new List<MetricsContainer>();
+            expectedMetrics = new List<Metrics>();
         }
 
         private void AssertTestPathMetricsAreCorrect()
         {
             Assert.Equal(expectedMetrics, testPathMetricsObtained);
 
-            expectedMetrics = new List<MetricsContainer>();
+            expectedMetrics = new List<Metrics>();
         }
 
         private void WithTestedInvoked(string signature)
@@ -209,17 +209,17 @@ namespace MetricsIntegrator.Parser
         {
             expectedMetrics.Add(metrics);
 
-            metrics = new MetricsContainer();
+            metrics = new Metrics();
         }
 
         private void AssertSourceCodeMetricsIsCorrect()
         {
-            Dictionary<string, MetricsContainer> metrics = new Dictionary<string, MetricsContainer>();
+            Dictionary<string, Metrics> metrics = new Dictionary<string, Metrics>();
             metrics.Add(testedInvoked, expectedMetrics[0]);
 
             Assert.Equal(metrics, sourceCodeMetricsObtained);
 
-            expectedMetrics = new List<MetricsContainer>();
+            expectedMetrics = new List<Metrics>();
         }
 
         private void WithTestMethod(string signature)
@@ -229,12 +229,12 @@ namespace MetricsIntegrator.Parser
 
         private void AssertTestCodeMetricsIsCorrect()
         {
-            Dictionary<string, MetricsContainer> metrics = new Dictionary<string, MetricsContainer>();
+            Dictionary<string, Metrics> metrics = new Dictionary<string, Metrics>();
             metrics.Add(testMethod, expectedMetrics[0]);
 
             Assert.Equal(metrics, testCodeMetricsObtained);
 
-            expectedMetrics = new List<MetricsContainer>();
+            expectedMetrics = new List<Metrics>();
         }
 
         private void BindTestMethods(params string[] testMethods)

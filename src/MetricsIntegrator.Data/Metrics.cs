@@ -3,12 +3,12 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace MetricsIntegrator.Metrics
+namespace MetricsIntegrator.Data
 {
     /// <summary>
     ///     Responsible for storing metrics.
     /// </summary>
-    public class MetricsContainer
+    public class Metrics
     {
         //---------------------------------------------------------------------
         //		Attributes
@@ -19,7 +19,7 @@ namespace MetricsIntegrator.Metrics
         //---------------------------------------------------------------------
         //		Constructor
         //---------------------------------------------------------------------
-        public MetricsContainer()
+        public Metrics()
         {
             metrics = new Dictionary<string, string>();
         }

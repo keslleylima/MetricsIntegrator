@@ -1,4 +1,4 @@
-﻿using MetricsIntegrator.Metrics;
+﻿using MetricsIntegrator.Data;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
@@ -12,11 +12,11 @@ namespace MetricsIntegrator.Export
         //---------------------------------------------------------------------
         private string outputPath;
         private Dictionary<string, List<string>> mapping;
-        private Dictionary<string, MetricsContainer> dictSourceCode;
-        private Dictionary<string, MetricsContainer> dictSourceTest;
+        private Dictionary<string, Metrics> dictSourceCode;
+        private Dictionary<string, Metrics> dictSourceTest;
         private string delimiter;
         private StringBuilder lines;
-        private List<MetricsContainer> listBaseMetrics;
+        private List<Metrics> listBaseMetrics;
 
 
         //---------------------------------------------------------------------
@@ -24,9 +24,9 @@ namespace MetricsIntegrator.Export
         //---------------------------------------------------------------------
         public MetricsCSVExporter(string outputPath,
                                     Dictionary<string, List<string>> mapping,
-                                    Dictionary<string, MetricsContainer> dictSourceCode,
-                                    Dictionary<string, MetricsContainer> dictSourceTest,
-                                    List<MetricsContainer> baseMetrics,
+                                    Dictionary<string, Metrics> dictSourceCode,
+                                    Dictionary<string, Metrics> dictSourceTest,
+                                    List<Metrics> baseMetrics,
                                     string delimiter)
         {
             this.outputPath = outputPath;
@@ -56,13 +56,13 @@ namespace MetricsIntegrator.Export
                 string testedMethod = kvp.Key;
                 List<string> testMethods = kvp.Value;
 
-                dictSourceCode.TryGetValue(testedMethod, out MetricsContainer metricsSourceCode);
+                dictSourceCode.TryGetValue(testedMethod, out Metrics metricsSourceCode);
 
                 foreach (string testMethod in testMethods)
                 {
-                    dictSourceTest.TryGetValue(testMethod, out MetricsContainer metricsSourceTest);
+                    dictSourceTest.TryGetValue(testMethod, out Metrics metricsSourceTest);
 
-                    foreach (MetricsContainer baseMetrics in listBaseMetrics)
+                    foreach (Metrics baseMetrics in listBaseMetrics)
                     {
                         if (!baseMetrics.GetID().Equals(testMethod))
                             continue;
@@ -97,7 +97,7 @@ namespace MetricsIntegrator.Export
             return GetFirstMetricFrom(dictSourceTest).GetAllMetrics();
         }
 
-        private MetricsContainer GetFirstMetricFrom(Dictionary<string, MetricsContainer> dictionary)
+        private Metrics GetFirstMetricFrom(Dictionary<string, Metrics> dictionary)
         {
             var dictEnum = dictionary.GetEnumerator();
             dictEnum.MoveNext();
@@ -133,7 +133,7 @@ namespace MetricsIntegrator.Export
             return listBaseMetrics[0].GetAllMetrics();
         }
 
-        private void WriteMetricsOfTestedMethod(MetricsContainer metricsSourceCode)
+        private void WriteMetricsOfTestedMethod(Metrics metricsSourceCode)
         {
             foreach (string metricValue in metricsSourceCode.GetAllMetricValues())
             {
@@ -142,7 +142,7 @@ namespace MetricsIntegrator.Export
             }
         }
 
-        private void WriteMetricsOfTestMethod(MetricsContainer metricsSourceTest)
+        private void WriteMetricsOfTestMethod(Metrics metricsSourceTest)
         {
             foreach (string metricValue in metricsSourceTest.GetAllMetricValues())
             {
@@ -151,7 +151,7 @@ namespace MetricsIntegrator.Export
             }
         }
 
-        private void WriteMetricsOfBaseMetrics(MetricsContainer baseMetrics)
+        private void WriteMetricsOfBaseMetrics(Metrics baseMetrics)
         {
             foreach (string metricValue in baseMetrics.GetAllMetricValues())
             {

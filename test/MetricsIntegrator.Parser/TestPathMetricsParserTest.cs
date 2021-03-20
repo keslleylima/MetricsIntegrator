@@ -1,4 +1,4 @@
-﻿using MetricsIntegrator.Metrics;
+﻿using MetricsIntegrator.Data;
 using MetricsIntegratorTest;
 using System;
 using System.Collections.Generic;
@@ -14,9 +14,9 @@ namespace MetricsIntegrator.Parser
         //---------------------------------------------------------------------
         private readonly string basePath;
         private string filename;
-        private List<MetricsContainer> obtained;
-        private List<MetricsContainer> expected;
-        private MetricsContainer metrics;
+        private List<Metrics> obtained;
+        private List<Metrics> expected;
+        private Metrics metrics;
 
 
         //---------------------------------------------------------------------
@@ -25,8 +25,8 @@ namespace MetricsIntegrator.Parser
         public TestPathMetricsParserTest()
         {
             basePath = GenerateBasePath();
-            metrics = new MetricsContainer();
-            expected = new List<MetricsContainer>();
+            metrics = new Metrics();
+            expected = new List<Metrics>();
         }
 
 
@@ -119,7 +119,7 @@ namespace MetricsIntegrator.Parser
         private void BindMetrics()
         {
             expected.Add(metrics);
-            metrics = new MetricsContainer();
+            metrics = new Metrics();
         }
 
         private void DoParsing()

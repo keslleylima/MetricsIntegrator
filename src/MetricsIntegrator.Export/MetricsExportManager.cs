@@ -1,4 +1,4 @@
-﻿using MetricsIntegrator.Metrics;
+﻿using MetricsIntegrator.Data;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -14,8 +14,8 @@ namespace MetricsIntegrator.Export
         private readonly string projectName;
         private readonly string delimiter;
         private Dictionary<string, List<string>> mapping;
-        private Dictionary<string, MetricsContainer> dictSourceCode;
-        private Dictionary<string, MetricsContainer> dictSourceTest;
+        private Dictionary<string, Metrics> dictSourceCode;
+        private Dictionary<string, Metrics> dictSourceTest;
 
 
         //---------------------------------------------------------------------
@@ -24,8 +24,8 @@ namespace MetricsIntegrator.Export
         public MetricsExportManager(string outputDir, string projectName, 
                                     string delimiter, 
                                     Dictionary<string, List<string>> mapping,
-                                    Dictionary<string, MetricsContainer> dictSourceCode,
-                                    Dictionary<string, MetricsContainer> dictSourceTest)
+                                    Dictionary<string, Metrics> dictSourceCode,
+                                    Dictionary<string, Metrics> dictSourceTest)
         {
             this.outputDir = outputDir;
             this.projectName = projectName;
@@ -39,7 +39,7 @@ namespace MetricsIntegrator.Export
         //---------------------------------------------------------------------
         //		Methods
         //---------------------------------------------------------------------
-        public void ExportTestPathMetrics(List<MetricsContainer> tpMetrics)
+        public void ExportTestPathMetrics(List<Metrics> tpMetrics)
         {
             string TestPathFilePath = outputDir + @"\TP_dataset_resulting_" + projectName + ".csv";
             MetricsCSVExporter tpCSVExporter = new MetricsCSVExporter(
@@ -54,7 +54,7 @@ namespace MetricsIntegrator.Export
             tpCSVExporter.Export();
         }
         
-        public void ExportTestCaseMetrics(List<MetricsContainer> tcMetrics)
+        public void ExportTestCaseMetrics(List<Metrics> tcMetrics)
         {
             string TestCaseFilePath = outputDir + @"\TC_dataset_resulting_" + projectName + ".csv";
             MetricsCSVExporter tcCSVExporter = new MetricsCSVExporter(

@@ -3,26 +3,26 @@ using System.Collections.Generic;
 using System.Text;
 using Xunit;
 
-namespace MetricsIntegrator.Metrics
+namespace MetricsIntegrator.Data
 {
-    public class MetricsContainerTest
+    public class MetricsTest
     {
         //---------------------------------------------------------------------
         //		Attributes
         //---------------------------------------------------------------------
         private readonly string metricName;
         private readonly string metricValue;
-        private MetricsContainer metricsContainer;
+        private Metrics metrics;
 
 
         //---------------------------------------------------------------------
         //		Constructor
         //---------------------------------------------------------------------
-        public MetricsContainerTest()
+        public MetricsTest()
         {
             metricName = "m";
             metricValue = "v";
-            metricsContainer = new MetricsContainer();
+            metrics = new Metrics();
         }
 
 
@@ -32,9 +32,9 @@ namespace MetricsIntegrator.Metrics
         [Fact]
         public void TestAddMetric()
         {
-            metricsContainer.AddMetric(metricName, metricValue);
+            metrics.AddMetric(metricName, metricValue);
 
-            Assert.Equal(metricValue, metricsContainer.GetMetric(metricName));
+            Assert.Equal(metricValue, metrics.GetMetric(metricName));
         }
 
         [Fact]
@@ -42,7 +42,7 @@ namespace MetricsIntegrator.Metrics
         {
             Assert.Throws<ArgumentException>(() =>
             {
-                metricsContainer.AddMetric(null, metricValue);
+                metrics.AddMetric(null, metricValue);
             });
         }
 
@@ -51,7 +51,7 @@ namespace MetricsIntegrator.Metrics
         {
             Assert.Throws<ArgumentException>(() =>
             {
-                metricsContainer.AddMetric("", metricValue);
+                metrics.AddMetric("", metricValue);
             });
         }
 
@@ -60,7 +60,7 @@ namespace MetricsIntegrator.Metrics
         {
             Assert.Throws<ArgumentException>(() =>
             {
-                metricsContainer.AddMetric(metricName, null);
+                metrics.AddMetric(metricName, null);
             });
         }
 
@@ -69,31 +69,31 @@ namespace MetricsIntegrator.Metrics
         {
             Assert.Throws<ArgumentException>(() =>
             {
-                metricsContainer.AddMetric(metricName, "");
+                metrics.AddMetric(metricName, "");
             });
         }
 
         [Fact]
         public void TestGetAllMetricValues()
         {
-            metricsContainer.AddMetric(metricName, metricValue);
-            metricsContainer.AddMetric(metricName + "2", metricValue + "2");
+            metrics.AddMetric(metricName, metricValue);
+            metrics.AddMetric(metricName + "2", metricValue + "2");
 
             Assert.Equal(
                 new string[] { metricValue, metricValue + "2" }, 
-                metricsContainer.GetAllMetricValues()
+                metrics.GetAllMetricValues()
             );
         }
 
         [Fact]
         public void TestGetAllMetrics()
         {
-            metricsContainer.AddMetric(metricName, metricValue);
-            metricsContainer.AddMetric(metricName + "2", metricValue + "2");
+            metrics.AddMetric(metricName, metricValue);
+            metrics.AddMetric(metricName + "2", metricValue + "2");
 
             Assert.Equal(
                 new string[] { metricName, metricName + "2" },
-                metricsContainer.GetAllMetrics()
+                metrics.GetAllMetrics()
             );
         }
     }

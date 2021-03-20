@@ -49,8 +49,11 @@ namespace MetricsIntegrator.Integrator
 
             string outputDir = workingDirectory + Path.DirectorySeparatorChar + "results";
             string delimiter = ";";
-            MetricsExportManager exportManager;
-            exportManager = new MetricsExportManager(outputDir, projectName, delimiter, metricsParseManager.Mapping, metricsParseManager.DictSourceCode, metricsParseManager.DictSourceTest);
+            
+            MetricsExportManager exportManager = new MetricsExportManager(
+                outputDir, projectName, delimiter, metricsParseManager.Mapping, 
+                metricsParseManager.DictSourceCode, metricsParseManager.DictSourceTest
+            );
             exportManager.ExportTestCaseMetrics(metricsParseManager.ListTestCase);
             exportManager.ExportTestPathMetrics(metricsParseManager.ListTestPath);
         }

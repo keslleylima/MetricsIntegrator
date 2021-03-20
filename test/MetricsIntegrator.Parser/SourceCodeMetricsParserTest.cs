@@ -1,4 +1,4 @@
-﻿using MetricsIntegrator.Metrics;
+﻿using MetricsIntegrator.Data;
 using MetricsIntegratorTest;
 using System;
 using System.Collections.Generic;
@@ -18,10 +18,10 @@ namespace MetricsIntegrator.Parser
         private string testMethod;
         private bool isMetricOfTestedInvoked;
         private Dictionary<string, List<string>> mapping;
-        private Dictionary<string, MetricsContainer> sourceCodeMetricsObtained;
-        private Dictionary<string, MetricsContainer> testCodeMetricsObtained;
-        private MetricsContainer expectedSourceCodeMetrics;
-        private MetricsContainer expectedTestCodeMetrics;
+        private Dictionary<string, Metrics> sourceCodeMetricsObtained;
+        private Dictionary<string, Metrics> testCodeMetricsObtained;
+        private Metrics expectedSourceCodeMetrics;
+        private Metrics expectedTestCodeMetrics;
 
 
         //---------------------------------------------------------------------
@@ -32,10 +32,10 @@ namespace MetricsIntegrator.Parser
             basePath = GenerateBasePath();
             isMetricOfTestedInvoked = false;
             mapping = new Dictionary<string, List<string>>();
-            sourceCodeMetricsObtained = new Dictionary<string, MetricsContainer>();
-            testCodeMetricsObtained = new Dictionary<string, MetricsContainer>();
-            expectedSourceCodeMetrics = new MetricsContainer();
-            expectedTestCodeMetrics = new MetricsContainer();
+            sourceCodeMetricsObtained = new Dictionary<string, Metrics>();
+            testCodeMetricsObtained = new Dictionary<string, Metrics>();
+            expectedSourceCodeMetrics = new Metrics();
+            expectedTestCodeMetrics = new Metrics();
         }
 
 
@@ -175,7 +175,7 @@ namespace MetricsIntegrator.Parser
 
         private void AssertSourceCodeMetricsIsCorrect()
         {
-            Dictionary<string, MetricsContainer> expectedMetrics = new Dictionary<string, MetricsContainer>();
+            Dictionary<string, Metrics> expectedMetrics = new Dictionary<string, Metrics>();
             expectedMetrics.Add(testedInvoked, expectedSourceCodeMetrics);
 
             Assert.Equal(expectedMetrics, sourceCodeMetricsObtained);
@@ -183,7 +183,7 @@ namespace MetricsIntegrator.Parser
 
         private void AssertTestCodeMetricsIsCorrect()
         {
-            Dictionary<string, MetricsContainer> expectedMetrics = new Dictionary<string, MetricsContainer>();
+            Dictionary<string, Metrics> expectedMetrics = new Dictionary<string, Metrics>();
             expectedMetrics.Add(testMethod, expectedTestCodeMetrics);
 
             Assert.Equal(expectedMetrics, testCodeMetricsObtained);

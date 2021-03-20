@@ -1,4 +1,4 @@
-﻿using MetricsIntegrator.Metrics;
+﻿using MetricsIntegrator.Data;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -41,9 +41,9 @@ namespace MetricsIntegrator.Parser
         //---------------------------------------------------------------------
         //		Methods
         //---------------------------------------------------------------------
-        public List<MetricsContainer> Parse()
+        public List<Metrics> Parse()
         {
-            List<MetricsContainer> metrics = new List<MetricsContainer>();
+            List<Metrics> metrics = new List<Metrics>();
 
             string[] testCaseMetricsFile = File.ReadAllLines(filepath);
             string[] fields = testCaseMetricsFile[0].Split(delimiter);
@@ -56,9 +56,9 @@ namespace MetricsIntegrator.Parser
             return metrics;
         }
 
-        private MetricsContainer CreateTestCaseMetrics(string[] row, string[] fields)
+        private Metrics CreateTestCaseMetrics(string[] row, string[] fields)
         {
-            MetricsContainer testCase = new MetricsContainer();
+            Metrics testCase = new Metrics();
 
             for (int i = 0; i < fields.Length; i++)
             {

@@ -4,7 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using MetricsIntegrator.Export;
-using MetricsIntegrator.Metrics;
+using MetricsIntegrator.Data;
 
 namespace MetricsIntegrator.Parser
 {
@@ -50,8 +50,8 @@ namespace MetricsIntegrator.Parser
         //---------------------------------------------------------------------
         //		Properties
         //---------------------------------------------------------------------
-        public Dictionary<string, MetricsContainer> DictSourceCode { get; private set; }
-        public Dictionary<string, MetricsContainer> DictSourceTest { get; private set; }
+        public Dictionary<string, Metrics> DictSourceCode { get; private set; }
+        public Dictionary<string, Metrics> DictSourceTest { get; private set; }
 
 
         //---------------------------------------------------------------------
@@ -59,8 +59,8 @@ namespace MetricsIntegrator.Parser
         //---------------------------------------------------------------------
         public void Parse()
         {
-            DictSourceCode = new Dictionary<string, MetricsContainer>();
-            DictSourceTest = new Dictionary<string, MetricsContainer>();
+            DictSourceCode = new Dictionary<string, Metrics>();
+            DictSourceTest = new Dictionary<string, Metrics>();
             string[] sourceMetricsFile = File.ReadAllLines(filepath);
             string[] fields = sourceMetricsFile[0].Split(delimiter);
 
@@ -91,9 +91,9 @@ namespace MetricsIntegrator.Parser
             }
         }
 
-        private MetricsContainer CreateMetricsContainer(string[] row, string[] fields)
+        private Metrics CreateMetricsContainer(string[] row, string[] fields)
         {
-            MetricsContainer metricsSourceTest = new MetricsContainer();
+            Metrics metricsSourceTest = new Metrics();
 
             for (int i = 1; i < fields.Length; i++)
             {
