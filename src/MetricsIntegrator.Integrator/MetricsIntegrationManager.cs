@@ -4,7 +4,6 @@ using MetricsIntegrator.Parser;
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Text;
 
 namespace MetricsIntegrator.Integrator
 {
@@ -48,14 +47,13 @@ namespace MetricsIntegrator.Integrator
             metricsParseManager.Parse();
 
             string outputDir = workingDirectory + Path.DirectorySeparatorChar + "results";
-            string delimiter = ";";
             
-            MetricsExportManager exportManager = new MetricsExportManager(
-                outputDir, projectName, delimiter, metricsParseManager.Mapping, 
-                metricsParseManager.DictSourceCode, metricsParseManager.DictSourceTest
+            IExporter exportManager = new MetricsExportManager(
+                outputDir, 
+                projectName, 
+                metricsParseManager.MetricsContainer
             );
-            exportManager.ExportTestCaseMetrics(metricsParseManager.ListTestCase);
-            exportManager.ExportTestPathMetrics(metricsParseManager.ListTestPath);
+            exportManager.Export();
         }
     }
 }

@@ -2,7 +2,6 @@
 using MetricsIntegrator.Data;
 using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace MetricsIntegrator.Parser
 {
@@ -45,9 +44,11 @@ namespace MetricsIntegrator.Parser
 
             if ((delimiter == null) || delimiter.Length == 0)
                 throw new ArgumentException("Delimiter cannot be null");
-
+            
             this.metricsFileManager = metricsFileManager;
             this.delimiter = delimiter;
+
+            MetricsContainer = new MetricsContainer();
         }
 
         /// <summary>
@@ -69,11 +70,7 @@ namespace MetricsIntegrator.Parser
         //---------------------------------------------------------------------
         //		Properties
         //---------------------------------------------------------------------
-        public Dictionary<string, Metrics> DictSourceCode { get; private set; }
-        public Dictionary<string, Metrics> DictSourceTest { get; private set; }
-        public Dictionary<string, List<string>> Mapping { get; private set; }
-        public List<Metrics> ListTestPath { get; private set; }
-        public List<Metrics> ListTestCase { get; private set; }
+        public MetricsContainer MetricsContainer { get; private set; }
 
 
         //---------------------------------------------------------------------
@@ -84,7 +81,7 @@ namespace MetricsIntegrator.Parser
             DoMappingParser();
             DoTestPathMetricsParsing();
             DoTestCaseMetricsParsing();
-            DoSourceCodeMetricsParsing(Mapping);
+            DoSourceCodeMetricsParsing(MetricsContainer.Mapping);
         }
 
         private void DoMappingParser()
@@ -93,8 +90,8 @@ namespace MetricsIntegrator.Parser
                 metricsFileManager.MapPath, 
                 delimiter
             );
-            
-            Mapping = mapParser.Parse();
+
+            MetricsContainer.Mapping = mapParser.Parse();
         }
 
         private void DoTestPathMetricsParsing()
@@ -104,7 +101,7 @@ namespace MetricsIntegrator.Parser
                 delimiter
             );
 
-            ListTestPath = tpParser.Parse();
+            MetricsContainer.TestPathMetrics = tpParser.Parse();
         }
 
         private void DoTestCaseMetricsParsing()
@@ -114,7 +111,7 @@ namespace MetricsIntegrator.Parser
                 delimiter
             );
 
-            ListTestCase = tcParser.Parse();
+            MetricsContainer.TestCaseMetrics = tcParser.Parse();
         }
 
         private void DoSourceCodeMetricsParsing(Dictionary<string, List<string>> mapping)
@@ -127,8 +124,8 @@ namespace MetricsIntegrator.Parser
             
             scmParser.Parse();
 
-            DictSourceCode = scmParser.DictSourceCode;
-            DictSourceTest = scmParser.DictSourceTest;
+            MetricsContainer.SourceCodeMetrics = scmParser.DictSourceCode;
+            MetricsContainer.TestCodeMetrics = scmParser.DictSourceTest;
         }
     }
 }
