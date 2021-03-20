@@ -1,4 +1,5 @@
 ﻿using MetricsIntegrator.Metrics;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -19,6 +20,15 @@ namespace MetricsIntegrator.Parser
         //---------------------------------------------------------------------
         public TestCaseMetricsParser(string filepath, string delimiter)
         {
+            if ((filepath == null) || filepath.Length == 0)
+                throw new ArgumentException("File path cannot be empty");
+
+            if (!File.Exists(filepath))
+                throw new ArgumentException("File does not exist: " + filepath);
+
+            if ((delimiter == null) || delimiter.Length == 0)
+                throw new ArgumentException("Delimiter cannot be empty");
+
             this.filepath = filepath;
             this.delimiter = delimiter;
         }

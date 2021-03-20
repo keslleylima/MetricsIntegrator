@@ -48,6 +48,51 @@ namespace MetricsIntegrator.Parser
             AssertParsingIsCorrect();
         }
 
+        [Fact]
+        public void TestConstructorWithNullFilePath()
+        {
+            Assert.Throws<ArgumentException>(() => 
+            {
+                new TestCaseMetricsParser(null, ";");
+            });
+        }
+
+        [Fact]
+        public void TestConstructorWithEmptyFilePath()
+        {
+            Assert.Throws<ArgumentException>(() =>
+            {
+                new TestCaseMetricsParser("", ";");
+            });
+        }
+
+        [Fact]
+        public void TestConstructorWithNonExistentFilePath()
+        {
+            Assert.Throws<ArgumentException>(() =>
+            {
+                new TestCaseMetricsParser("foo/bar.csv", ";");
+            });
+        }
+
+        [Fact]
+        public void TestConstructorWithNullDelimiter()
+        {
+            Assert.Throws<ArgumentException>(() =>
+            {
+                new TestCaseMetricsParser(basePath + "tc-test.csv", null);
+            });
+        }
+
+        [Fact]
+        public void TestConstructorWithEmptyDelimiter()
+        {
+            Assert.Throws<ArgumentException>(() =>
+            {
+                new TestCaseMetricsParser(basePath + "tc-test.csv", "");
+            });
+        }
+
 
         //---------------------------------------------------------------------
         //		Methods
