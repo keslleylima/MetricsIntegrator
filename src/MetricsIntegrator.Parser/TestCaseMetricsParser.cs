@@ -5,7 +5,7 @@ using System.Linq;
 
 namespace MetricsIntegrator.Parser
 {
-    class TestCaseMetricsParser
+    public class TestCaseMetricsParser
     {
         //---------------------------------------------------------------------
         //		Attributes
@@ -21,6 +21,10 @@ namespace MetricsIntegrator.Parser
         {
             this.filepath = filepath;
             this.delimiter = delimiter;
+        }
+
+        public TestCaseMetricsParser(string filepath) : this(filepath, ";")
+        {
         }
 
 

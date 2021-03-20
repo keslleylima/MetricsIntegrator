@@ -3,7 +3,6 @@ using MetricsIntegratorTest;
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Text;
 using Xunit;
 
 namespace MetricsIntegrator.Parser
@@ -30,9 +29,9 @@ namespace MetricsIntegrator.Parser
         //---------------------------------------------------------------------
         public SourceCodeMetricsParserTest()
         {
+            basePath = GenerateBasePath();
             isMetricOfTestedInvoked = false;
             mapping = new Dictionary<string, List<string>>();
-            basePath = GenerateBasePath();
             sourceCodeMetricsObtained = new Dictionary<string, MetricsContainer>();
             testCodeMetricsObtained = new Dictionary<string, MetricsContainer>();
             expectedSourceCodeMetrics = new MetricsContainer();
@@ -125,7 +124,7 @@ namespace MetricsIntegrator.Parser
         //---------------------------------------------------------------------
         private string GenerateBasePath()
         {
-            return PathManager.GetResourcesPath()
+            return  PathManager.GetResourcesPath()
                     + Path.DirectorySeparatorChar
                     + "MetricsIntegrator.Parser"
                     + Path.DirectorySeparatorChar;
