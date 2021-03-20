@@ -65,6 +65,60 @@ namespace MetricsIntegrator.Parser
             AssertTestCodeMetricsIsCorrect();
         }
 
+        [Fact]
+        public void TestConstructorWithNullFilePath()
+        {
+            Assert.Throws<ArgumentException>(() => 
+            {
+                new SourceCodeMetricsParser(null, mapping);
+            });
+        }
+
+        [Fact]
+        public void TestConstructorWithEmptyFilePath()
+        {
+            Assert.Throws<ArgumentException>(() =>
+            {
+                new SourceCodeMetricsParser("", mapping);
+            });
+        }
+
+        [Fact]
+        public void TestConstructorWithNonExistentFilePath()
+        {
+            Assert.Throws<ArgumentException>(() =>
+            {
+                new SourceCodeMetricsParser("foo/bar.csv", mapping);
+            });
+        }
+
+        [Fact]
+        public void TestConstructorWithNullMapping()
+        {
+            Assert.Throws<ArgumentException>(() =>
+            {
+                new SourceCodeMetricsParser(basePath + "sc-test.csv", null);
+            });
+        }
+        [Fact]
+        public void TestConstructorWithNullDelimiter()
+        {
+            Assert.Throws<ArgumentException>(() =>
+            {
+                new SourceCodeMetricsParser(basePath + "sc-test.csv", mapping, null);
+            });
+        }
+
+        [Fact]
+        public void TestConstructorWithEmptyDelimiter()
+        {
+            Assert.Throws<ArgumentException>(() =>
+            {
+                new SourceCodeMetricsParser(basePath + "sc-test.csv", mapping, "");
+            });
+        }
+
+
 
         //---------------------------------------------------------------------
         //		Methods
