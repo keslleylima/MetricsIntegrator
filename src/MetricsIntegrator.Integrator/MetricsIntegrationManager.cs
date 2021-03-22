@@ -1,8 +1,6 @@
 ﻿using MetricsIntegrator.Export;
 using MetricsIntegrator.IO;
 using MetricsIntegrator.Parser;
-using System;
-using System.Collections.Generic;
 using System.IO;
 
 namespace MetricsIntegrator.Integrator
@@ -44,15 +42,27 @@ namespace MetricsIntegrator.Integrator
         //---------------------------------------------------------------------
         public void IntegrateMetrics()
         {
-            metricsParseManager.Parse();
+            DoParsing();
+            DoExportation();
+        }
 
-            string outputDir = workingDirectory + Path.DirectorySeparatorChar + "results";
-            
-            IExporter exportManager = new MetricsExportManager(
-                outputDir, 
-                projectName, 
-                metricsParseManager.MetricsContainer
-            );
+        private void DoParsing()
+        {
+            metricsParseManager.Parse();
+        }
+
+        private void DoExportation()
+        {
+            IExporter exportManager = new MetricsExportManager.Builder()
+                .OutputDirectory(workingDirectory + Path.DirectorySeparatorChar + "results")
+                .ProjectName(projectName)
+                .Mapping(metricsParseManager.Mapping)
+                .SourceCodeMetrics(metricsParseManager.SourceCodeMetrics)
+                .TestCodeMetrics(metricsParseManager.TestCodeMetrics)
+                .TestPathMetrics(metricsParseManager.TestPathMetrics)
+                .TestCaseMetrics(metricsParseManager.TestCaseMetrics)
+                .Build();
+
             exportManager.Export();
         }
     }

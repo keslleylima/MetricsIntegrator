@@ -1,6 +1,6 @@
 ﻿namespace MetricsIntegrator.Export
 {
-    interface IExporter
+    public interface IExporter
     {
         void Export();
     }
