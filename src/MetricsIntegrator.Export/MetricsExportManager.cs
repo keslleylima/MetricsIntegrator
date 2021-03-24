@@ -5,6 +5,9 @@ using System.Text;
 
 namespace MetricsIntegrator.Export
 {
+    /// <summary>
+    ///     Responsible for handling all data exports.
+    /// </summary>
     public class MetricsExportManager : IExporter
     {
         //---------------------------------------------------------------------

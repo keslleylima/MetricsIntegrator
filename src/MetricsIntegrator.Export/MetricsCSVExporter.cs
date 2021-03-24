@@ -63,9 +63,15 @@ namespace MetricsIntegrator.Export
             private Dictionary<string, Metrics> testCodeMetrics;
             private List<Metrics> baseMetrics;
 
-            public Builder(string outputPath)
+            public Builder()
+            {
+            }
+
+            public Builder OutputPath(string outputPath)
             {
                 this.outputPath = outputPath;
+
+                return this;
             }
 
             public Builder Mapping(Dictionary<string, List<string>> mapping)

@@ -146,7 +146,8 @@ namespace MetricsIntegrator.Export
         //---------------------------------------------------------------------
         private IExporter CreateMetricsCSVExporter(string outputPath, List<Metrics> metrics)
         {
-            return new MetricsCSVExporter.Builder(outputPath)
+            return new MetricsCSVExporter.Builder()
+               .OutputPath(outputPath)
                .Mapping(mapping)
                .SourceCodeMetrics(sourceCodeMetrics)
                .TestCodeMetrics(testCodeMetrics)
