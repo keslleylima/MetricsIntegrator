@@ -22,9 +22,9 @@ namespace MetricsIntegrator.GUI
     /// <summary>
     /// An empty page that can be used on its own or navigated to within a Frame.
     /// </summary>
-    public sealed partial class MainPage : Page
+    public sealed partial class ExportView : Page
     {
-        public MainPage()
+        public ExportView()
         {
             this.InitializeComponent();
             var cbxId = new CheckBox();
@@ -54,9 +54,9 @@ namespace MetricsIntegrator.GUI
             
             if (file != null)
             {
-                var dialog = new Windows.UI.Popups.MessageDialog("Arquivo exportado com sucesso!");
+                var dialog = new Windows.UI.Popups.MessageDialog("The file has been successfully exported!");
                 await dialog.ShowAsync();
-                this.Frame.Navigate(typeof(EndPage));
+                this.Frame.Navigate(typeof(EndView));
             }
             else
             {

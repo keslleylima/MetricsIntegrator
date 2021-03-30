@@ -1,5 +1,5 @@
 ﻿<Page
-    x:Class="MetricsIntegrator.GUI.MetricsMain"
+    x:Class="MetricsIntegrator.GUI.HomeView"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="using:MetricsIntegrator.GUI"

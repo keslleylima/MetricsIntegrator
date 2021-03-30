@@ -22,9 +22,9 @@ namespace MetricsIntegrator.GUI
     /// <summary>
     /// An empty page that can be used on its own or navigated to within a Frame.
     /// </summary>
-    public sealed partial class EndPage : Page
+    public sealed partial class EndView : Page
     {
-        public EndPage()
+        public EndView()
         {
             this.InitializeComponent();
             this.lblExportPath.Text = "/foo/bar.csv";
@@ -32,7 +32,7 @@ namespace MetricsIntegrator.GUI
 
         private async void OnGoBackToHome(object sender, RoutedEventArgs e)
         {
-            this.Frame.Navigate(typeof(MetricsMain));
+            this.Frame.Navigate(typeof(HomeView));
         }
 
         private void OnQuit(object sender, RoutedEventArgs e)

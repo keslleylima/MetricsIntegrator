@@ -22,9 +22,9 @@ namespace MetricsIntegrator.GUI
     /// <summary>
     /// An empty page that can be used on its own or navigated to within a Frame.
     /// </summary>
-    public sealed partial class MetricsMain : Page
+    public sealed partial class HomeView : Page
     {
-        public MetricsMain()
+        public HomeView()
         {
             this.InitializeComponent();
             btnIntegrate.IsEnabled = false;
@@ -131,7 +131,7 @@ namespace MetricsIntegrator.GUI
 
         private async void OnIntegrate(object sender, RoutedEventArgs e)
         {
-            this.Frame.Navigate(typeof(MainPage));
+            this.Frame.Navigate(typeof(ExportView));
         }
     }
 }

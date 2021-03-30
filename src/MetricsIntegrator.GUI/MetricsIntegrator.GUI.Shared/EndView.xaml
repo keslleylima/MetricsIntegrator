@@ -5,7 +5,7 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:Custom="using:Microsoft.UI.Xaml.Controls"
-    x:Class="MetricsIntegrator.GUI.EndPage"
+    x:Class="MetricsIntegrator.GUI.EndView"
     mc:Ignorable="d" d:DesignHeight="600" d:DesignWidth="700" Background="#FF1D1D1D">
 
     <StackPanel>

@@ -91,7 +91,7 @@ namespace MetricsIntegrator.GUI
                     // When the navigation stack isn't restored navigate to the first page,
                     // configuring the new page by passing required information as a navigation
                     // parameter
-                    rootFrame.Navigate(typeof(MetricsMain), e.Arguments);
+                    rootFrame.Navigate(typeof(HomeView), e.Arguments);
                     window.SizeChanged += (o,e2) => {
                         Windows.UI.ViewManagement.ApplicationView.GetForCurrentView().TryResizeView(new Windows.Foundation.Size(700, 600));
 
