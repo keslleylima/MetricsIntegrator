@@ -6,7 +6,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:Custom="using:Microsoft.UI.Xaml.Controls"
     x:Class="MetricsIntegrator.GUI.EndView"
-    mc:Ignorable="d" d:DesignHeight="600" d:DesignWidth="700" Background="#FF1D1D1D">
+    mc:Ignorable="d" d:DesignHeight="650" d:DesignWidth="700" Background="#FF1D1D1D">
 
     <StackPanel>
         <StackPanel Height="80">

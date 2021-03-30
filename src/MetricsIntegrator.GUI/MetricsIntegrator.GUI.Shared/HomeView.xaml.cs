@@ -28,7 +28,7 @@ namespace MetricsIntegrator.GUI
         {
             this.InitializeComponent();
             btnIntegrate.IsEnabled = false;
-            
+            inProjectName.TextChanged += (o, e) => { CheckIfIntegrateIsAvailable(); };
         }
 
         private async void OnChooseMapping(object sender, RoutedEventArgs e)
@@ -57,12 +57,18 @@ namespace MetricsIntegrator.GUI
 
         private bool AreAllFilesProvided()
         {
-            return (inMapping.Text != "")
+            return (inProjectName.Text != "")
+                && (inMapping.Text != "")
                 && (inSourceCode.Text != "")
                 && (inTestPath.Text != "")
                 && (inTestCase.Text != "");
         }
 
+        private async void OnClearProjectName(object sender, RoutedEventArgs e)
+        {
+            inProjectName.Text = "";
+        }
+        
         private async void OnChooseSourceCode(object sender, RoutedEventArgs e)
         {
             FileOpenPicker openPicker = new FileOpenPicker();
@@ -75,10 +81,6 @@ namespace MetricsIntegrator.GUI
             {
                 inSourceCode.Text = file.Path;
                 CheckIfIntegrateIsAvailable();
-            }
-            else
-            {
-                inSourceCode.Text = "";
             }
         }
 
@@ -122,6 +124,7 @@ namespace MetricsIntegrator.GUI
 
         private async void OnClear(object sender, RoutedEventArgs e)
         {
+            inProjectName.Text = "";
             inMapping.Text = "";
             inSourceCode.Text = "";
             inTestPath.Text = "";

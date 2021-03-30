@@ -55,11 +55,6 @@ namespace MetricsIntegrator.GUI
 #else
             var window = Windows.UI.Xaml.Window.Current;
 #endif
-            Windows.UI.ViewManagement.ApplicationView.PreferredLaunchViewSize = new Windows.Foundation.Size(700, 600);
-            Windows.UI.ViewManagement.ApplicationView.PreferredLaunchWindowingMode = Windows.UI.ViewManagement.ApplicationViewWindowingMode.PreferredLaunchViewSize;
-            Windows.UI.ViewManagement.ApplicationView.GetForCurrentView().SetPreferredMinSize(new Size(700, 600));
-
-
 
             var rootFrame = window.Content as Frame;
             
@@ -93,7 +88,7 @@ namespace MetricsIntegrator.GUI
                     // parameter
                     rootFrame.Navigate(typeof(HomeView), e.Arguments);
                     window.SizeChanged += (o,e2) => {
-                        Windows.UI.ViewManagement.ApplicationView.GetForCurrentView().TryResizeView(new Windows.Foundation.Size(700, 600));
+                        Windows.UI.ViewManagement.ApplicationView.GetForCurrentView().TryResizeView(new Windows.Foundation.Size(700, 650));
 
                     };
                     //rootFrame.Navigate(typeof(MainPage), e.Arguments);

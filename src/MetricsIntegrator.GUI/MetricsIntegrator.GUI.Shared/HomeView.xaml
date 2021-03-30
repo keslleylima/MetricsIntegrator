@@ -5,7 +5,7 @@
     xmlns:local="using:MetricsIntegrator.GUI"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    mc:Ignorable="d" d:DesignHeight="600" d:DesignWidth="700" Width="700" MaxWidth="700" Background="#FF1D1D1D">
+    mc:Ignorable="d" d:DesignHeight="650" d:DesignWidth="700" Width="700" Background="#FF1D1D1D">
 
     <StackPanel Background="#FF232323">
         <!-- Header -->
@@ -21,22 +21,32 @@
         <ProgressBar Minimum="0" Maximum="100" Value="1" Foreground="#21b721" Background="#3311B25A" />
 
         <!-- Body -->
-        <StackPanel  Margin="10 0 10 0" Padding="0 10 0 0" Height="510">
+        <StackPanel  Margin="10 0 10 0" Padding="0 10 0 0">
             <TextBlock Text="Metrics file selection" FontSize="40" HorizontalAlignment="Center" />
-            
-         
+
+            <StackPanel Margin="0 10 0 10">
+                <TextBlock Text="Project name" FontSize="20" Margin="30 0 0 10" />
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="100"/>
+                    </Grid.ColumnDefinitions>
+                    <TextBox Name="inProjectName" PlaceholderText="org.foo.bar" Margin="0 0 10 0" Grid.Column="0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Background="#FF151515" SelectionHighlightColor="#FF21B721" PlaceholderForeground="#FF818181" />
+                    <Button Click="OnClearProjectName"  Content="Clear" Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Background="#21b721" />
+                </Grid>
+            </StackPanel>
             
             <StackPanel Margin="0 10 0 10">
-            <TextBlock Text="Mapping file" FontSize="20" Margin="30 0 0 10" />
-            <Grid>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="100"/>
-                </Grid.ColumnDefinitions>
-                <TextBox Name="inMapping" PlaceholderText="File path" Margin="0 0 10 0" Grid.Column="0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" IsEnabled="False" />
+                <TextBlock Text="Mapping file" FontSize="20" Margin="30 0 0 10" />
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="100"/>
+                    </Grid.ColumnDefinitions>
+                    <TextBox Name="inMapping" PlaceholderText="File path" Margin="0 0 10 0" Grid.Column="0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" IsEnabled="False" />
                     <Button Click="OnChooseMapping"  Content="Select file" Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Background="#21b721" />
-            </Grid>
-        </StackPanel>
+                </Grid>
+            </StackPanel>
 
             <StackPanel Margin="0 10 0 10">
                 <TextBlock Text="Source code metrics file" FontSize="20" Margin="30 0 0 10" />
@@ -62,7 +72,7 @@
             </Grid>
         </StackPanel>
 
-            <StackPanel Margin="0 10 0 10">
+        <StackPanel Margin="0 10 0 10">
             <TextBlock Text="Test case metrics file" FontSize="20" Margin="30 0 0 10" />
             <Grid>
                 <Grid.ColumnDefinitions>
@@ -74,15 +84,13 @@
             </Grid>
         </StackPanel>
 
-            
-
-            <Grid Margin="0 40 0 0">
+        <Grid Margin="0 10 0 0">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
             <Button Click="OnClear" Content="Clear" Margin="0 0 10 0" Grid.Column="0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" />
-                <Button Name="btnIntegrate" Click="OnIntegrate" Content="Integrate" Margin="10 0 0 0" Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Background="#21b721" />
+            <Button Name="btnIntegrate" Click="OnIntegrate" Content="Integrate" Margin="10 0 0 0" Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Background="#21b721" />
         </Grid>
         </StackPanel>
     </StackPanel>
