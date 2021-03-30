@@ -7,7 +7,31 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MetricsIntegrator", "src\Me
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MetricsIntegratorTest", "test\MetricsIntegratorTest.csproj", "{E7FD9855-5028-40FB-B453-EAADA915CE2C}"
 EndProject
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "MetricsIntegrator.GUI.Shared", "src\MetricsIntegrator.GUI\MetricsIntegrator.GUI.Shared\MetricsIntegrator.GUI.Shared.shproj", "{6279C845-92F8-4333-AB99-3D213163593C}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Platforms", "Platforms", "{B7A89862-7DE2-437A-83FE-74E70721DC43}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MetricsIntegrator.GUI.UWP", "src\MetricsIntegrator.GUI\MetricsIntegrator.GUI.UWP\MetricsIntegrator.GUI.UWP.csproj", "{854E9A4D-ED0E-4F68-9E27-F66484659E4A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MetricsIntegrator.GUI.macOS", "src\MetricsIntegrator.GUI\MetricsIntegrator.GUI.macOS\MetricsIntegrator.GUI.macOS.csproj", "{399E24EF-AC73-46A7-B08D-CB4887283E20}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MetricsIntegrator.GUI.Skia.Wpf.Host", "src\MetricsIntegrator.GUI\MetricsIntegrator.GUI.Skia.Wpf.Host\MetricsIntegrator.GUI.Skia.Wpf.Host.csproj", "{4E45EC7E-37C4-4387-9510-0FFE89A18CD9}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MetricsIntegrator.GUI.Skia.Wpf", "src\MetricsIntegrator.GUI\MetricsIntegrator.GUI.Skia.Wpf\MetricsIntegrator.GUI.Skia.Wpf.csproj", "{40C019C6-0A10-471D-9C18-2001562007B0}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MetricsIntegrator.GUI.Skia.Gtk", "src\MetricsIntegrator.GUI\MetricsIntegrator.GUI.Skia.Gtk\MetricsIntegrator.GUI.Skia.Gtk.csproj", "{58228714-ED77-4A69-BC3F-E256B003C223}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MetricsIntegrator.GUI.Skia.Tizen", "src\MetricsIntegrator.GUI\MetricsIntegrator.GUI.Skia.Tizen\MetricsIntegrator.GUI.Skia.Tizen.csproj", "{88A3C954-2724-4D21-9ED5-5C5BF6A058AF}"
+EndProject
 Global
+	GlobalSection(SharedMSBuildProjectFiles) = preSolution
+		src\MetricsIntegrator.GUI\MetricsIntegrator.GUI.Shared\MetricsIntegrator.GUI.Shared.projitems*{399e24ef-ac73-46a7-b08d-cb4887283e20}*SharedItemsImports = 4
+		src\MetricsIntegrator.GUI\MetricsIntegrator.GUI.Shared\MetricsIntegrator.GUI.Shared.projitems*{40c019c6-0a10-471d-9c18-2001562007b0}*SharedItemsImports = 5
+		src\MetricsIntegrator.GUI\MetricsIntegrator.GUI.Shared\MetricsIntegrator.GUI.Shared.projitems*{58228714-ed77-4a69-bc3f-e256b003c223}*SharedItemsImports = 5
+		src\MetricsIntegrator.GUI\MetricsIntegrator.GUI.Shared\MetricsIntegrator.GUI.Shared.projitems*{6279c845-92f8-4333-ab99-3d213163593c}*SharedItemsImports = 13
+		src\MetricsIntegrator.GUI\MetricsIntegrator.GUI.Shared\MetricsIntegrator.GUI.Shared.projitems*{854e9a4d-ed0e-4f68-9e27-f66484659e4a}*SharedItemsImports = 4
+		src\MetricsIntegrator.GUI\MetricsIntegrator.GUI.Shared\MetricsIntegrator.GUI.Shared.projitems*{88a3c954-2724-4d21-9ed5-5c5bf6a058af}*SharedItemsImports = 5
+	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
@@ -21,13 +45,39 @@ Global
 		{E7FD9855-5028-40FB-B453-EAADA915CE2C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E7FD9855-5028-40FB-B453-EAADA915CE2C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E7FD9855-5028-40FB-B453-EAADA915CE2C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{854E9A4D-ED0E-4F68-9E27-F66484659E4A}.Debug|Any CPU.ActiveCfg = Debug|x86
+		{854E9A4D-ED0E-4F68-9E27-F66484659E4A}.Debug|Any CPU.Build.0 = Debug|x86
+		{854E9A4D-ED0E-4F68-9E27-F66484659E4A}.Debug|Any CPU.Deploy.0 = Debug|x86
+		{854E9A4D-ED0E-4F68-9E27-F66484659E4A}.Release|Any CPU.ActiveCfg = Release|x86
+		{399E24EF-AC73-46A7-B08D-CB4887283E20}.Debug|Any CPU.ActiveCfg = Debug|iPhoneSimulator
+		{399E24EF-AC73-46A7-B08D-CB4887283E20}.Release|Any CPU.ActiveCfg = Release|iPhoneSimulator
+		{4E45EC7E-37C4-4387-9510-0FFE89A18CD9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4E45EC7E-37C4-4387-9510-0FFE89A18CD9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4E45EC7E-37C4-4387-9510-0FFE89A18CD9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4E45EC7E-37C4-4387-9510-0FFE89A18CD9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{40C019C6-0A10-471D-9C18-2001562007B0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{40C019C6-0A10-471D-9C18-2001562007B0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{40C019C6-0A10-471D-9C18-2001562007B0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{40C019C6-0A10-471D-9C18-2001562007B0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{58228714-ED77-4A69-BC3F-E256B003C223}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{58228714-ED77-4A69-BC3F-E256B003C223}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{58228714-ED77-4A69-BC3F-E256B003C223}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{58228714-ED77-4A69-BC3F-E256B003C223}.Release|Any CPU.Build.0 = Release|Any CPU
+		{88A3C954-2724-4D21-9ED5-5C5BF6A058AF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{88A3C954-2724-4D21-9ED5-5C5BF6A058AF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{88A3C954-2724-4D21-9ED5-5C5BF6A058AF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{88A3C954-2724-4D21-9ED5-5C5BF6A058AF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
-		{9ACFD02C-43D5-46E1-9ECE-B5EEABC5154A} = {17444F35-D179-43FC-A1C0-FF09E4B1C13B}
-		{E7FD9855-5028-40FB-B453-EAADA915CE2C} = {F503CF14-32B9-4283-AE97-55281E212D94}
+		{854E9A4D-ED0E-4F68-9E27-F66484659E4A} = {B7A89862-7DE2-437A-83FE-74E70721DC43}
+		{399E24EF-AC73-46A7-B08D-CB4887283E20} = {B7A89862-7DE2-437A-83FE-74E70721DC43}
+		{4E45EC7E-37C4-4387-9510-0FFE89A18CD9} = {B7A89862-7DE2-437A-83FE-74E70721DC43}
+		{40C019C6-0A10-471D-9C18-2001562007B0} = {B7A89862-7DE2-437A-83FE-74E70721DC43}
+		{58228714-ED77-4A69-BC3F-E256B003C223} = {B7A89862-7DE2-437A-83FE-74E70721DC43}
+		{88A3C954-2724-4D21-9ED5-5C5BF6A058AF} = {B7A89862-7DE2-437A-83FE-74E70721DC43}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {DC441F0E-4942-472A-BE1A-E5B5E2AF3B26}
