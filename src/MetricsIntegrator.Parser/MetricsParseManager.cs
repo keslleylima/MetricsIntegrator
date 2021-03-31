@@ -33,6 +33,7 @@ namespace MetricsIntegrator.Parser
         /// 
         /// <param name="metricsFileManager">Metric files</param>
         /// <param name="delimiter">Symbol used to separate data</param>
+        /// <param name="filterMetrics">Metrics to be avoided</param>
         /// 
         /// <exception cref="System.ArgumentException">
         ///     If metrics file manager is null or if delimiter is null or empty.
@@ -49,21 +50,6 @@ namespace MetricsIntegrator.Parser
             this.delimiter = delimiter;
         }
 
-        /// <summary>
-        ///     Parses files contained in a metric file manager. Using this
-        ///     constructor, delimiter will be ';'.
-        /// </summary>
-        /// 
-        /// <param name="metricsFileManager">Metric files</param>
-        /// 
-        /// <exception cref="System.ArgumentException">
-        ///     If metrics file manager is null or if delimiter is null or empty.
-        /// </exception>
-        public MetricsParseManager(MetricsFileManager metricsFileManager) 
-            : this(metricsFileManager, ";")
-        {
-        }
-
 
         //---------------------------------------------------------------------
         //		Properties
@@ -73,6 +59,7 @@ namespace MetricsIntegrator.Parser
         public Dictionary<string, Metrics> TestCodeMetrics { get; private set; }
         public List<Metrics> TestPathMetrics { get; private set; }
         public List<Metrics> TestCaseMetrics { get; private set; }
+        public ISet<string> FieldKeys { get; private set; }
 
 
         //---------------------------------------------------------------------
@@ -98,17 +85,18 @@ namespace MetricsIntegrator.Parser
 
         private void DoTestPathMetricsParsing()
         {
-            TestPathMetricsParser tpParser = new TestPathMetricsParser(
+            BaseMetricsParser tpParser = new BaseMetricsParser(
                 metricsFileManager.TestPathsPath, 
                 delimiter
             );
 
             TestPathMetrics = tpParser.Parse();
+            FieldKeys = tpParser.FieldKeys;
         }
 
         private void DoTestCaseMetricsParsing()
         {
-            TestCaseMetricsParser tcParser = new TestCaseMetricsParser(
+            BaseMetricsParser tcParser = new BaseMetricsParser(
                 metricsFileManager.TestCasePath, 
                 delimiter
             );

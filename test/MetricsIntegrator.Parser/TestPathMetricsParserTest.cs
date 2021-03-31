@@ -124,7 +124,7 @@ namespace MetricsIntegrator.Parser
 
         private void DoParsing()
         {
-            TestPathMetricsParser parser = new TestPathMetricsParser(basePath + filename);
+            BaseMetricsParser parser = new TestPathMetricsParser(basePath + filename);
             obtained = parser.Parse();
         }
 

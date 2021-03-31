@@ -1,6 +1,7 @@
 ﻿using MetricsIntegrator.Export;
 using MetricsIntegrator.IO;
 using MetricsIntegrator.Parser;
+using System.Collections.Generic;
 using System.IO;
 
 namespace MetricsIntegrator.Integrator
@@ -20,7 +21,7 @@ namespace MetricsIntegrator.Integrator
         //---------------------------------------------------------------------
         //		Attributes
         //---------------------------------------------------------------------
-        private readonly string workingDirectory;
+        private readonly static string DELIMITER = ";";
         private readonly string projectName;
         private readonly MetricsParseManager metricsParseManager;
 
@@ -28,33 +29,33 @@ namespace MetricsIntegrator.Integrator
         //---------------------------------------------------------------------
         //		Constructor
         //---------------------------------------------------------------------
-        public MetricsIntegrationManager(string workingDirectory, string projectName, 
+        public MetricsIntegrationManager(string projectName, 
                                          MetricsFileManager metricsFileManager)
         {
-            this.workingDirectory = workingDirectory;
             this.projectName = projectName;
-            metricsParseManager = new MetricsParseManager(metricsFileManager);
+            metricsParseManager = new MetricsParseManager(
+                metricsFileManager, 
+                DELIMITER
+            );
         }
 
 
         //---------------------------------------------------------------------
         //		Methods
         //---------------------------------------------------------------------
-        public void IntegrateMetrics()
-        {
-            DoParsing();
-            DoExportation();
-        }
-
-        private void DoParsing()
+        public ISet<string> DoParsing()
         {
             metricsParseManager.Parse();
+            
+            return metricsParseManager.FieldKeys;
         }
 
-        private void DoExportation()
+        public string DoExportation(string outputDirectory)
         {
+            string outputPath = outputDirectory + Path.DirectorySeparatorChar + "results";
+
             IExporter exportManager = new MetricsExportManager.Builder()
-                .OutputDirectory(workingDirectory + Path.DirectorySeparatorChar + "results")
+                .OutputDirectory(outputPath)
                 .ProjectName(projectName)
                 .Mapping(metricsParseManager.Mapping)
                 .SourceCodeMetrics(metricsParseManager.SourceCodeMetrics)
@@ -64,6 +65,8 @@ namespace MetricsIntegrator.Integrator
                 .Build();
 
             exportManager.Export();
+
+            return outputPath;
         }
     }
 }

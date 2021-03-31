@@ -9,30 +9,29 @@ namespace MetricsIntegrator
     {
         static void Main(string[] args)
         {
+            //MetricsIntegrationManager integrator = new MetricsIntegrationManager(
+            //    Directory.GetCurrentDirectory(),
+            //    AskUserForProjectName(),
+            //    CreateMetricsFileManager(args)
+            //);
+
             MetricsIntegrationManager integrator = new MetricsIntegrationManager(
-                Directory.GetCurrentDirectory(),
-                AskUserForProjectName(),
-                CreateMetricsFileManager(args)
+                workingDirectory,
+                projectName,
+                CreateMetricsFileManager()
             );
 
             integrator.IntegrateMetrics();
-        }
-
-        private static string AskUserForProjectName()
-        {
-            Console.Write("Project name: ");
-
-            return Console.ReadLine();
         }
 
         private static MetricsFileManager CreateMetricsFileManager(string[] args)
         {
             MetricsFileManager metricsFileManager = new MetricsFileManager();
 
-            if (args.Length > 1)
-                metricsFileManager.SetFilesFromCLI(args);
-            else
-                metricsFileManager.FindAllFromDirectory(Directory.GetCurrentDirectory());
+            metricsFileManager.MapPath;
+            metricsFileManager.SourceCodePath;
+            metricsFileManager.TestCasePath;
+            metricsFileManager.TestPathsPath;
 
             return metricsFileManager;
         }

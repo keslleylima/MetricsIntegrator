@@ -14,6 +14,7 @@ using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
+using MetricsIntegrator.Integrator;
 
 // The Blank Page item template is documented at http://go.microsoft.com/fwlink/?LinkId=402352&clcid=0x409
 
@@ -24,9 +25,23 @@ namespace MetricsIntegrator.GUI
     /// </summary>
     public sealed partial class ExportView : Page
     {
+        private MetricsIntegrationManager integrator;
+
         public ExportView()
         {
             this.InitializeComponent();
+        }
+
+        protected override void OnNavigatedTo(NavigationEventArgs e)
+        {
+            base.OnNavigatedTo(e);
+
+            integrator = (MetricsIntegrationManager) e.Parameter;
+            CreateMetricsSelector();
+        }
+
+        private void CreateMetricsSelector()
+        {
             var cbxId = new CheckBox();
             cbxId.Name = "cbxId";
             cbxId.Content = "CHX CRIADO!!!";

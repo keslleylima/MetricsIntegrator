@@ -86,7 +86,6 @@ namespace MetricsIntegrator.Parser
                         }
 
                     }
-
                 }
             }
         }

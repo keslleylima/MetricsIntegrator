@@ -6,19 +6,20 @@ using System.Linq;
 
 namespace MetricsIntegrator.Parser
 {
-    public class TestPathMetricsParser
+    public class BaseMetricsParser
     {
         //---------------------------------------------------------------------
         //		Attributes
         //---------------------------------------------------------------------
         private readonly string filepath;
         private readonly string delimiter;
+        private readonly ISet<string> filterMetrics;
 
 
         //---------------------------------------------------------------------
         //		Constructor
         //---------------------------------------------------------------------
-        public TestPathMetricsParser(string filepath, string delimiter)
+        public BaseMetricsParser(string filepath, string delimiter)
         {
             if ((filepath == null) || filepath.Length == 0)
                 throw new ArgumentException("File path cannot be empty");
@@ -31,11 +32,15 @@ namespace MetricsIntegrator.Parser
 
             this.filepath = filepath;
             this.delimiter = delimiter;
+
+            FieldKeys = new HashSet<string>();
         }
 
-        public TestPathMetricsParser(string filepath) : this(filepath, ";")
-        {
-        }
+
+        //---------------------------------------------------------------------
+        //		Properties
+        //---------------------------------------------------------------------
+        public ISet<string> FieldKeys { get; private set; }
 
 
         //---------------------------------------------------------------------
@@ -46,26 +51,36 @@ namespace MetricsIntegrator.Parser
             List<Metrics> metrics = new List<Metrics>();
 
             string[] testPathMetricsFile = File.ReadAllLines(filepath);
-            string[] fields = testPathMetricsFile[0].Split(delimiter);
+            string[] fieldKey = testPathMetricsFile[0].Split(delimiter);
+
+            StoreFieldKeys(fieldKey);
 
             foreach (string line in testPathMetricsFile.Skip(1).ToArray())
             {
-                metrics.Add(CreateTestPathMetrics(line.Split(delimiter), fields));
+                metrics.Add(CreateBaseMetrics(line.Split(delimiter), fieldKey));
             }
 
             return metrics;
         }
 
-        private Metrics CreateTestPathMetrics(string[] row, string[] fields)
+        private void StoreFieldKeys(string[] fieldKey)
         {
-            Metrics testPath = new Metrics();
-
-            for (int i = 0; i < fields.Length; i++)
+            for (int i = 0; i < fieldKey.Length; i++)
             {
-                testPath.AddMetric(fields[i], row[i]);
+                FieldKeys.Add(fieldKey[i]);
+            }
+        }
+
+        private Metrics CreateBaseMetrics(string[] fieldValue, string[] fieldKey)
+        {
+            Metrics metrics = new Metrics();
+
+            for (int i = 0; i < fieldKey.Length; i++)
+            {
+                metrics.AddMetric(fieldKey[i], fieldValue[i]);
             }
 
-            return testPath;
+            return metrics;
         }
     }
 }

@@ -1,4 +1,6 @@
-﻿using System;
+﻿using MetricsIntegrator.Integrator;
+using MetricsIntegrator.IO;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -134,7 +136,24 @@ namespace MetricsIntegrator.GUI
 
         private async void OnIntegrate(object sender, RoutedEventArgs e)
         {
-            this.Frame.Navigate(typeof(ExportView));
+            MetricsIntegrationManager integrator = new MetricsIntegrationManager(
+                inProjectName.Text,
+                CreateMetricsFileManager()
+            );
+
+            this.Frame.Navigate(typeof(ExportView), integrator);
+        }
+
+        private MetricsFileManager CreateMetricsFileManager()
+        {
+            MetricsFileManager metricsFileManager = new MetricsFileManager();
+
+            metricsFileManager.MapPath = inMapping.Text;
+            metricsFileManager.SourceCodePath = inSourceCode.Text;
+            metricsFileManager.TestCasePath = inTestCase.Text;
+            metricsFileManager.TestPathsPath = inTestPath.Text;
+
+            return metricsFileManager;
         }
     }
 }
