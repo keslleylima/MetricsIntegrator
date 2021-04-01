@@ -27,7 +27,13 @@ namespace MetricsIntegrator.GUI
         public EndView()
         {
             this.InitializeComponent();
-            this.lblExportPath.Text = "/foo/bar.csv";
+        }
+
+        protected override void OnNavigatedTo(NavigationEventArgs e)
+        {
+            base.OnNavigatedTo(e);
+
+            lblExportPath.Text = (string) e.Parameter;
         }
 
         private async void OnGoBackToHome(object sender, RoutedEventArgs e)

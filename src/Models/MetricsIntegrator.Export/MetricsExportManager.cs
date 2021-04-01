@@ -171,13 +171,13 @@ namespace MetricsIntegrator.Export
 
         private void ExportUsingTestPathMetrics()
         {
-            IExporter csvExporter = exportFactory.CreateTestPathCSVExporter(testPathMetrics, filterMetrics);
+            IExporter csvExporter = exportFactory.CreateTestPathCSVExporter(testPathMetrics);
             csvExporter.Export();
         }
 
         private void ExportUsingTestCaseMetrics()
         {
-            IExporter csvExporter = exportFactory.CreateTestCaseCSVExporter(testCaseMetrics, filterMetrics);
+            IExporter csvExporter = exportFactory.CreateTestCaseCSVExporter(testCaseMetrics);
             csvExporter.Export();
         }
     }
