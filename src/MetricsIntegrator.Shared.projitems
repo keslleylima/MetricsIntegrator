@@ -18,19 +18,6 @@
     <Compile Include="$(MSBuildThisFileDirectory)App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
-    <Compile Include="$(MSBuildThisFileDirectory)Models\MetricsIntegrator.Data\Metrics.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Models\MetricsIntegrator.Export\IExporter.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Models\MetricsIntegrator.Export\MetricsCSVExporter.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Models\MetricsIntegrator.Export\MetricsExporterFactory.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Models\MetricsIntegrator.Export\MetricsExportManager.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Models\MetricsIntegrator.Integrator\MetricsIntegrationManager.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Models\MetricsIntegrator.IO\MetricsFileManager.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Models\MetricsIntegrator.Parser\BaseMetricsParser.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Models\MetricsIntegrator.Parser\MappingMetricsParser.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Models\MetricsIntegrator.Parser\MetricsParseManager.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Models\MetricsIntegrator.Parser\SourceCodeMetricsParser.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Models\MetricsIntegrator.Utils\DictionaryUtils.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Models\MetricsIntegrator.Utils\FileUtils.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Views\EndView\EndView.xaml.cs">
       <DependentUpon>EndView.xaml</DependentUpon>
     </Compile>

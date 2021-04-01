@@ -96,7 +96,7 @@ namespace MetricsIntegrator.Parser
         {
             Assert.Throws<ArgumentException>(() => 
             {
-                new MetricsParseManager(null);
+                new MetricsParseManager(null, ";");
             });
         }
 
@@ -152,7 +152,7 @@ namespace MetricsIntegrator.Parser
 
         private void DoParsing()
         {
-            MetricsParseManager parser = new MetricsParseManager(CreateMetricsFileManager());
+            MetricsParseManager parser = new MetricsParseManager(CreateMetricsFileManager(), ";");
 
             parser.Parse();
 

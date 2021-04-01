@@ -19,6 +19,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MetricsIntegrator.GUI.Skia.
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MetricsIntegrator.GUI.Skia.Tizen", "src\Platforms\MetricsIntegrator.GUI.Skia.Tizen\MetricsIntegrator.GUI.Skia.Tizen.csproj", "{88A3C954-2724-4D21-9ED5-5C5BF6A058AF}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MetricsIntegrator", "src\Models\MetricsIntegrator.csproj", "{471DAF15-43B0-4650-B55A-6E2F529F4BA4}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MetricsIntegratorTest", "test\MetricsIntegratorTest.csproj", "{4E10B458-1226-479D-9A25-3670A14342A3}"
+EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
 		src\MetricsIntegrator.Shared.projitems*{399e24ef-ac73-46a7-b08d-cb4887283e20}*SharedItemsImports = 4
@@ -55,6 +59,14 @@ Global
 		{88A3C954-2724-4D21-9ED5-5C5BF6A058AF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{88A3C954-2724-4D21-9ED5-5C5BF6A058AF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{88A3C954-2724-4D21-9ED5-5C5BF6A058AF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{471DAF15-43B0-4650-B55A-6E2F529F4BA4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{471DAF15-43B0-4650-B55A-6E2F529F4BA4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{471DAF15-43B0-4650-B55A-6E2F529F4BA4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{471DAF15-43B0-4650-B55A-6E2F529F4BA4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4E10B458-1226-479D-9A25-3670A14342A3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4E10B458-1226-479D-9A25-3670A14342A3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4E10B458-1226-479D-9A25-3670A14342A3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4E10B458-1226-479D-9A25-3670A14342A3}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

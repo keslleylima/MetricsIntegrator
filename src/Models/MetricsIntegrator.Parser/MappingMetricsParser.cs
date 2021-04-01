@@ -80,7 +80,7 @@ namespace MetricsIntegrator.Parser
         {
             List<string> testMethods = new List<string>();
 
-            for (int i = 0; i < columns.Length; i++)
+            for (int i = 1; i < columns.Length; i++)
             {
                 if (columns[i].Length == 0)
                     continue;

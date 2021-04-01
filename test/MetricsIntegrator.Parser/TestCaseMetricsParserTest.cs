@@ -123,7 +123,7 @@ namespace MetricsIntegrator.Parser
 
         private void DoParsing()
         {
-            BaseMetricsParser parser = new TestCaseMetricsParser(basePath + filename);
+            BaseMetricsParser parser = new BaseMetricsParser(basePath + filename, ";");
             obtained = parser.Parse();
         }
 

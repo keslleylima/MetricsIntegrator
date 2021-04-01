@@ -42,21 +42,14 @@ namespace MetricsIntegrator.GUI
 
         private void CreateMetricsSelector()
         {
-            var cbxId = new CheckBox();
-            cbxId.Name = "cbxId";
-            cbxId.Content = "CHX CRIADO!!!";
-            cbxId.IsChecked = true;
-            cbxId.IsEnabled = false;
-            pnlMetricsSelection.Children.Add(cbxId);
-
             List<string> fieldKeys = integrator.DoParsing();
 
-            pnlMetricsSelection.Children.Add(CreateCheckBoxForIdField(fieldKeys[0]));
+            //pnlMetricsSelection.Children.Add(CreateCheckBoxForIdField(fieldKeys[0]));
 
-            for (int i = 1; i < fieldKeys.Count; i++)
+            /*for (int i = 1; i < fieldKeys.Count; i++)
             {
                 pnlMetricsSelection.Children.Add(CreateCheckBoxForField(fieldKeys[i]));
-            }
+            }*/
         }
 
         private CheckBox CreateCheckBoxForIdField(string field)
