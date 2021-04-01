@@ -80,12 +80,12 @@ namespace MetricsIntegrator.Parser
         {
             List<string> testMethods = new List<string>();
 
-            foreach (string column in columns[1..columns.Length])
+            for (int i = 0; i < columns.Length; i++)
             {
-                if (column.Length == 0)
+                if (columns[i].Length == 0)
                     continue;
 
-                testMethods.Add(column);
+                testMethods.Add(columns[i]);
             }
 
             return testMethods;

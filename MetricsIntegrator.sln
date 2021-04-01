@@ -3,66 +3,36 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.29519.181
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MetricsIntegrator", "src\MetricsIntegrator.csproj", "{9ACFD02C-43D5-46E1-9ECE-B5EEABC5154A}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MetricsIntegratorTest", "test\MetricsIntegratorTest.csproj", "{E7FD9855-5028-40FB-B453-EAADA915CE2C}"
-EndProject
-Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "MetricsIntegrator.GUI.Shared", "src\MetricsIntegrator.GUI.Shared\MetricsIntegrator.GUI.Shared.shproj", "{6279C845-92F8-4333-AB99-3D213163593C}"
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "MetricsIntegrator.Shared", "src\MetricsIntegrator.Shared.shproj", "{6279C845-92F8-4333-AB99-3D213163593C}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Platforms", "Platforms", "{B7A89862-7DE2-437A-83FE-74E70721DC43}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MetricsIntegrator.GUI.UWP", "src\MetricsIntegrator.GUI.UWP\MetricsIntegrator.GUI.UWP.csproj", "{854E9A4D-ED0E-4F68-9E27-F66484659E4A}"
-	ProjectSection(ProjectDependencies) = postProject
-		{9ACFD02C-43D5-46E1-9ECE-B5EEABC5154A} = {9ACFD02C-43D5-46E1-9ECE-B5EEABC5154A}
-	EndProjectSection
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MetricsIntegrator.GUI.UWP", "src\Platforms\MetricsIntegrator.GUI.UWP\MetricsIntegrator.GUI.UWP.csproj", "{854E9A4D-ED0E-4F68-9E27-F66484659E4A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MetricsIntegrator.GUI.macOS", "src\MetricsIntegrator.GUI.macOS\MetricsIntegrator.GUI.macOS.csproj", "{399E24EF-AC73-46A7-B08D-CB4887283E20}"
-	ProjectSection(ProjectDependencies) = postProject
-		{9ACFD02C-43D5-46E1-9ECE-B5EEABC5154A} = {9ACFD02C-43D5-46E1-9ECE-B5EEABC5154A}
-	EndProjectSection
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MetricsIntegrator.GUI.macOS", "src\Platforms\MetricsIntegrator.GUI.macOS\MetricsIntegrator.GUI.macOS.csproj", "{399E24EF-AC73-46A7-B08D-CB4887283E20}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MetricsIntegrator.GUI.Skia.Wpf.Host", "src\MetricsIntegrator.GUI.Skia.Wpf.Host\MetricsIntegrator.GUI.Skia.Wpf.Host.csproj", "{4E45EC7E-37C4-4387-9510-0FFE89A18CD9}"
-	ProjectSection(ProjectDependencies) = postProject
-		{9ACFD02C-43D5-46E1-9ECE-B5EEABC5154A} = {9ACFD02C-43D5-46E1-9ECE-B5EEABC5154A}
-	EndProjectSection
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MetricsIntegrator.GUI.Skia.Wpf.Host", "src\Platforms\MetricsIntegrator.GUI.Skia.Wpf.Host\MetricsIntegrator.GUI.Skia.Wpf.Host.csproj", "{4E45EC7E-37C4-4387-9510-0FFE89A18CD9}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MetricsIntegrator.GUI.Skia.Wpf", "src\MetricsIntegrator.GUI.Skia.Wpf\MetricsIntegrator.GUI.Skia.Wpf.csproj", "{40C019C6-0A10-471D-9C18-2001562007B0}"
-	ProjectSection(ProjectDependencies) = postProject
-		{9ACFD02C-43D5-46E1-9ECE-B5EEABC5154A} = {9ACFD02C-43D5-46E1-9ECE-B5EEABC5154A}
-	EndProjectSection
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MetricsIntegrator.GUI.Skia.Wpf", "src\Platforms\MetricsIntegrator.GUI.Skia.Wpf\MetricsIntegrator.GUI.Skia.Wpf.csproj", "{40C019C6-0A10-471D-9C18-2001562007B0}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MetricsIntegrator.GUI.Skia.Gtk", "src\MetricsIntegrator.GUI.Skia.Gtk\MetricsIntegrator.GUI.Skia.Gtk.csproj", "{58228714-ED77-4A69-BC3F-E256B003C223}"
-	ProjectSection(ProjectDependencies) = postProject
-		{9ACFD02C-43D5-46E1-9ECE-B5EEABC5154A} = {9ACFD02C-43D5-46E1-9ECE-B5EEABC5154A}
-	EndProjectSection
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MetricsIntegrator.GUI.Skia.Gtk", "src\Platforms\MetricsIntegrator.GUI.Skia.Gtk\MetricsIntegrator.GUI.Skia.Gtk.csproj", "{58228714-ED77-4A69-BC3F-E256B003C223}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MetricsIntegrator.GUI.Skia.Tizen", "src\MetricsIntegrator.GUI.Skia.Tizen\MetricsIntegrator.GUI.Skia.Tizen.csproj", "{88A3C954-2724-4D21-9ED5-5C5BF6A058AF}"
-	ProjectSection(ProjectDependencies) = postProject
-		{9ACFD02C-43D5-46E1-9ECE-B5EEABC5154A} = {9ACFD02C-43D5-46E1-9ECE-B5EEABC5154A}
-	EndProjectSection
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MetricsIntegrator.GUI.Skia.Tizen", "src\Platforms\MetricsIntegrator.GUI.Skia.Tizen\MetricsIntegrator.GUI.Skia.Tizen.csproj", "{88A3C954-2724-4D21-9ED5-5C5BF6A058AF}"
 EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
-		src\MetricsIntegrator.GUI.Shared\MetricsIntegrator.GUI.Shared.projitems*{399e24ef-ac73-46a7-b08d-cb4887283e20}*SharedItemsImports = 4
-		src\MetricsIntegrator.GUI.Shared\MetricsIntegrator.GUI.Shared.projitems*{40c019c6-0a10-471d-9c18-2001562007b0}*SharedItemsImports = 5
-		src\MetricsIntegrator.GUI.Shared\MetricsIntegrator.GUI.Shared.projitems*{58228714-ed77-4a69-bc3f-e256b003c223}*SharedItemsImports = 5
-		src\MetricsIntegrator.GUI.Shared\MetricsIntegrator.GUI.Shared.projitems*{6279c845-92f8-4333-ab99-3d213163593c}*SharedItemsImports = 13
-		src\MetricsIntegrator.GUI.Shared\MetricsIntegrator.GUI.Shared.projitems*{854e9a4d-ed0e-4f68-9e27-f66484659e4a}*SharedItemsImports = 4
-		src\MetricsIntegrator.GUI.Shared\MetricsIntegrator.GUI.Shared.projitems*{88a3c954-2724-4d21-9ed5-5c5bf6a058af}*SharedItemsImports = 5
+		src\MetricsIntegrator.Shared.projitems*{399e24ef-ac73-46a7-b08d-cb4887283e20}*SharedItemsImports = 4
+		src\MetricsIntegrator.Shared.projitems*{40c019c6-0a10-471d-9c18-2001562007b0}*SharedItemsImports = 5
+		src\MetricsIntegrator.Shared.projitems*{58228714-ed77-4a69-bc3f-e256b003c223}*SharedItemsImports = 5
+		src\MetricsIntegrator.Shared.projitems*{6279c845-92f8-4333-ab99-3d213163593c}*SharedItemsImports = 13
+		src\MetricsIntegrator.Shared.projitems*{854e9a4d-ed0e-4f68-9e27-f66484659e4a}*SharedItemsImports = 4
+		src\MetricsIntegrator.Shared.projitems*{88a3c954-2724-4d21-9ed5-5c5bf6a058af}*SharedItemsImports = 5
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{9ACFD02C-43D5-46E1-9ECE-B5EEABC5154A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{9ACFD02C-43D5-46E1-9ECE-B5EEABC5154A}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{9ACFD02C-43D5-46E1-9ECE-B5EEABC5154A}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{9ACFD02C-43D5-46E1-9ECE-B5EEABC5154A}.Release|Any CPU.Build.0 = Release|Any CPU
-		{E7FD9855-5028-40FB-B453-EAADA915CE2C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{E7FD9855-5028-40FB-B453-EAADA915CE2C}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{E7FD9855-5028-40FB-B453-EAADA915CE2C}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{E7FD9855-5028-40FB-B453-EAADA915CE2C}.Release|Any CPU.Build.0 = Release|Any CPU
 		{854E9A4D-ED0E-4F68-9E27-F66484659E4A}.Debug|Any CPU.ActiveCfg = Debug|x86
 		{854E9A4D-ED0E-4F68-9E27-F66484659E4A}.Debug|Any CPU.Build.0 = Debug|x86
 		{854E9A4D-ED0E-4F68-9E27-F66484659E4A}.Debug|Any CPU.Deploy.0 = Debug|x86

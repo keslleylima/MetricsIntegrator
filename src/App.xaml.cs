@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using MetricsIntegrator.GUI;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -16,7 +17,7 @@ using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 
-namespace MetricsIntegrator.GUI
+namespace MetricsIntegrator
 {
     /// <summary>
     /// Provides application-specific behavior to supplement the default Application class.
@@ -55,7 +56,7 @@ namespace MetricsIntegrator.GUI
 #else
             var window = Windows.UI.Xaml.Window.Current;
 #endif
-
+            Windows.UI.ViewManagement.ApplicationView.PreferredLaunchViewSize = new Size(650,700);
             var rootFrame = window.Content as Frame;
             
             // Do not repeat app initialization when the Window already has content,

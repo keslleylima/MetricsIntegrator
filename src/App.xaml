@@ -1,8 +1,8 @@
 ﻿<Application
-    x:Class="MetricsIntegrator.GUI.App"
+    x:Class="MetricsIntegrator.App"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:material="using:Uno.Material"
-    xmlns:local="using:MetricsIntegrator.GUI"
+    xmlns:local="using:MetricsIntegrator"
 >
 </Application>
