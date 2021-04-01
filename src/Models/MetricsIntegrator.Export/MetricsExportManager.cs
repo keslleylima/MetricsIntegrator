@@ -16,6 +16,7 @@ namespace MetricsIntegrator.Export
         private readonly List<Metrics> testPathMetrics;
         private readonly List<Metrics> testCaseMetrics;
         private readonly MetricsExporterFactory exportFactory;
+        private readonly ISet<string> filterMetrics;
 
 
         //---------------------------------------------------------------------
@@ -27,10 +28,12 @@ namespace MetricsIntegrator.Export
                                     Dictionary<string, Metrics> sourceCodeMetrics,
                                     Dictionary<string, Metrics> testCodeMetrics,
                                     List<Metrics> testPathMetrics,
-                                    List<Metrics> testCaseMetrics)
+                                    List<Metrics> testCaseMetrics,
+                                    ISet<string> filterMetrics)
         {
             this.testPathMetrics = testPathMetrics;
             this.testCaseMetrics = testCaseMetrics;
+            this.filterMetrics = filterMetrics;
 
             exportFactory = new MetricsExporterFactory.Builder()
                 .OutputDirectory(outputDirectoryPath)
@@ -38,6 +41,7 @@ namespace MetricsIntegrator.Export
                 .Mapping(mapping)
                 .SourceCodeMetrics(sourceCodeMetrics)
                 .TestCodeMetrics(testCodeMetrics)
+                .FilterMetrics(filterMetrics)
                 .Build();
         }
 
@@ -54,6 +58,8 @@ namespace MetricsIntegrator.Export
             private Dictionary<string, Metrics> testCodeMetrics;
             private List<Metrics> testPathMetrics;
             private List<Metrics> testCaseMetrics;
+            private ISet<string> filterMetrics;
+
 
             public Builder()
             {
@@ -108,6 +114,13 @@ namespace MetricsIntegrator.Export
                 return this;
             }
 
+            public Builder FilterMetrics(ISet<string> filterMetrics)
+            {
+                this.filterMetrics = filterMetrics;
+
+                return this;
+            }
+
             public MetricsExportManager Build()
             {
                 ValidateRequiredFields();
@@ -119,7 +132,8 @@ namespace MetricsIntegrator.Export
                     sourceCodeMetrics,
                     testCodeMetrics,
                     testPathMetrics,
-                    testCaseMetrics
+                    testCaseMetrics,
+                    filterMetrics
                 );
             }
 
@@ -157,13 +171,13 @@ namespace MetricsIntegrator.Export
 
         private void ExportUsingTestPathMetrics()
         {
-            IExporter csvExporter = exportFactory.CreateTestPathCSVExporter(testPathMetrics);
+            IExporter csvExporter = exportFactory.CreateTestPathCSVExporter(testPathMetrics, filterMetrics);
             csvExporter.Export();
         }
 
         private void ExportUsingTestCaseMetrics()
         {
-            IExporter csvExporter = exportFactory.CreateTestCaseCSVExporter(testCaseMetrics);
+            IExporter csvExporter = exportFactory.CreateTestCaseCSVExporter(testCaseMetrics, filterMetrics);
             csvExporter.Export();
         }
     }

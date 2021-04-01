@@ -15,6 +15,7 @@ namespace MetricsIntegrator.Export
         private readonly Dictionary<string, List<string>> mapping;
         private readonly Dictionary<string, Metrics> sourceCodeMetrics;
         private readonly Dictionary<string, Metrics> testCodeMetrics;
+        private readonly ISet<string> filterMetrics;
 
 
         //---------------------------------------------------------------------
@@ -24,13 +25,15 @@ namespace MetricsIntegrator.Export
                                        string projectName,
                                        Dictionary<string, List<string>> mapping,
                                        Dictionary<string, Metrics> sourceCodeMetrics,
-                                       Dictionary<string, Metrics> testCodeMetrics)
+                                       Dictionary<string, Metrics> testCodeMetrics,
+                                       ISet<string> filterMetrics)
         {
             this.outputDirectoryPath = outputDirectoryPath;
             this.projectName = projectName;
             this.mapping = mapping;
             this.sourceCodeMetrics = sourceCodeMetrics;
             this.testCodeMetrics = testCodeMetrics;
+            this.filterMetrics = filterMetrics;
         }
 
 
@@ -44,6 +47,7 @@ namespace MetricsIntegrator.Export
             private Dictionary<string, List<string>> mapping;
             private Dictionary<string, Metrics> sourceCodeMetrics;
             private Dictionary<string, Metrics> testCodeMetrics;
+            private ISet<string> filterMetrics;
 
             public Builder()
             {
@@ -84,6 +88,13 @@ namespace MetricsIntegrator.Export
                 return this;
             }
 
+            public Builder FilterMetrics(ISet<string> filterMetrics)
+            {
+                this.filterMetrics = filterMetrics;
+
+                return this;
+            }
+
             public MetricsExporterFactory Build()
             {
                 ValidateRequiredFields();
@@ -93,7 +104,8 @@ namespace MetricsIntegrator.Export
                     projectName,
                     mapping,
                     sourceCodeMetrics,
-                    testCodeMetrics
+                    testCodeMetrics,
+                    filterMetrics
                 );
             }
 
@@ -153,6 +165,7 @@ namespace MetricsIntegrator.Export
                .TestCodeMetrics(testCodeMetrics)
                .BaseMetrics(metrics)
                .UsingDelimiter(DELIMITER)
+               .FilterMetrics(filterMetrics)
                .Build();
         }
     }

@@ -17,7 +17,6 @@ using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 
-// The Blank Page item template is documented at http://go.microsoft.com/fwlink/?LinkId=402352&clcid=0x409
 
 namespace MetricsIntegrator.GUI
 {
@@ -66,7 +65,7 @@ namespace MetricsIntegrator.GUI
                 && (inTestCase.Text != "");
         }
 
-        private async void OnClearProjectName(object sender, RoutedEventArgs e)
+        private void OnClearProjectName(object sender, RoutedEventArgs e)
         {
             inProjectName.Text = "";
         }
@@ -124,7 +123,7 @@ namespace MetricsIntegrator.GUI
             }
         }
 
-        private async void OnClear(object sender, RoutedEventArgs e)
+        private void OnClear(object sender, RoutedEventArgs e)
         {
             inProjectName.Text = "";
             inMapping.Text = "";
@@ -134,7 +133,7 @@ namespace MetricsIntegrator.GUI
             btnIntegrate.IsEnabled = false;
         }
 
-        private async void OnIntegrate(object sender, RoutedEventArgs e)
+        private void OnIntegrate(object sender, RoutedEventArgs e)
         {
             MetricsIntegrationManager integrator = new MetricsIntegrationManager(
                 inProjectName.Text,

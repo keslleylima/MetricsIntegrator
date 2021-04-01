@@ -21,7 +21,7 @@
         <ProgressBar Minimum="0" Maximum="100" Value="50" Foreground="#21b721" Background="#3311B25A" />
 
 
-        <StackPanel Height="440">
+        <StackPanel Height="500">
             <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
                 <Button Click="OnBack" 
                     VerticalAlignment="Top" 
@@ -31,64 +31,8 @@
                 <TextBlock x:Name="maintitle" Text="Export - metrics selections" FontSize="20" VerticalAlignment="Center" Margin="10 0 0 3" />
             </StackPanel>
             
-            <ScrollViewer VerticalScrollBarVisibility="Visible" HorizontalScrollBarVisibility="Disabled" Height="400">
+            <ScrollViewer VerticalScrollBarVisibility="Visible" HorizontalScrollBarVisibility="Disabled" Height="450">
                 <StackPanel Name="pnlMetricsSelection" Spacing="20" Margin="20 0 0 0">
-                    <CheckBox 
-                        Content="DISABLED CHECKED"
-                         AutomationProperties.AutomationId="Fluent_Disabled_Checked"
-                         IsChecked="True"
-                         IsEnabled="False" />
-
-                    <CheckBox
-                        Content="UNCHECKED"
-                        AutomationProperties.AutomationId="Fluent_Unchecked" />
-
-                    <CheckBox Content="CHECKED"
-             AutomationProperties.AutomationId="Fluent_Checked"
-             IsChecked="True" 
-                              />
-                    <CheckBox Content="UNCHECKED"
-             AutomationProperties.AutomationId="Fluent_Unchecked" />
-
-                    <CheckBox Content="CHECKED"
-             AutomationProperties.AutomationId="Fluent_Checked"
-             IsChecked="True" />
-                    <CheckBox Content="UNCHECKED"
-             AutomationProperties.AutomationId="Fluent_Unchecked" />
-
-                    <CheckBox Content="CHECKED"
-             AutomationProperties.AutomationId="Fluent_Checked"
-             IsChecked="True" />
-                    <CheckBox Content="UNCHECKED"
-             AutomationProperties.AutomationId="Fluent_Unchecked" />
-
-                    <CheckBox Content="CHECKED"
-             AutomationProperties.AutomationId="Fluent_Checked"
-             IsChecked="True" />
-                    <CheckBox Content="UNCHECKED"
-             AutomationProperties.AutomationId="Fluent_Unchecked" />
-
-                    <CheckBox Content="CHECKED"
-             AutomationProperties.AutomationId="Fluent_Checked"
-             IsChecked="True" />
-                    <CheckBox Content="UNCHECKED"
-             AutomationProperties.AutomationId="Fluent_Unchecked" />
-
-                    <CheckBox Content="CHECKED"
-             AutomationProperties.AutomationId="Fluent_Checked"
-             IsChecked="True" />
-                    <CheckBox Content="UNCHECKED"
-             AutomationProperties.AutomationId="Fluent_Unchecked" />
-
-                    <CheckBox Content="CHECKED"
-             AutomationProperties.AutomationId="Fluent_Checked"
-             IsChecked="True" />
-                    <CheckBox Content="UNCHECKED"
-             AutomationProperties.AutomationId="Fluent_Unchecked" />
-
-                    <CheckBox Content="CHECKED"
-             AutomationProperties.AutomationId="Fluent_Checked"
-             IsChecked="True" />
                 </StackPanel>
             </ScrollViewer>
             <MediaElement Height="100" Width="100"/>

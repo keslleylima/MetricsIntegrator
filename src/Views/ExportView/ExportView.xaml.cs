@@ -48,16 +48,57 @@ namespace MetricsIntegrator.GUI
             cbxId.IsChecked = true;
             cbxId.IsEnabled = false;
             pnlMetricsSelection.Children.Add(cbxId);
+
+            List<string> fieldKeys = integrator.DoParsing();
+
+            pnlMetricsSelection.Children.Add(CreateCheckBoxForIdField(fieldKeys[0]));
+
+            for (int i = 1; i < fieldKeys.Count; i++)
+            {
+                pnlMetricsSelection.Children.Add(CreateCheckBoxForField(fieldKeys[i]));
+            }
         }
 
-        private async void OnCheckAll(object sender, RoutedEventArgs e)
+        private CheckBox CreateCheckBoxForIdField(string field)
         {
+            CheckBox cbx = new CheckBox();
+
+            cbx.Name = "cbxId";
+            cbx.Content = field;
+            cbx.IsChecked = true;
+            cbx.IsEnabled = false;
+
+            return cbx;
+        }
+
+        private CheckBox CreateCheckBoxForField(string field)
+        {
+            CheckBox cbx = new CheckBox();
+
+            cbx.Name = "cbx" + field;
+            cbx.Content = field;
+            cbx.IsChecked = true;
+            cbx.IsEnabled = true;
+
+            return cbx;
+        }
+
+        private void OnCheckAll(object sender, RoutedEventArgs e)
+        {
+            foreach (UIElement uie in pnlMetricsSelection.Children)
+            {
+                ((CheckBox) uie).IsChecked = true;
+            }
         }
 
         private void OnCheckNone(object sender, RoutedEventArgs e)
         {
-
-        }
+            foreach (UIElement uie in pnlMetricsSelection.Children)
+            {
+                if (((CheckBox) uie).Name != "cbxId")
+                    ((CheckBox) uie).IsChecked = false;
+            }
+            }
 
         private async void OnExport(object sender, RoutedEventArgs e)
         {
@@ -69,13 +110,23 @@ namespace MetricsIntegrator.GUI
             
             if (file != null)
             {
+                ISet<string> filterMetrics = new HashSet<string>();
+
+                foreach (UIElement uie in pnlMetricsSelection.Children)
+                {
+                    CheckBox cbx = (CheckBox) uie;
+                    bool isChecked = cbx.IsChecked ?? false;
+
+                    if (!isChecked)
+                        filterMetrics.Add((string) cbx.Content);
+                }
+
+                string output = integrator.DoExportation(file.Path, filterMetrics);
+
                 var dialog = new Windows.UI.Popups.MessageDialog("The file has been successfully exported!");
                 await dialog.ShowAsync();
-                this.Frame.Navigate(typeof(EndView));
-            }
-            else
-            {
-                //inTestCase.Text = "";
+
+                this.Frame.Navigate(typeof(EndView), output);
             }
         }
 

@@ -33,14 +33,14 @@ namespace MetricsIntegrator.Parser
             this.filepath = filepath;
             this.delimiter = delimiter;
 
-            FieldKeys = new HashSet<string>();
+            FieldKeys = new List<string>();
         }
 
 
         //---------------------------------------------------------------------
         //		Properties
         //---------------------------------------------------------------------
-        public ISet<string> FieldKeys { get; private set; }
+        public List<string> FieldKeys { get; private set; }
 
 
         //---------------------------------------------------------------------

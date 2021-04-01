@@ -18,6 +18,7 @@ namespace MetricsIntegrator.Export
         private string delimiter;
         private StringBuilder lines;
         private List<Metrics> listBaseMetrics;
+        private ISet<string> filterMetrics;
 
 
         //---------------------------------------------------------------------
@@ -28,7 +29,8 @@ namespace MetricsIntegrator.Export
                                    Dictionary<string, List<string>> mapping,
                                    Dictionary<string, Metrics> dictSourceCode,
                                    Dictionary<string, Metrics> dictSourceTest,
-                                   List<Metrics> baseMetrics)
+                                   List<Metrics> baseMetrics,
+                                   ISet<string> filterMetrics)
         {
             this.outputPath = outputPath;
             this.mapping = mapping;
@@ -37,6 +39,7 @@ namespace MetricsIntegrator.Export
             this.delimiter = delimiter;
             listBaseMetrics = baseMetrics;
             lines = new StringBuilder();
+            this.filterMetrics = filterMetrics ?? new HashSet<string>();
         }
 
 
@@ -62,6 +65,7 @@ namespace MetricsIntegrator.Export
             private Dictionary<string, Metrics> sourceCodeMetrics;
             private Dictionary<string, Metrics> testCodeMetrics;
             private List<Metrics> baseMetrics;
+            private ISet<string> filterMetrics;
 
             public Builder()
             {
@@ -109,6 +113,13 @@ namespace MetricsIntegrator.Export
                 return this;
             }
 
+            public Builder FilterMetrics(ISet<string> filterMetrics)
+            {
+                this.filterMetrics = filterMetrics;
+
+                return this;
+            }
+
             /// <summary>
             ///     Creates an instance of MetricsCSVExporter.
             /// </summary>
@@ -132,7 +143,8 @@ namespace MetricsIntegrator.Export
                     mapping, 
                     sourceCodeMetrics, 
                     testCodeMetrics, 
-                    baseMetrics
+                    baseMetrics,
+                    filterMetrics
                 );
             }
 
@@ -272,9 +284,17 @@ namespace MetricsIntegrator.Export
         {
             foreach (string metricValue in baseMetrics.GetAllMetricValues())
             {
+                if (IsMetricInFilter(metricValue))
+                    continue;
+
                 lines.Append(metricValue);
                 lines.Append(delimiter);
             }
+        }
+
+        private bool IsMetricInFilter(string metric)
+        {
+            return filterMetrics.Contains(metric);
         }
 
         private void WriteBreakLine()

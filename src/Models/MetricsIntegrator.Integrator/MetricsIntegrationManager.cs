@@ -43,14 +43,15 @@ namespace MetricsIntegrator.Integrator
         //---------------------------------------------------------------------
         //		Methods
         //---------------------------------------------------------------------
-        public ISet<string> DoParsing()
+        public List<string> DoParsing()
         {
             metricsParseManager.Parse();
             
             return metricsParseManager.FieldKeys;
         }
 
-        public string DoExportation(string outputDirectory)
+        public string DoExportation(string outputDirectory, 
+                                    ISet<string> filterMetrics)
         {
             string outputPath = outputDirectory + Path.DirectorySeparatorChar + "results";
 
@@ -62,6 +63,7 @@ namespace MetricsIntegrator.Integrator
                 .TestCodeMetrics(metricsParseManager.TestCodeMetrics)
                 .TestPathMetrics(metricsParseManager.TestPathMetrics)
                 .TestCaseMetrics(metricsParseManager.TestCaseMetrics)
+                .FilterMetrics(filterMetrics)
                 .Build();
 
             exportManager.Export();

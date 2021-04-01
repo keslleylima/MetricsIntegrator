@@ -59,7 +59,7 @@ namespace MetricsIntegrator.Parser
         public Dictionary<string, Metrics> TestCodeMetrics { get; private set; }
         public List<Metrics> TestPathMetrics { get; private set; }
         public List<Metrics> TestCaseMetrics { get; private set; }
-        public ISet<string> FieldKeys { get; private set; }
+        public List<string> FieldKeys { get; private set; }
 
 
         //---------------------------------------------------------------------
