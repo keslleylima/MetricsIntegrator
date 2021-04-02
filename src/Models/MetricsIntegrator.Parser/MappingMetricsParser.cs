@@ -28,8 +28,8 @@ namespace MetricsIntegrator.Parser
             if ((delimiter == null) || delimiter.Length == 0)
                 throw new ArgumentException("Delimiter cannot be empty");
 
-            if (!File.Exists(filepath))
-                throw new ArgumentException("File path does not exist: " + filepath);
+            //if (!File.Exists(filepath))
+            //    throw new ArgumentException("File path does not exist: " + filepath);
 
             this.filepath = filepath;
             this.delimiter = delimiter;

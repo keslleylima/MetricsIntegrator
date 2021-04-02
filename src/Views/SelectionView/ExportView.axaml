@@ -1,0 +1,44 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d" d:DesignWidth="700" d:DesignHeight="650"
+             x:Class="MetricsIntegrator.Views.ExportView"
+             Background="#FF1D1D1D"
+>
+  <StackPanel>
+    <!-- Header -->
+    <StackPanel Height="80">
+      <Image Height="80" Width="700" Source="/Assets/Images/header-700x80.png" />
+    </StackPanel>
+
+    <ProgressBar Minimum="0" Maximum="100" Value="50" Foreground="#21b721" Background="#3311B25A" />
+
+    <StackPanel Height="500">
+      <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+        <Button Click="OnBack"
+            VerticalAlignment="Top"
+            HorizontalAlignment="Left"
+            Content="BACK"
+            />
+        <TextBlock x:Name="maintitle" Text="Export - metrics selections" FontSize="20" VerticalAlignment="Center" Margin="10 0 0 3" />
+      </StackPanel>
+
+      <ScrollViewer VerticalScrollBarVisibility="Visible" HorizontalScrollBarVisibility="Disabled" Height="450">
+        <StackPanel Name="pnlMetricsSelection" Spacing="20" Margin="20 0 0 0">
+        </StackPanel>
+      </ScrollViewer>
+    </StackPanel>
+
+    <Grid Margin="0 20 0 0">
+      <Grid.ColumnDefinitions>
+        <ColumnDefinition Width="*"/>
+        <ColumnDefinition Width="*"/>
+        <ColumnDefinition Width="*"/>
+      </Grid.ColumnDefinitions>
+      <Button Content="Check all" Grid.Column="0" Margin="10,0,10,0" Click="OnCheckAll"  HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
+      <Button Content="Check none" Grid.Column="1" Margin="10,0,10,0" Click="OnCheckNone" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
+      <Button Content="Export" Grid.Column="2" Margin="10,0,10,0"  Click="OnExport" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Background="#21b721" />
+    </Grid>
+  </StackPanel>
+</UserControl>

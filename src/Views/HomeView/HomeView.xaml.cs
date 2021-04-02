@@ -1,54 +1,43 @@
-﻿using MetricsIntegrator.Integrator;
+using Avalonia;
+using Avalonia.Controls;
+using Avalonia.Interactivity;
+using Avalonia.Markup.Xaml;
+using MetricsIntegrator.Integrator;
 using MetricsIntegrator.IO;
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Runtime.InteropServices.WindowsRuntime;
-using Windows.Foundation;
-using Windows.Foundation.Collections;
-using Windows.Storage;
-using Windows.Storage.Pickers;
-using Windows.UI.Xaml;
-using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Controls.Primitives;
-using Windows.UI.Xaml.Data;
-using Windows.UI.Xaml.Input;
-using Windows.UI.Xaml.Media;
-using Windows.UI.Xaml.Navigation;
+using System.Threading.Tasks;
 
-
-namespace MetricsIntegrator.GUI
+namespace MetricsIntegrator.Views
 {
-    /// <summary>
-    /// An empty page that can be used on its own or navigated to within a Frame.
-    /// </summary>
-    public sealed partial class HomeView : Page
+    public class HomeView : UserControl
     {
+        private TextBox inProjectName;
+        private TextBox inMapping;
+        private TextBox inSourceCode;
+        private TextBox inTestPath;
+        private TextBox inTestCase;
+        private Button btnIntegrate;
+        private string inFileChoose;
+        private MainWindow window;
+
         public HomeView()
         {
-            this.InitializeComponent();
-            btnIntegrate.IsEnabled = false;
-            inProjectName.TextChanged += (o, e) => { CheckIfIntegrateIsAvailable(); };
+            InitializeComponent();
+
+            btnIntegrate = this.FindControl<Button>("btnIntegrate");
+            btnIntegrate.Click += OnIntegrate;
+
+            inMapping = this.FindControl<TextBox>("inMapping");
+            inSourceCode = this.FindControl<TextBox>("inSourceCode");
+            inTestPath = this.FindControl<TextBox>("inTestPath");
+            inTestCase = this.FindControl<TextBox>("inTestCase");
+
+            inProjectName = this.FindControl<TextBox>("inProjectName");
+            inProjectName.KeyUp += (o, e) => { CheckIfIntegrateIsAvailable(); };
         }
 
-        private async void OnChooseMapping(object sender, RoutedEventArgs e)
+        public HomeView(MainWindow window) : this()
         {
-            FileOpenPicker openPicker = new FileOpenPicker();
-            openPicker.ViewMode = PickerViewMode.Thumbnail;
-            openPicker.SuggestedStartLocation = PickerLocationId.DocumentsLibrary;
-            openPicker.FileTypeFilter.Add(".csv");
-
-            StorageFile file = await openPicker.PickSingleFileAsync();
-            if (file != null)
-            {
-                inMapping.Text = file.Path;
-                CheckIfIntegrateIsAvailable();
-            }
-            else
-            {
-                inMapping.Text = "";
-            }
+            this.window = window;
         }
 
         private void CheckIfIntegrateIsAvailable()
@@ -58,69 +47,67 @@ namespace MetricsIntegrator.GUI
 
         private bool AreAllFilesProvided()
         {
-            return (inProjectName.Text != "")
+            return (inProjectName.Text != "") 
+                && (inProjectName.Text != null)
                 && (inMapping.Text != "")
+                && (inMapping.Text != null)
                 && (inSourceCode.Text != "")
+                && (inSourceCode.Text != null)
                 && (inTestPath.Text != "")
-                && (inTestCase.Text != "");
+                && (inTestPath.Text != null)
+                && (inTestCase.Text != "")
+                && (inTestCase.Text != null);
+        }
+
+        private void InitializeComponent()
+        {
+            AvaloniaXamlLoader.Load(this);
+        }
+
+        private async void OnChooseMapping(object sender, RoutedEventArgs e)
+        {
+            await AskUserForCSVFileOfType("Mapping file");
+            inMapping.Text = inFileChoose;
+            CheckIfIntegrateIsAvailable();
+        }
+
+        private async Task AskUserForCSVFileOfType(string type)
+        {
+            OpenFileDialog dialog = new OpenFileDialog();
+            dialog.Filters.Add(new FileDialogFilter() { Name = type, Extensions = { "csv" } });
+            dialog.AllowMultiple = false;
+
+            string[] result = await dialog.ShowAsync(new MainWindow());
+
+            inFileChoose = ((result != null) && (result.Length > 0)) 
+                    ? result[0] 
+                    : "";
         }
 
         private void OnClearProjectName(object sender, RoutedEventArgs e)
         {
             inProjectName.Text = "";
         }
-        
+
         private async void OnChooseSourceCode(object sender, RoutedEventArgs e)
         {
-            FileOpenPicker openPicker = new FileOpenPicker();
-            openPicker.ViewMode = PickerViewMode.Thumbnail;
-            openPicker.SuggestedStartLocation = PickerLocationId.DocumentsLibrary;
-            openPicker.FileTypeFilter.Add(".csv");
-
-            StorageFile file = await openPicker.PickSingleFileAsync();
-            if (file != null)
-            {
-                inSourceCode.Text = file.Path;
-                CheckIfIntegrateIsAvailable();
-            }
+            await AskUserForCSVFileOfType("Metrics file");
+            inSourceCode.Text = inFileChoose;
+            CheckIfIntegrateIsAvailable();
         }
 
         private async void OnChooseTestPath(object sender, RoutedEventArgs e)
         {
-            FileOpenPicker openPicker = new FileOpenPicker();
-            openPicker.ViewMode = PickerViewMode.Thumbnail;
-            openPicker.SuggestedStartLocation = PickerLocationId.DocumentsLibrary;
-            openPicker.FileTypeFilter.Add(".csv");
-
-            StorageFile file = await openPicker.PickSingleFileAsync();
-            if (file != null)
-            {
-                inTestPath.Text = file.Path;
-                CheckIfIntegrateIsAvailable();
-            }
-            else
-            {
-                inTestPath.Text = "";
-            }
+            await AskUserForCSVFileOfType("Metrics file");
+            inTestPath.Text = inFileChoose;
+            CheckIfIntegrateIsAvailable();
         }
 
         private async void OnChooseTestCase(object sender, RoutedEventArgs e)
         {
-            FileOpenPicker openPicker = new FileOpenPicker();
-            openPicker.ViewMode = PickerViewMode.Thumbnail;
-            openPicker.SuggestedStartLocation = PickerLocationId.DocumentsLibrary;
-            openPicker.FileTypeFilter.Add(".csv");
-
-            StorageFile file = await openPicker.PickSingleFileAsync();
-            if (file != null)
-            {
-                inTestCase.Text = file.Path;
-                CheckIfIntegrateIsAvailable();
-            }
-            else
-            {
-                inTestCase.Text = "";
-            }
+            await AskUserForCSVFileOfType("Metrics file");
+            inTestCase.Text = inFileChoose;
+            CheckIfIntegrateIsAvailable();
         }
 
         private void OnClear(object sender, RoutedEventArgs e)
@@ -140,7 +127,15 @@ namespace MetricsIntegrator.GUI
                 CreateMetricsFileManager()
             );
 
-            this.Frame.Navigate(typeof(ExportView), integrator);
+            window.NavigateToExportView(integrator);
+            //nav.children.clear();
+            /*MetricsIntegrationManager integrator = new MetricsIntegrationManager(
+                inProjectName.Text,
+                CreateMetricsFileManager()
+            );*/
+
+            //viewModel.NavigateToExportView(null);
+            //this.frame.navigate(typeof(exportview), integrator);
         }
 
         private MetricsFileManager CreateMetricsFileManager()
