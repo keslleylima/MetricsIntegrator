@@ -77,7 +77,7 @@ namespace MetricsIntegrator.Views
             dialog.Filters.Add(new FileDialogFilter() { Name = type, Extensions = { "csv" } });
             dialog.AllowMultiple = false;
 
-            string[] result = await dialog.ShowAsync(new MainWindow());
+            string[] result = await dialog.ShowAsync(window);
 
             inFileChoose = ((result != null) && (result.Length > 0)) 
                     ? result[0] 

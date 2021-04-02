@@ -4,6 +4,7 @@ using Avalonia.Interactivity;
 using Avalonia.Markup.Xaml;
 using MetricsIntegrator.Integrator;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace MetricsIntegrator.Views
 {
@@ -12,6 +13,7 @@ namespace MetricsIntegrator.Views
         private MainWindow window;
         private MetricsIntegrationManager integrator;
         private StackPanel pnlMetricsSelection;
+        private string inDirectoryChoose;
 
         public ExportView()
         {
@@ -93,32 +95,38 @@ namespace MetricsIntegrator.Views
 
         private async void OnExport(object sender, RoutedEventArgs e)
         {
-            //FileSavePicker savePicker = new FileSavePicker();
-            //savePicker.SuggestedStartLocation = PickerLocationId.DocumentsLibrary;
-            //savePicker.FileTypeChoices.Add("CSV", new List<string>() { ".csv" });
-            //savePicker.SuggestedFileName = "Metrics";
-            //StorageFile file = await savePicker.PickSaveFileAsync();
+            await AskUserForWhereToSaveExportation();
+            
+            if (inDirectoryChoose.Length == 0)
+                return;
 
-            //if (file != null)
-            //{
-            //    ISet<string> filterMetrics = new HashSet<string>();
+            ISet<string> filterMetrics = new HashSet<string>();
 
-            //    foreach (UIElement uie in pnlMetricsSelection.Children)
-            //    {
-            //        CheckBox cbx = (CheckBox)uie;
-            //        bool isChecked = cbx.IsChecked ?? false;
+            var cbxMetrics = pnlMetricsSelection.Children.GetEnumerator();
 
-            //        if (!isChecked)
-            //            filterMetrics.Add((string)cbx.Content);
-            //    }
+            while (cbxMetrics.MoveNext())
+            {
+                CheckBox cbx = (CheckBox) cbxMetrics.Current;
+                bool isChecked = cbx.IsChecked ?? false;
 
-            //    string output = integrator.DoExportation(file.Path, filterMetrics);
+                if (!isChecked)
+                    filterMetrics.Add((string) cbx.Content);
+            }
 
-            //    var dialog = new Windows.UI.Popups.MessageDialog("The file has been successfully exported!");
-            //    await dialog.ShowAsync();
+            string output = integrator.DoExportation(inDirectoryChoose, filterMetrics);
 
-            //    this.Frame.Navigate(typeof(EndView), output);
-            //}
+            window.NavigateToEndView(output);
+        }
+
+        private async Task AskUserForWhereToSaveExportation()
+        {
+            OpenFolderDialog dialog = new OpenFolderDialog();
+
+            string result = await dialog.ShowAsync(window);
+
+            inDirectoryChoose = ((result != null) && (result.Length > 0))
+                    ? result
+                    : "";
         }
 
         private void OnBack(object sender, RoutedEventArgs e)

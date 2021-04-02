@@ -31,6 +31,11 @@ namespace MetricsIntegrator.Views
             contentControl.Content = new ExportView(this, integrator);
         }
 
+        public void NavigateToEndView(string output)
+        {
+            contentControl.Content = new EndView(this, output);
+        }
+
         private void InitializeComponent()
         {
             AvaloniaXamlLoader.Load(this);

@@ -187,6 +187,9 @@ namespace MetricsIntegrator.Export
 
                 dictSourceCode.TryGetValue(testedMethod, out Metrics metricsSourceCode);
 
+                if (metricsSourceCode == null)
+                    continue;
+
                 foreach (string testMethod in testMethods)
                 {
                     dictSourceTest.TryGetValue(testMethod, out Metrics metricsSourceTest);
@@ -194,6 +197,9 @@ namespace MetricsIntegrator.Export
                     foreach (Metrics baseMetrics in listBaseMetrics)
                     {
                         if (!baseMetrics.GetID().Equals(testMethod))
+                            continue;
+
+                        if (metricsSourceTest == null)
                             continue;
 
                         WriteMetricsOfTestedMethod(metricsSourceCode);
@@ -223,6 +229,9 @@ namespace MetricsIntegrator.Export
 
         private string[] GetTestedMethodMetrics()
         {
+            if (dictSourceTest.Count == 0)
+                return new string[0];
+
             return GetFirstMetricFrom(dictSourceTest).GetAllMetrics();
         }
 
@@ -245,6 +254,9 @@ namespace MetricsIntegrator.Export
 
         private string[] GetTestMethodMetrics()
         {
+            if (dictSourceTest.Count == 0)
+                return new string[0];
+
             return GetFirstMetricFrom(dictSourceTest).GetAllMetrics();
         }
 
@@ -306,6 +318,8 @@ namespace MetricsIntegrator.Export
         {
             if (File.Exists(outputPath))
                 File.Delete(outputPath);
+
+            Directory.CreateDirectory(Directory.GetParent(outputPath).FullName);
 
             File.WriteAllText(outputPath, lines.ToString());
         }
