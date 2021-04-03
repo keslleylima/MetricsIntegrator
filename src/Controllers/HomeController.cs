@@ -34,14 +34,12 @@ namespace MetricsIntegrator.Controllers
         //---------------------------------------------------------------------
         //		Methods
         //---------------------------------------------------------------------
-        public async Task<string> AskUserForMappingFile()
+        public Task<string> AskUserForMappingFile()
         {
-            await AskUserForCSVFileOfType("Mapping file");
-            
-            return inFileChoose;
+            return AskUserForCSVFileOfType("Mapping file");
         }
 
-        private async Task AskUserForCSVFileOfType(string type)
+        private async Task<string> AskUserForCSVFileOfType(string type)
         {
             OpenFileDialog dialog = new OpenFileDialog();
             dialog.Filters.Add(new FileDialogFilter() { Name = type, Extensions = { "csv" } });
@@ -49,16 +47,14 @@ namespace MetricsIntegrator.Controllers
 
             string[] result = await dialog.ShowAsync(window);
 
-            inFileChoose = ((result != null) && (result.Length > 0))
+            return ((result != null) && (result.Length > 0))
                     ? result[0]
                     : "";
         }
 
-        public async Task<string> AskUserForMetricsFile()
+        public Task<string> AskUserForMetricsFile()
         {
-            await AskUserForCSVFileOfType("Metrics file");
-
-            return inFileChoose;
+            return AskUserForCSVFileOfType("Metrics file");
         }
 
         public void OnIntegrate(string projectName, string mapPath, 

@@ -143,7 +143,7 @@ namespace MetricsIntegrator.Views
 
         private async void OnChooseMapping(object sender, RoutedEventArgs e)
         {
-            inMapping.Text = homeController.AskUserForMappingFile().Result;
+            inMapping.Text = await homeController.AskUserForMappingFile();
             CheckIfIntegrateIsAvailable();
         }
 
@@ -154,19 +154,19 @@ namespace MetricsIntegrator.Views
 
         private async void OnChooseSourceCode(object sender, RoutedEventArgs e)
         {
-            inSourceCode.Text = homeController.AskUserForMetricsFile().Result;
+            inSourceCode.Text = await homeController.AskUserForMetricsFile();
             CheckIfIntegrateIsAvailable();
         }
 
         private async void OnChooseTestPath(object sender, RoutedEventArgs e)
         {
-            inTestPath.Text = homeController.AskUserForMetricsFile().Result;
+            inTestPath.Text = await homeController.AskUserForMetricsFile();
             CheckIfIntegrateIsAvailable();
         }
 
         private async void OnChooseTestCase(object sender, RoutedEventArgs e)
         {
-            inTestCase.Text = homeController.AskUserForMetricsFile().Result;
+            inTestCase.Text = await homeController.AskUserForMetricsFile();
             CheckIfIntegrateIsAvailable();
         }
 

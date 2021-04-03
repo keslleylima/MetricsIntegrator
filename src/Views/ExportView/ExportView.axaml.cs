@@ -3,9 +3,11 @@ using Avalonia.Collections;
 using Avalonia.Controls;
 using Avalonia.Interactivity;
 using Avalonia.Markup.Xaml;
+using MetricsIntegrator.Controllers;
 using MetricsIntegrator.Data;
 using MetricsIntegrator.Integrator;
 using MetricsIntegrator.Parser;
+using MetricsIntegrator.Views.Dialog;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -22,6 +24,7 @@ namespace MetricsIntegrator.Views
         private StackPanel pnlSourceCodeMetrics;
         private StackPanel pnlTestCaseMetrics;
         private string inDirectoryChoose;
+        private ExportController exportController;
 
 
         //---------------------------------------------------------------------
@@ -37,9 +40,8 @@ namespace MetricsIntegrator.Views
         public ExportView(MainWindow window, MetricsIntegrationManager integrator) 
             : this()
         {
-            this.window = window;
-            this.integrator = integrator;
-
+            exportController = new ExportController(window, integrator);
+ 
             BuildMetricsSelector();
         }
 
@@ -54,10 +56,18 @@ namespace MetricsIntegrator.Views
 
         private void BuildMetricsSelector()
         {
-            MetricsParseManager parser = integrator.DoParsing();
+            try
+            {
+                exportController.ParseMetrics();
 
-            BuildSourceCodeMetricsSelector(parser.SourceCodeFieldKeys);
-            BuildTestCaseMetricsSelector(parser.TestCaseFieldKeys);
+                BuildSourceCodeMetricsSelector(exportController.SourceCodeFieldKeys);
+                BuildTestCaseMetricsSelector(exportController.TestCaseFieldKeys);
+            }
+            catch (Exception e)
+            {
+                ErrorDialog dialog = new ErrorDialog(e.Message);
+                dialog.Show();
+            }
         }
 
         private void BuildSourceCodeMetricsSelector(List<string> fieldKeys)
@@ -154,26 +164,18 @@ namespace MetricsIntegrator.Views
 
         private async void OnExport(object sender, RoutedEventArgs e)
         {
-            await AskUserForWhereToSaveExportation();
+            string outputPath = await exportController.AskUserForWhereToSaveExportation();
+            FilterMetrics filter = ParseUnselectedMetrics();
             
-            if (inDirectoryChoose.Length == 0)
-                return;
-
-            FilterMetrics filterMetrics = ParseUnselectedMetrics();
-            string output = integrator.DoExportation(inDirectoryChoose, filterMetrics);
-
-            window.NavigateToEndView(output);
-        }
-
-        private async Task AskUserForWhereToSaveExportation()
-        {
-            OpenFolderDialog dialog = new OpenFolderDialog();
-
-            string result = await dialog.ShowAsync(window);
-
-            inDirectoryChoose = ((result != null) && (result.Length > 0))
-                    ? result
-                    : "";
+            try
+            {
+                exportController.OnExport(outputPath, filter);
+            }
+            catch (Exception e2)
+            {
+                ErrorDialog dialog = new ErrorDialog(e2.Message);
+                dialog.Show();
+            }
         }
 
         private FilterMetrics ParseUnselectedMetrics()
@@ -216,7 +218,7 @@ namespace MetricsIntegrator.Views
 
         private void OnBack(object sender, RoutedEventArgs e)
         {
-            window.NavigateToHomeView();
+            exportController.OnBack();
         }
     }
 }

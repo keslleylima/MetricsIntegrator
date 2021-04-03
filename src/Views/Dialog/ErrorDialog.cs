@@ -23,9 +23,9 @@ namespace MetricsIntegrator.Views.Dialog
         //---------------------------------------------------------------------
         //		Constructor
         //---------------------------------------------------------------------
-        public ErrorDialog(string title, string message)
+        public ErrorDialog(string message)
         {
-            Title = title;
+            Title = "Metrics Integrator - Error";
             this.message = message;
         }
 
