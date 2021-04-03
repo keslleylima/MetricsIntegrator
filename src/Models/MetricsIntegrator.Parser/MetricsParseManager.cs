@@ -114,8 +114,8 @@ namespace MetricsIntegrator.Parser
             
             scmParser.Parse();
 
-            SourceCodeMetrics = scmParser.DictSourceCode;
-            TestCodeMetrics = scmParser.DictSourceTest;
+            SourceCodeMetrics = scmParser.SourceCodeMetrics;
+            TestCodeMetrics = scmParser.SourceTestMetrics;
         }
     }
 }

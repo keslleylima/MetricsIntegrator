@@ -2,8 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
-using MetricsIntegrator.Export;
+using System.Text.RegularExpressions;
 using MetricsIntegrator.Data;
 
 namespace MetricsIntegrator.Parser
@@ -21,7 +20,8 @@ namespace MetricsIntegrator.Parser
         //---------------------------------------------------------------------
         //		Constructor
         //---------------------------------------------------------------------
-        public SourceCodeMetricsParser(string filepath, Dictionary<string, List<string>> mapping,
+        public SourceCodeMetricsParser(string filepath, 
+                                       Dictionary<string, List<string>> mapping,
                                        string delimiter)
         {
             if ((filepath == null) || filepath.Length == 0)
@@ -39,9 +39,13 @@ namespace MetricsIntegrator.Parser
             this.filepath = filepath;
             this.mapping = mapping;
             this.delimiter = delimiter;
+
+            SourceCodeMetrics = new Dictionary<string, Metrics>();
+            SourceTestMetrics = new Dictionary<string, Metrics>();
         }
 
-        public SourceCodeMetricsParser(string filepath, Dictionary<string, List<string>> mapping)
+        public SourceCodeMetricsParser(string filepath, 
+                                       Dictionary<string, List<string>> mapping)
             : this(filepath, mapping, ";")
         {
         }
@@ -50,8 +54,15 @@ namespace MetricsIntegrator.Parser
         //---------------------------------------------------------------------
         //		Properties
         //---------------------------------------------------------------------
-        public Dictionary<string, Metrics> DictSourceCode { get; private set; }
-        public Dictionary<string, Metrics> DictSourceTest { get; private set; }
+        /// <summary>
+        ///     Tested methods and constructors by a test method.
+        /// </summary>
+        public Dictionary<string, Metrics> SourceCodeMetrics { get; private set; }
+
+        /// <summary>
+        ///     Test methods that are tested by a test method.
+        /// </summary>
+        public Dictionary<string, Metrics> SourceTestMetrics { get; private set; }
 
 
         //---------------------------------------------------------------------
@@ -59,35 +70,68 @@ namespace MetricsIntegrator.Parser
         //---------------------------------------------------------------------
         public void Parse()
         {
-            DictSourceCode = new Dictionary<string, Metrics>();
-            DictSourceTest = new Dictionary<string, Metrics>();
-            string[] sourceMetricsFile = File.ReadAllLines(filepath);
-            string[] fields = sourceMetricsFile[0].Split(delimiter);
+            string[] lines = File.ReadAllLines(filepath);
+            string[] fields = ExtractFieldKeys(lines);
+            
+            ParseMetrics(lines, fields);
+        }
 
-            foreach (string line in sourceMetricsFile.Skip(1).ToArray())
+        private void ParseMetrics(string[] lines, string[] fields)
+        {
+            foreach (string line in lines.Skip(1).ToArray())
             {
-                string[] column;
-                column = line.Split(delimiter);
-                if (mapping.ContainsKey(column[0])) // column[0]: Name  }-> if (current method is a tested method)
-                {
-                    DictSourceCode.Add(column[0], CreateMetricsContainer(column, fields));
-                }
-                else // else current method is a test method
-                {
-                    foreach (KeyValuePair<string, List<string>> kvp in mapping)
-                    {
-                        List<string> keysTest = kvp.Value;
-                        foreach (string key in keysTest)
-                        {
-                            if (key == column[0] && !DictSourceTest.ContainsKey(column[0]))
-                            {
-                                DictSourceTest.Add(column[0], CreateMetricsContainer(column, fields));
-                            }
-                        }
+                string[] columns = line.Split(delimiter);
 
+                if (!IsMethodOrConstructorSignature(columns[0]))
+                    continue;
+                
+                if (IsTestMethod(columns[0]))
+                    ParseTestMethod(columns, fields);
+                else
+                    ParseTestedMethodOrConstructor(columns, fields);
+            }
+        }
+
+        private bool IsMethodOrConstructorSignature(string signature)
+        {
+            Regex regexSignature = new Regex(
+                @".*([^.]\.)+[^.]+\(.*\).*",
+                RegexOptions.Compiled | RegexOptions.IgnoreCase
+            );
+
+            return regexSignature.IsMatch(signature);
+        }
+
+        private bool IsTestMethod(string signature)
+        {
+            return !mapping.ContainsKey(signature);
+        }
+
+        private void ParseTestMethod(string[] columns, string[] fields)
+        {
+            foreach (KeyValuePair<string, List<string>> kvp in mapping)
+            {
+                List<string> testMethods = kvp.Value;
+
+                foreach (string testMethod in testMethods)
+                {
+                    if (testMethod == columns[0] && !SourceTestMetrics.ContainsKey(columns[0]))
+                    {
+                        SourceTestMetrics.Add(columns[0], CreateMetricsContainer(columns, fields));
                     }
                 }
+
             }
+        }
+
+        private void ParseTestedMethodOrConstructor(string[] columns, string[] fields)
+        {
+            SourceCodeMetrics.Add(columns[0], CreateMetricsContainer(columns, fields));
+        }
+
+        private string[] ExtractFieldKeys(string[] lines)
+        {
+            return lines[0].Split(delimiter);
         }
 
         private Metrics CreateMetricsContainer(string[] row, string[] fields)

@@ -194,12 +194,12 @@ namespace MetricsIntegrator.Export
                 {
                     dictSourceTest.TryGetValue(testMethod, out Metrics metricsSourceTest);
 
+                    if (metricsSourceTest == null)
+                        continue;
+
                     foreach (Metrics baseMetrics in listBaseMetrics)
                     {
                         if (!baseMetrics.GetID().Equals(testMethod))
-                            continue;
-
-                        if (metricsSourceTest == null)
                             continue;
 
                         WriteMetricsOfTestedMethod(metricsSourceCode);

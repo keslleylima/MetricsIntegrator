@@ -28,8 +28,8 @@ namespace MetricsIntegrator.Parser
             if ((delimiter == null) || delimiter.Length == 0)
                 throw new ArgumentException("Delimiter cannot be empty");
 
-            //if (!File.Exists(filepath))
-            //    throw new ArgumentException("File path does not exist: " + filepath);
+            if (!File.Exists(filepath))
+                throw new ArgumentException("File path does not exist: " + filepath);
 
             this.filepath = filepath;
             this.delimiter = delimiter;
@@ -62,10 +62,11 @@ namespace MetricsIntegrator.Parser
                     continue;
 
                 string[] columns = line.Split(delimiter);
-                string testedMethod = columns[0];
-                List<string> testMethods = ExtractTestMethods(columns);
 
-                mapping.Add(testedMethod, testMethods);
+                mapping.Add(
+                    ExtractTestedMethod(columns), 
+                    ExtractTestMethods(columns)
+                );
             }
 
             return mapping;
@@ -74,6 +75,11 @@ namespace MetricsIntegrator.Parser
         private bool IsBlank(string line)
         {
             return line.Trim().Equals("");
+        }
+
+        private string ExtractTestedMethod(string[] columns)
+        {
+            return columns[0];
         }
 
         private List<string> ExtractTestMethods(string[] columns)

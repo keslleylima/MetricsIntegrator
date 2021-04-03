@@ -13,7 +13,6 @@ namespace MetricsIntegrator.Parser
         //---------------------------------------------------------------------
         private readonly string filepath;
         private readonly string delimiter;
-        private readonly ISet<string> filterMetrics;
 
 
         //---------------------------------------------------------------------
@@ -48,36 +47,40 @@ namespace MetricsIntegrator.Parser
         //---------------------------------------------------------------------
         public List<Metrics> Parse()
         {
+            string[] lines = File.ReadAllLines(filepath);
+
+            StoreFieldKeys(lines);
+            
+            return ParseMetrics(lines, FieldKeys);
+        }
+
+        private List<Metrics> ParseMetrics(string[] lines, List<string> fieldKeys)
+        {
             List<Metrics> metrics = new List<Metrics>();
 
-            string[] testPathMetricsFile = File.ReadAllLines(filepath);
-            string[] fieldKey = testPathMetricsFile[0].Split(delimiter);
-
-            StoreFieldKeys(fieldKey);
-
-            foreach (string line in testPathMetricsFile.Skip(1).ToArray())
+            foreach (string line in lines.Skip(1).ToArray())
             {
-                metrics.Add(CreateBaseMetrics(line.Split(delimiter), fieldKey));
+                metrics.Add(CreateBaseMetrics(line.Split(delimiter), fieldKeys));
             }
 
             return metrics;
         }
 
-        private void StoreFieldKeys(string[] fieldKey)
+        private void StoreFieldKeys(string[] lines)
         {
-            for (int i = 0; i < fieldKey.Length; i++)
+            foreach (string field in lines[0].Split(delimiter))
             {
-                FieldKeys.Add(fieldKey[i]);
+                FieldKeys.Add(field);
             }
         }
 
-        private Metrics CreateBaseMetrics(string[] fieldValue, string[] fieldKey)
+        private Metrics CreateBaseMetrics(string[] fieldValue, List<string> fieldKeys)
         {
             Metrics metrics = new Metrics();
 
-            for (int i = 0; i < fieldKey.Length; i++)
+            for (int i = 0; i < fieldKeys.Count; i++)
             {
-                metrics.AddMetric(fieldKey[i], fieldValue[i]);
+                metrics.AddMetric(fieldKeys[i], fieldValue[i]);
             }
 
             return metrics;

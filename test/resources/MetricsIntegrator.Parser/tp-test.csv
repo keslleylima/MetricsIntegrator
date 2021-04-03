@@ -1,2 +1,2 @@
 ﻿id;field1;field2;field3
-pkg1.pkg2.ClassName1.testedMethod1(int);1;2;3
+pkgname1.pkgname2.ClassName1.testedMethod1();1;2;3
