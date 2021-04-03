@@ -4,9 +4,9 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              mc:Ignorable="d" d:DesignWidth="700" d:DesignHeight="650"
              x:Class="MetricsIntegrator.Views.HomeView"
-             Background="#FF1D1D1D"
+             Name="pnlHome"
 >
-  <StackPanel Background="#FF232323">
+  <StackPanel>
     <!-- Header -->
     <StackPanel Height="80">
       <Image Height="80" Width="700" Source="/Assets/Images/header-700x80.png" />
@@ -26,7 +26,7 @@
             <ColumnDefinition Width="100"/>
           </Grid.ColumnDefinitions>
           <TextBox Name="inProjectName"  Watermark="org.foo.bar"  CaretBrush="#21b721" Margin="0 0 10 0" Grid.Column="0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Background="#FF151515" SelectionBrush="#FF21B721"/>
-          <Button Click="OnClearProjectName"  Content="Clear" Grid.Column="1" HorizontalContentAlignment="Center"  HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Background="#21b721" />
+          <Button Name="btnClearProjectName" Click="OnClearProjectName"  Content="Clear" Grid.Column="1" HorizontalContentAlignment="Center"  HorizontalAlignment="Stretch" VerticalAlignment="Stretch" />
         </Grid>
       </StackPanel>
 
@@ -38,7 +38,7 @@
             <ColumnDefinition Width="100"/>
           </Grid.ColumnDefinitions>
           <TextBox Name="inMapping" Watermark="File path" Margin="0 0 10 0" Grid.Column="0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" IsEnabled="False" />
-          <Button Click="OnChooseMapping"  Content="Select file" Grid.Column="1" HorizontalContentAlignment="Center" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Background="#21b721" />
+          <Button Name="btnChooseMapping" Click="OnChooseMapping"  Content="Select file" Grid.Column="1" HorizontalContentAlignment="Center" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" />
         </Grid>
       </StackPanel>
 
@@ -50,7 +50,7 @@
             <ColumnDefinition Width="100"/>
           </Grid.ColumnDefinitions>
           <TextBox Name="inSourceCode" Watermark="File path" Margin="0 0 10 0" Grid.Column="0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" IsEnabled="False" />
-          <Button Click="OnChooseSourceCode" Content="Select file" Grid.Column="1" HorizontalContentAlignment="Center" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Background="#21b721" />
+          <Button Name="btnChooseSource" Click="OnChooseSourceCode" Content="Select file" Grid.Column="1" HorizontalContentAlignment="Center" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" />
         </Grid>
       </StackPanel>
 
@@ -62,7 +62,7 @@
             <ColumnDefinition Width="100"/>
           </Grid.ColumnDefinitions>
           <TextBox Name="inTestPath" Watermark="File path" Margin="0 0 10 0" Grid.Column="0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" IsEnabled="False" />
-          <Button Click="OnChooseTestPath" Content="Select file" Grid.Column="1" HorizontalContentAlignment="Center" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Background="#21b721" />
+          <Button Name="btnChooseTestPath" Click="OnChooseTestPath" Content="Select file" Grid.Column="1" HorizontalContentAlignment="Center" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" />
         </Grid>
       </StackPanel>
 
@@ -74,7 +74,7 @@
             <ColumnDefinition Width="100"/>
           </Grid.ColumnDefinitions>
           <TextBox Name="inTestCase" Watermark="File path" Margin="0 0 10 0" Grid.Column="0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" IsEnabled="False" />
-          <Button Click="OnChooseTestCase" Content="Select file" Grid.Column="1" HorizontalContentAlignment="Center" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Background="#21b721" />
+          <Button Name="btnChooseTestCase" Click="OnChooseTestCase" Content="Select file" Grid.Column="1" HorizontalContentAlignment="Center" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" />
         </Grid>
       </StackPanel>
 
@@ -84,7 +84,7 @@
           <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
         <Button Click="OnClear" Content="Clear" Margin="0 0 10 0" Grid.Column="0" HorizontalContentAlignment="Center" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" />
-        <Button Name="btnIntegrate" IsEnabled="False" Content="Integrate" HorizontalContentAlignment="Center" Margin="10 0 0 0" Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Background="#21b721" />
+        <Button Name="btnIntegrate" IsEnabled="False" Content="Integrate" HorizontalContentAlignment="Center" Margin="10 0 0 0" Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" />
       </Grid>
     </StackPanel>
   </StackPanel>

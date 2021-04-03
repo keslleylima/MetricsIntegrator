@@ -11,14 +11,16 @@ namespace MetricsIntegrator.Export
         //---------------------------------------------------------------------
         //		Attributes
         //---------------------------------------------------------------------
-        private string outputPath;
-        private Dictionary<string, List<string>> mapping;
-        private Dictionary<string, Metrics> dictSourceCode;
-        private Dictionary<string, Metrics> dictSourceTest;
-        private string delimiter;
-        private StringBuilder lines;
-        private List<Metrics> listBaseMetrics;
-        private ISet<string> filterMetrics;
+        private readonly string outputPath;
+        private readonly Dictionary<string, List<string>> mapping;
+        private readonly Dictionary<string, Metrics> sourceCodeMetrics;
+        private readonly Dictionary<string, Metrics> testCodeMetrics;
+        private readonly string delimiter;
+        private readonly StringBuilder lines;
+        private readonly FilterMetrics filterMetrics;
+        
+        // Base: Test path or test case
+        private readonly IDictionary<string, List<Metrics>> baseMetrics; 
 
 
         //---------------------------------------------------------------------
@@ -29,17 +31,17 @@ namespace MetricsIntegrator.Export
                                    Dictionary<string, List<string>> mapping,
                                    Dictionary<string, Metrics> dictSourceCode,
                                    Dictionary<string, Metrics> dictSourceTest,
-                                   List<Metrics> baseMetrics,
-                                   ISet<string> filterMetrics)
+                                   IDictionary<string, List<Metrics>> baseMetrics,
+                                   FilterMetrics filterMetrics)
         {
             this.outputPath = outputPath;
             this.mapping = mapping;
-            this.dictSourceCode = dictSourceCode;
-            this.dictSourceTest = dictSourceTest;
+            this.sourceCodeMetrics = dictSourceCode;
+            this.testCodeMetrics = dictSourceTest;
             this.delimiter = delimiter;
-            listBaseMetrics = baseMetrics;
+            this.baseMetrics = baseMetrics;
             lines = new StringBuilder();
-            this.filterMetrics = filterMetrics ?? new HashSet<string>();
+            this.filterMetrics = filterMetrics;
         }
 
 
@@ -64,8 +66,8 @@ namespace MetricsIntegrator.Export
             private Dictionary<string, List<string>> mapping;
             private Dictionary<string, Metrics> sourceCodeMetrics;
             private Dictionary<string, Metrics> testCodeMetrics;
-            private List<Metrics> baseMetrics;
-            private ISet<string> filterMetrics;
+            private IDictionary<string, List<Metrics>> baseMetrics;
+            private FilterMetrics filterMetrics;
 
             public Builder()
             {
@@ -99,7 +101,7 @@ namespace MetricsIntegrator.Export
                 return this;
             }
 
-            public Builder BaseMetrics(List<Metrics> metrics)
+            public Builder BaseMetrics(IDictionary<string, List<Metrics>> metrics)
             {
                 baseMetrics = metrics;
 
@@ -113,7 +115,7 @@ namespace MetricsIntegrator.Export
                 return this;
             }
 
-            public Builder FilterMetrics(ISet<string> filterMetrics)
+            public Builder FilterMetrics(FilterMetrics filterMetrics)
             {
                 this.filterMetrics = filterMetrics;
 
@@ -153,17 +155,17 @@ namespace MetricsIntegrator.Export
                 if (outputPath == null)
                     throw new ArgumentException("Output path cannot be null");
 
-                if (mapping == null)
-                    throw new ArgumentException("Mapping cannot be null");
+                if ((mapping == null) || (mapping.Count == 0))
+                    throw new ArgumentException("Mapping cannot be empty");
 
-                if (sourceCodeMetrics == null)
-                    throw new ArgumentException("Source code metrics cannot be null");
+                if ((sourceCodeMetrics == null) || (sourceCodeMetrics.Count == 0))
+                    throw new ArgumentException("Source code metrics cannot be empty");
 
-                if (testCodeMetrics == null)
-                    throw new ArgumentException("Test code metrics cannot be null");
+                if ((testCodeMetrics == null) || (testCodeMetrics.Count == 0))
+                    throw new ArgumentException("Test code metrics cannot be empty");
 
-                if (baseMetrics == null)
-                    throw new ArgumentException("Base metrics cannot be null");
+                if ((baseMetrics == null) || (baseMetrics.Count == 0))
+                    throw new ArgumentException("Base metrics cannot be empty");
             }
         }
 
@@ -174,41 +176,10 @@ namespace MetricsIntegrator.Export
         public void Export()
         {
             WriteHeader();
+            WriteBreakLine();
             WriteBody();
+            WriteBreakLine();
             SaveFile();
-        }
-
-        private void WriteBody()
-        {
-            foreach (KeyValuePair<string, List<string>> kvp in mapping)
-            {
-                string testedMethod = kvp.Key;
-                List<string> testMethods = kvp.Value;
-
-                dictSourceCode.TryGetValue(testedMethod, out Metrics metricsSourceCode);
-
-                if (metricsSourceCode == null)
-                    continue;
-
-                foreach (string testMethod in testMethods)
-                {
-                    dictSourceTest.TryGetValue(testMethod, out Metrics metricsSourceTest);
-
-                    if (metricsSourceTest == null)
-                        continue;
-
-                    foreach (Metrics baseMetrics in listBaseMetrics)
-                    {
-                        if (!baseMetrics.GetID().Equals(testMethod))
-                            continue;
-
-                        WriteMetricsOfTestedMethod(metricsSourceCode);
-                        WriteMetricsOfTestMethod(metricsSourceTest);
-                        WriteMetricsOfBaseMetrics(baseMetrics);
-                        WriteBreakLine();
-                    }
-                }
-            }
         }
 
         private void WriteHeader()
@@ -229,10 +200,7 @@ namespace MetricsIntegrator.Export
 
         private string[] GetTestedMethodMetrics()
         {
-            if (dictSourceTest.Count == 0)
-                return new string[0];
-
-            return GetFirstMetricFrom(dictSourceTest).GetAllMetrics();
+            return GetFirstMetricFrom(testCodeMetrics).GetAllMetrics();
         }
 
         private Metrics GetFirstMetricFrom(Dictionary<string, Metrics> dictionary)
@@ -254,10 +222,10 @@ namespace MetricsIntegrator.Export
 
         private string[] GetTestMethodMetrics()
         {
-            if (dictSourceTest.Count == 0)
+            if (testCodeMetrics.Count == 0)
                 return new string[0];
 
-            return GetFirstMetricFrom(dictSourceTest).GetAllMetrics();
+            return GetFirstMetricFrom(testCodeMetrics).GetAllMetrics();
         }
 
         private void WriteBaseMetrics()
@@ -271,32 +239,58 @@ namespace MetricsIntegrator.Export
 
         private string[] GetBaseMetrics()
         {
-            return listBaseMetrics[0].GetAllMetrics();
+            var firstOfBaseMetrics = baseMetrics.GetEnumerator();
+            firstOfBaseMetrics.MoveNext();
+
+            var firstMetric = firstOfBaseMetrics.Current.Value.GetEnumerator();
+            firstMetric.MoveNext();
+
+            return firstMetric.Current.GetAllMetrics();
         }
 
-        private void WriteMetricsOfTestedMethod(Metrics metricsSourceCode)
+        private void WriteBody()
         {
+            foreach (KeyValuePair<string, List<string>> kvp in mapping)
+            {
+                string testedMethod = kvp.Key;
+                List<string> testMethods = kvp.Value;
+
+                if (!sourceCodeMetrics.ContainsKey(testedMethod))
+                    continue;
+
+                WriteMetricsOfTestedMethod(testedMethod, testMethods);
+            }
+        }
+
+        private void WriteMetricsOfTestedMethod(string testedMethod, List<string> testMethods)
+        {
+            foreach (string testMethod in testMethods)
+            {
+                if (!testCodeMetrics.ContainsKey(testMethod))
+                    continue;
+
+                if (!baseMetrics.ContainsKey(testMethod))
+                    continue;
+
+                baseMetrics.TryGetValue(testMethod, out List<Metrics> baseMetricsList);
+
+                foreach (Metrics metrics in baseMetricsList)
+                {
+                    WriteMetricsOfTestedMethod(testedMethod);
+                    WriteMetricsOfTestMethod(testMethod);
+                    WriteMetricsOfBaseMetrics(metrics);
+                    WriteBreakLine();
+                }
+            }
+        }
+
+        private void WriteMetricsOfTestedMethod(string testedMethod)
+        {
+            sourceCodeMetrics.TryGetValue(testedMethod, out Metrics metricsSourceCode);
+
             foreach (string metricValue in metricsSourceCode.GetAllMetricValues())
             {
-                lines.Append(metricValue);
-                lines.Append(delimiter);
-            }
-        }
-
-        private void WriteMetricsOfTestMethod(Metrics metricsSourceTest)
-        {
-            foreach (string metricValue in metricsSourceTest.GetAllMetricValues())
-            {
-                lines.Append(metricValue);
-                lines.Append(delimiter);
-            }
-        }
-
-        private void WriteMetricsOfBaseMetrics(Metrics baseMetrics)
-        {
-            foreach (string metricValue in baseMetrics.GetAllMetricValues())
-            {
-                if (IsMetricInFilter(metricValue))
+                if (filterMetrics.IsFilteredBySourceCodeMetric(metricValue))
                     continue;
 
                 lines.Append(metricValue);
@@ -304,9 +298,30 @@ namespace MetricsIntegrator.Export
             }
         }
 
-        private bool IsMetricInFilter(string metric)
+        private void WriteMetricsOfTestMethod(string testMethod)
         {
-            return filterMetrics.Contains(metric);
+            testCodeMetrics.TryGetValue(testMethod, out Metrics metricsSourceTest);
+
+            foreach (string metricValue in metricsSourceTest.GetAllMetricValues())
+            {
+                if (filterMetrics.IsFilteredBySourceCodeMetric(metricValue))
+                    continue;
+
+                lines.Append(metricValue);
+                lines.Append(delimiter);
+            }
+        }
+
+        private void WriteMetricsOfBaseMetrics(Metrics metrics)
+        {
+            foreach (string metricValue in metrics.GetAllMetricValues())
+            {
+                if (filterMetrics.IsFilteredByBaseMetric(metricValue))
+                    continue;
+
+                lines.Append(metricValue);
+                lines.Append(delimiter);
+            }
         }
 
         private void WriteBreakLine()

@@ -7,9 +7,15 @@ namespace MetricsIntegrator.Views
 {
     public class MainWindow : Window
     {
+        //---------------------------------------------------------------------
+        //		Attributes
+        //---------------------------------------------------------------------
         private ContentControl contentControl;
 
 
+        //---------------------------------------------------------------------
+        //		Constructor
+        //---------------------------------------------------------------------
         public MainWindow()
         {
             InitializeComponent();
@@ -21,6 +27,10 @@ namespace MetricsIntegrator.Views
             contentControl.Content = new HomeView(this);
         }
 
+
+        //---------------------------------------------------------------------
+        //		Methods
+        //---------------------------------------------------------------------
         public void NavigateToHomeView()
         {
             contentControl.Content = new HomeView(this);

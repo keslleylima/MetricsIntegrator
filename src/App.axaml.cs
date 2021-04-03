@@ -7,6 +7,9 @@ namespace MetricsIntegrator
 {
     public class App : Application
     {
+        //---------------------------------------------------------------------
+        //		Methods
+        //---------------------------------------------------------------------
         public override void Initialize()
         {
             AvaloniaXamlLoader.Load(this);

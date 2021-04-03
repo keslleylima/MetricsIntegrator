@@ -13,10 +13,10 @@ namespace MetricsIntegrator.Export
         //---------------------------------------------------------------------
         //		Attributes
         //---------------------------------------------------------------------
-        private readonly List<Metrics> testPathMetrics;
-        private readonly List<Metrics> testCaseMetrics;
+        private readonly IDictionary<string, List<Metrics>> testPathMetrics;
+        private readonly IDictionary<string, List<Metrics>> testCaseMetrics;
         private readonly MetricsExporterFactory exportFactory;
-        private readonly ISet<string> filterMetrics;
+        private readonly FilterMetrics filterMetrics;
 
 
         //---------------------------------------------------------------------
@@ -27,9 +27,9 @@ namespace MetricsIntegrator.Export
                                     Dictionary<string, List<string>> mapping,
                                     Dictionary<string, Metrics> sourceCodeMetrics,
                                     Dictionary<string, Metrics> testCodeMetrics,
-                                    List<Metrics> testPathMetrics,
-                                    List<Metrics> testCaseMetrics,
-                                    ISet<string> filterMetrics)
+                                    IDictionary<string, List<Metrics>> testPathMetrics,
+                                    IDictionary<string, List<Metrics>> testCaseMetrics,
+                                    FilterMetrics filterMetrics)
         {
             this.testPathMetrics = testPathMetrics;
             this.testCaseMetrics = testCaseMetrics;
@@ -56,9 +56,9 @@ namespace MetricsIntegrator.Export
             private Dictionary<string, List<string>> mapping;
             private Dictionary<string, Metrics> sourceCodeMetrics;
             private Dictionary<string, Metrics> testCodeMetrics;
-            private List<Metrics> testPathMetrics;
-            private List<Metrics> testCaseMetrics;
-            private ISet<string> filterMetrics;
+            private IDictionary<string, List<Metrics>> testPathMetrics;
+            private IDictionary<string, List<Metrics>> testCaseMetrics;
+            private FilterMetrics filterMetrics;
 
 
             public Builder()
@@ -100,21 +100,21 @@ namespace MetricsIntegrator.Export
                 return this;
             }
 
-            public Builder TestPathMetrics(List<Metrics> metrics)
+            public Builder TestPathMetrics(IDictionary<string, List<Metrics>> metrics)
             {
                 testPathMetrics = metrics;
 
                 return this;
             }
 
-            public Builder TestCaseMetrics(List<Metrics> metrics)
+            public Builder TestCaseMetrics(IDictionary<string, List<Metrics>> metrics)
             {
                 testCaseMetrics = metrics;
 
                 return this;
             }
 
-            public Builder FilterMetrics(ISet<string> filterMetrics)
+            public Builder FilterMetrics(FilterMetrics filterMetrics)
             {
                 this.filterMetrics = filterMetrics;
 

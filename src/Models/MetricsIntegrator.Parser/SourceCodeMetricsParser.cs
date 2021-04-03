@@ -64,6 +64,8 @@ namespace MetricsIntegrator.Parser
         /// </summary>
         public Dictionary<string, Metrics> SourceTestMetrics { get; private set; }
 
+        public List<string> FieldKeys { get; private set; }
+
 
         //---------------------------------------------------------------------
         //		Methods
@@ -71,12 +73,12 @@ namespace MetricsIntegrator.Parser
         public void Parse()
         {
             string[] lines = File.ReadAllLines(filepath);
-            string[] fields = ExtractFieldKeys(lines);
+            FieldKeys = ExtractFieldKeys(lines);
             
-            ParseMetrics(lines, fields);
+            ParseMetrics(lines, FieldKeys);
         }
 
-        private void ParseMetrics(string[] lines, string[] fields)
+        private void ParseMetrics(string[] lines, List<string> fields)
         {
             foreach (string line in lines.Skip(1).ToArray())
             {
@@ -107,7 +109,7 @@ namespace MetricsIntegrator.Parser
             return !mapping.ContainsKey(signature);
         }
 
-        private void ParseTestMethod(string[] columns, string[] fields)
+        private void ParseTestMethod(string[] columns, List<string> fields)
         {
             foreach (KeyValuePair<string, List<string>> kvp in mapping)
             {
@@ -124,21 +126,21 @@ namespace MetricsIntegrator.Parser
             }
         }
 
-        private void ParseTestedMethodOrConstructor(string[] columns, string[] fields)
+        private void ParseTestedMethodOrConstructor(string[] columns, List<string> fields)
         {
             SourceCodeMetrics.Add(columns[0], CreateMetricsContainer(columns, fields));
         }
 
-        private string[] ExtractFieldKeys(string[] lines)
+        private List<string> ExtractFieldKeys(string[] lines)
         {
-            return lines[0].Split(delimiter);
+            return lines[0].Split(delimiter).ToList<string>();
         }
 
-        private Metrics CreateMetricsContainer(string[] row, string[] fields)
+        private Metrics CreateMetricsContainer(string[] row, List<string> fields)
         {
             Metrics metricsSourceTest = new Metrics();
 
-            for (int i = 1; i < fields.Length; i++)
+            for (int i = 1; i < fields.Count; i++)
             {
                 metricsSourceTest.AddMetric(fields[i], row[i]);
             }

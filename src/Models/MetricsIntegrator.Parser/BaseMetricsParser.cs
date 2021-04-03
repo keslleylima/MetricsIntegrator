@@ -45,7 +45,7 @@ namespace MetricsIntegrator.Parser
         //---------------------------------------------------------------------
         //		Methods
         //---------------------------------------------------------------------
-        public List<Metrics> Parse()
+        public IDictionary<string, List<Metrics>> Parse()
         {
             string[] lines = File.ReadAllLines(filepath);
 
@@ -54,13 +54,26 @@ namespace MetricsIntegrator.Parser
             return ParseMetrics(lines, FieldKeys);
         }
 
-        private List<Metrics> ParseMetrics(string[] lines, List<string> fieldKeys)
+        private IDictionary<string, List<Metrics>> ParseMetrics(string[] lines, List<string> fieldKeys)
         {
-            List<Metrics> metrics = new List<Metrics>();
+            IDictionary<string, List<Metrics>> metrics = new Dictionary<string, List<Metrics>>();
 
             foreach (string line in lines.Skip(1).ToArray())
             {
-                metrics.Add(CreateBaseMetrics(line.Split(delimiter), fieldKeys));
+                Metrics metric = CreateBaseMetrics(line.Split(delimiter), fieldKeys);
+
+                if (metrics.ContainsKey(metric.GetID()))
+                {
+                    metrics.TryGetValue(metric.GetID(), out List<Metrics> listMetrics);
+                    listMetrics.Add(metric);
+                }
+                else
+                {
+                    List<Metrics> listMetrics = new List<Metrics>();
+                    listMetrics.Add(metric);
+
+                    metrics.Add(metric.GetID(), listMetrics);
+                }
             }
 
             return metrics;

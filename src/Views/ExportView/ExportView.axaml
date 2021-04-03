@@ -24,10 +24,26 @@
         <TextBlock x:Name="maintitle" Text="Export - metrics selections" FontSize="20" VerticalAlignment="Center" Margin="10 0 0 3" />
       </StackPanel>
 
-      <ScrollViewer VerticalScrollBarVisibility="Visible" HorizontalScrollBarVisibility="Disabled" Height="450">
-        <StackPanel Name="pnlMetricsSelection" Spacing="20" Margin="20 0 0 0">
-        </StackPanel>
-      </ScrollViewer>
+      <Grid Margin="0 20 0 0">
+        <Grid.ColumnDefinitions>
+          <ColumnDefinition Width="*"/>
+          <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+          <RowDefinition Height="*"/>
+          <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <TextBlock Text="Source code metrics" Grid.Row="0" Grid.Column="0" Margin="10 10 0 10" />
+        <ScrollViewer Grid.Row="1" Grid.Column="0" VerticalScrollBarVisibility="Visible" HorizontalScrollBarVisibility="Disabled" Height="450">
+          <StackPanel Name="pnlSrcCodeMetrics" Spacing="5" Margin="20 0 0 0">
+          </StackPanel>
+        </ScrollViewer>
+        <TextBlock Text="Test case metrics" Grid.Row="0" Grid.Column="1" Margin="10 10 0 10" />
+        <ScrollViewer Grid.Row="1" Grid.Column="1" VerticalScrollBarVisibility="Visible" HorizontalScrollBarVisibility="Disabled" Height="450">
+          <StackPanel Name="pnlTestCaseMetrics" Spacing="5" Margin="20 0 0 0">
+          </StackPanel>
+        </ScrollViewer>
+      </Grid>
     </StackPanel>
 
     <Grid Margin="0 20 0 0">

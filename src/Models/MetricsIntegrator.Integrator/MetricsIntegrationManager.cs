@@ -1,4 +1,5 @@
-﻿using MetricsIntegrator.Export;
+﻿using MetricsIntegrator.Data;
+using MetricsIntegrator.Export;
 using MetricsIntegrator.IO;
 using MetricsIntegrator.Parser;
 using System.Collections.Generic;
@@ -43,15 +44,15 @@ namespace MetricsIntegrator.Integrator
         //---------------------------------------------------------------------
         //		Methods
         //---------------------------------------------------------------------
-        public List<string> DoParsing()
+        public MetricsParseManager DoParsing()
         {
             metricsParseManager.Parse();
             
-            return metricsParseManager.FieldKeys;
+            return metricsParseManager;
         }
 
-        public string DoExportation(string outputDirectory, 
-                                    ISet<string> filterMetrics)
+        public string DoExportation(string outputDirectory,
+                                    FilterMetrics filterMetrics)
         {
             string outputPath = outputDirectory + Path.DirectorySeparatorChar + "results";
 

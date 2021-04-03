@@ -15,7 +15,7 @@ namespace MetricsIntegrator.Export
         private readonly Dictionary<string, List<string>> mapping;
         private readonly Dictionary<string, Metrics> sourceCodeMetrics;
         private readonly Dictionary<string, Metrics> testCodeMetrics;
-        private readonly ISet<string> filterMetrics;
+        private readonly FilterMetrics filterMetrics;
 
 
         //---------------------------------------------------------------------
@@ -26,7 +26,7 @@ namespace MetricsIntegrator.Export
                                        Dictionary<string, List<string>> mapping,
                                        Dictionary<string, Metrics> sourceCodeMetrics,
                                        Dictionary<string, Metrics> testCodeMetrics,
-                                       ISet<string> filterMetrics)
+                                       FilterMetrics filterMetrics)
         {
             this.outputDirectoryPath = outputDirectoryPath;
             this.projectName = projectName;
@@ -47,7 +47,7 @@ namespace MetricsIntegrator.Export
             private Dictionary<string, List<string>> mapping;
             private Dictionary<string, Metrics> sourceCodeMetrics;
             private Dictionary<string, Metrics> testCodeMetrics;
-            private ISet<string> filterMetrics;
+            private FilterMetrics filterMetrics;
 
             public Builder()
             {
@@ -88,7 +88,7 @@ namespace MetricsIntegrator.Export
                 return this;
             }
 
-            public Builder FilterMetrics(ISet<string> filterMetrics)
+            public Builder FilterMetrics(FilterMetrics filterMetrics)
             {
                 this.filterMetrics = filterMetrics;
 
@@ -132,7 +132,8 @@ namespace MetricsIntegrator.Export
         //---------------------------------------------------------------------
         //		Factories
         //---------------------------------------------------------------------
-        public IExporter CreateTestCaseCSVExporter(List<Metrics> metrics)
+        public IExporter CreateTestCaseCSVExporter(IDictionary<string, 
+                                                   List<Metrics>> metrics)
         {
             if ((metrics == null) || metrics.Count == 0)
                 throw new ArgumentException("There are no test case metrics");
@@ -142,7 +143,8 @@ namespace MetricsIntegrator.Export
             return CreateMetricsCSVExporter(outputPath, metrics);
         }
 
-        public IExporter CreateTestPathCSVExporter(List<Metrics> metrics)
+        public IExporter CreateTestPathCSVExporter(IDictionary<string, 
+                                                   List<Metrics>> metrics)
         {
             if ((metrics == null) || metrics.Count == 0)
                 throw new ArgumentException("There are no test path metrics");
@@ -156,7 +158,8 @@ namespace MetricsIntegrator.Export
         //---------------------------------------------------------------------
         //		Methods
         //---------------------------------------------------------------------
-        private IExporter CreateMetricsCSVExporter(string outputPath, List<Metrics> metrics)
+        private IExporter CreateMetricsCSVExporter(string outputPath, 
+                                                   IDictionary<string, List<Metrics>> metrics)
         {
             return new MetricsCSVExporter.Builder()
                .OutputPath(outputPath)

@@ -8,9 +8,15 @@ namespace MetricsIntegrator.Views
 {
     public class EndView : UserControl
     {
+        //---------------------------------------------------------------------
+        //		Attributes
+        //---------------------------------------------------------------------
         private MainWindow window;
 
 
+        //---------------------------------------------------------------------
+        //		Constructors
+        //---------------------------------------------------------------------
         public EndView()
         {
             InitializeComponent();
@@ -26,6 +32,9 @@ namespace MetricsIntegrator.Views
         }
 
 
+        //---------------------------------------------------------------------
+        //		Methods
+        //---------------------------------------------------------------------
         private void InitializeComponent()
         {
             AvaloniaXamlLoader.Load(this);
