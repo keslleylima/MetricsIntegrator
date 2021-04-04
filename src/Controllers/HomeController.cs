@@ -1,6 +1,5 @@
 ﻿using Avalonia.Controls;
 using MetricsIntegrator.Integrator;
-using MetricsIntegrator.IO;
 using MetricsIntegrator.Views;
 using System;
 using System.Collections.Generic;
@@ -10,6 +9,7 @@ using System.Threading.Tasks;
 using System.Drawing;
 using System.Reflection;
 using Image = Avalonia.Controls.Image;
+using MetricsIntegrator.IO;
 
 namespace MetricsIntegrator.Controllers
 {

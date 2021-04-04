@@ -49,17 +49,19 @@ namespace MetricsIntegrator.Parser
             UsingMapping("pkgname1.pkgname2.ClassName1.testedMethod1()", "pkgname3.ClassName2.testMethod1()");
 
             WithTestedInvoked("pkgname1.pkgname2.ClassName1.testedMethod1()");
+            BindMetric("Name", "pkgname1.pkgname2.ClassName1.testedMethod1()");
             BindMetric("field1", "Method");
             BindMetric("field2", "1");
             BindMetric("field3", "1");
-            
+
             WithTestMethod("pkgname3.ClassName2.testMethod1()");
+            BindMetric("Name", "pkgname3.ClassName2.testMethod1()");
             BindMetric("field1", "Method");
             BindMetric("field2", "1");
             BindMetric("field3", "1");
 
             DoParsing();
-
+            
             AssertSourceCodeMetricsIsCorrect();
             AssertTestCodeMetricsIsCorrect();
         }
@@ -169,8 +171,8 @@ namespace MetricsIntegrator.Parser
             SourceCodeMetricsParser parser = new SourceCodeMetricsParser(basePath + filename, mapping);
             parser.Parse();
 
-            sourceCodeMetricsObtained = parser.DictSourceCode;
-            testCodeMetricsObtained = parser.DictSourceTest;
+            sourceCodeMetricsObtained = parser.SourceCodeMetrics;
+            testCodeMetricsObtained = parser.SourceTestMetrics;
         }
 
         private void AssertSourceCodeMetricsIsCorrect()
@@ -179,6 +181,8 @@ namespace MetricsIntegrator.Parser
             expectedMetrics.Add(testedInvoked, expectedSourceCodeMetrics);
 
             Assert.Equal(expectedMetrics, sourceCodeMetricsObtained);
+
+            expectedSourceCodeMetrics = new Metrics();
         }
 
         private void AssertTestCodeMetricsIsCorrect()
@@ -187,6 +191,8 @@ namespace MetricsIntegrator.Parser
             expectedMetrics.Add(testMethod, expectedTestCodeMetrics);
 
             Assert.Equal(expectedMetrics, testCodeMetricsObtained);
+
+            testCodeMetricsObtained = new Dictionary<string, Metrics>();
         }
     }
 }
