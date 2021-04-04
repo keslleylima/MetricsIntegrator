@@ -22,8 +22,8 @@ namespace MetricsIntegrator.Parser
         private string tcFile;
         private Dictionary<string, Metrics> sourceCodeObtained;
         private Dictionary<string, Metrics> testCodeObtained;
-        private List<Metrics> testPathObtained;
-        private List<Metrics> testCaseObtained;
+        private IDictionary<string, List<Metrics>> testPathObtained;
+        private IDictionary<string, List<Metrics>> testCaseObtained;
         private Dictionary<string, List<string>> mappingObtained;
         private Dictionary<string, List<string>> expectedMapping;
         private List<Metrics> expectedMetrics;
@@ -56,6 +56,7 @@ namespace MetricsIntegrator.Parser
             DoParsing();
 
             WithTestedInvoked("pkgname1.pkgname2.ClassName1.testedMethod1()");
+            WithMetric("Name", "pkgname1.pkgname2.ClassName1.testedMethod1()");
             WithMetric("field1", "Method");
             WithMetric("field2", "1");
             WithMetric("field3", "1");
@@ -63,6 +64,7 @@ namespace MetricsIntegrator.Parser
             AssertSourceCodeMetricsIsCorrect();
 
             WithTestMethod("pkgname3.ClassName2.testMethod1()");
+            WithMetric("Name", "pkgname3.ClassName2.testMethod1()");
             WithMetric("field1", "Method");
             WithMetric("field2", "1");
             WithMetric("field3", "1");
@@ -77,13 +79,15 @@ namespace MetricsIntegrator.Parser
             BindTestMethods("pkgname3.ClassName2.testMethod1()");
             AssertMappingIsCorrect();
 
-            WithMetric("id", "pkg1.pkg2.ClassName1.testedMethod1(int)");
+            WithTestMethod("pkgname3.ClassName2.testMethod1()");
+            WithMetric("id", "pkgname3.ClassName2.testMethod1()");
             WithMetric("field1", "1");
             WithMetric("field2", "2");
             BindMetrics();
             AssertTestCaseMetricsAreCorrect();
 
-            WithMetric("id", "pkg1.pkg2.ClassName1.testedMethod1(int)");
+            WithTestedInvoked("pkgname1.pkgname2.ClassName1.testedMethod1()");
+            WithMetric("id", "pkgname1.pkgname2.ClassName1.testedMethod1()");
             WithMetric("field1", "1");
             WithMetric("field2", "2");
             WithMetric("field3", "3");
@@ -183,14 +187,22 @@ namespace MetricsIntegrator.Parser
 
         private void AssertTestCaseMetricsAreCorrect()
         {
-            Assert.Equal(expectedMetrics, testCaseObtained);
+            IDictionary<string, List<Metrics>> expected = new Dictionary<string, List<Metrics>>();
+
+            expected.Add(testMethod, expectedMetrics);
+
+            Assert.Equal(expected, testCaseObtained);
 
             expectedMetrics = new List<Metrics>();
         }
 
         private void AssertTestPathMetricsAreCorrect()
         {
-            Assert.Equal(expectedMetrics, testPathObtained);
+            IDictionary<string, List<Metrics>> expected = new Dictionary<string, List<Metrics>>();
+            
+            expected.Add(testedInvoked, expectedMetrics);
+            
+            Assert.Equal(expected, testPathObtained);
 
             expectedMetrics = new List<Metrics>();
         }

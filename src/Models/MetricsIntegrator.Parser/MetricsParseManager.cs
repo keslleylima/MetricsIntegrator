@@ -48,6 +48,15 @@ namespace MetricsIntegrator.Parser
             
             this.metricsFileManager = metricsFileManager;
             this.delimiter = delimiter;
+
+            Mapping = new Dictionary<string, List<string>>();
+            SourceCodeMetrics = new Dictionary<string, Metrics>();
+            TestCodeMetrics = new Dictionary<string, Metrics>();
+            TestPathMetrics = new Dictionary<string, List<Metrics>>();
+            TestCaseMetrics = new Dictionary<string, List<Metrics>>();
+            TestCaseFieldKeys = new List<string>();
+            TestPathFieldKeys = new List<string>();
+            SourceCodeFieldKeys = new List<string>();
         }
 
 
@@ -57,9 +66,11 @@ namespace MetricsIntegrator.Parser
         public Dictionary<string, List<string>> Mapping { get; private set; }
         public Dictionary<string, Metrics> SourceCodeMetrics { get; private set; }
         public Dictionary<string, Metrics> TestCodeMetrics { get; private set; }
-        public List<Metrics> TestPathMetrics { get; private set; }
-        public List<Metrics> TestCaseMetrics { get; private set; }
-        public List<string> FieldKeys { get; private set; }
+        public IDictionary<string, List<Metrics>> TestPathMetrics { get; private set; }
+        public IDictionary<string, List<Metrics>> TestCaseMetrics { get; private set; }
+        public List<string> TestPathFieldKeys { get; private set; }
+        public List<string> TestCaseFieldKeys { get; private set; }
+        public List<string> SourceCodeFieldKeys { get; private set; }
 
 
         //---------------------------------------------------------------------
@@ -91,7 +102,7 @@ namespace MetricsIntegrator.Parser
             );
 
             TestPathMetrics = tpParser.Parse();
-            FieldKeys = tpParser.FieldKeys;
+            TestPathFieldKeys = tpParser.FieldKeys;
         }
 
         private void DoTestCaseMetricsParsing()
@@ -102,6 +113,7 @@ namespace MetricsIntegrator.Parser
             );
 
             TestCaseMetrics = tcParser.Parse();
+            TestCaseFieldKeys = tcParser.FieldKeys;
         }
 
         private void DoSourceCodeMetricsParsing(Dictionary<string, List<string>> mapping)
@@ -114,8 +126,9 @@ namespace MetricsIntegrator.Parser
             
             scmParser.Parse();
 
-            SourceCodeMetrics = scmParser.DictSourceCode;
-            TestCodeMetrics = scmParser.DictSourceTest;
+            SourceCodeMetrics = scmParser.SourceCodeMetrics;
+            TestCodeMetrics = scmParser.SourceTestMetrics;
+            SourceCodeFieldKeys = scmParser.FieldKeys;
         }
     }
 }

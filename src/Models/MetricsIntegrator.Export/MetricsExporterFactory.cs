@@ -4,6 +4,9 @@ using System.Collections.Generic;
 
 namespace MetricsIntegrator.Export
 {
+    /// <summary>
+    ///     Responsible for creating metrics exporters.
+    /// </summary>
     public class MetricsExporterFactory
     {
         //---------------------------------------------------------------------
@@ -15,7 +18,7 @@ namespace MetricsIntegrator.Export
         private readonly Dictionary<string, List<string>> mapping;
         private readonly Dictionary<string, Metrics> sourceCodeMetrics;
         private readonly Dictionary<string, Metrics> testCodeMetrics;
-        private readonly ISet<string> filterMetrics;
+        private readonly FilterMetrics filterMetrics;
 
 
         //---------------------------------------------------------------------
@@ -26,7 +29,7 @@ namespace MetricsIntegrator.Export
                                        Dictionary<string, List<string>> mapping,
                                        Dictionary<string, Metrics> sourceCodeMetrics,
                                        Dictionary<string, Metrics> testCodeMetrics,
-                                       ISet<string> filterMetrics)
+                                       FilterMetrics filterMetrics)
         {
             this.outputDirectoryPath = outputDirectoryPath;
             this.projectName = projectName;
@@ -47,7 +50,7 @@ namespace MetricsIntegrator.Export
             private Dictionary<string, List<string>> mapping;
             private Dictionary<string, Metrics> sourceCodeMetrics;
             private Dictionary<string, Metrics> testCodeMetrics;
-            private ISet<string> filterMetrics;
+            private FilterMetrics filterMetrics;
 
             public Builder()
             {
@@ -88,7 +91,7 @@ namespace MetricsIntegrator.Export
                 return this;
             }
 
-            public Builder FilterMetrics(ISet<string> filterMetrics)
+            public Builder FilterMetrics(FilterMetrics filterMetrics)
             {
                 this.filterMetrics = filterMetrics;
 
@@ -132,31 +135,35 @@ namespace MetricsIntegrator.Export
         //---------------------------------------------------------------------
         //		Factories
         //---------------------------------------------------------------------
-        public IExporter CreateTestCaseCSVExporter(List<Metrics> metrics)
+        public IExporter CreateTestCaseCSVExporter(IDictionary<string, 
+                                                   List<Metrics>> metrics)
         {
             if ((metrics == null) || metrics.Count == 0)
                 throw new ArgumentException("There are no test case metrics");
 
             string outputPath = outputDirectoryPath + @"\TC_dataset_resulting_" + projectName + ".csv";
 
-            return CreateMetricsCSVExporter(outputPath, metrics);
+            return CreateMetricsCSVExporter(outputPath, metrics, filterMetrics.TestCaseMetricsFilter);
         }
 
-        public IExporter CreateTestPathCSVExporter(List<Metrics> metrics)
+        public IExporter CreateTestPathCSVExporter(IDictionary<string, 
+                                                   List<Metrics>> metrics)
         {
             if ((metrics == null) || metrics.Count == 0)
                 throw new ArgumentException("There are no test path metrics");
 
             string outputPath = outputDirectoryPath + @"\TP_dataset_resulting_" + projectName + ".csv";
 
-            return CreateMetricsCSVExporter(outputPath, metrics);
+            return CreateMetricsCSVExporter(outputPath, metrics, filterMetrics.TestPathMetricsFilter);
         }
 
 
         //---------------------------------------------------------------------
         //		Methods
         //---------------------------------------------------------------------
-        private IExporter CreateMetricsCSVExporter(string outputPath, List<Metrics> metrics)
+        private IExporter CreateMetricsCSVExporter(string outputPath, 
+                                                   IDictionary<string, List<Metrics>> metrics,
+                                                   ISet<string> baseMetricsFilter)
         {
             return new MetricsCSVExporter.Builder()
                .OutputPath(outputPath)
@@ -165,7 +172,8 @@ namespace MetricsIntegrator.Export
                .TestCodeMetrics(testCodeMetrics)
                .BaseMetrics(metrics)
                .UsingDelimiter(DELIMITER)
-               .FilterMetrics(filterMetrics)
+               .SourceCodeMetricsFilter(filterMetrics.SourceCodeMetricsFilter)
+               .BaseMetricsFilter(baseMetricsFilter)
                .Build();
         }
     }

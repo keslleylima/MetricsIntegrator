@@ -58,19 +58,17 @@ namespace MetricsIntegrator.Data
         [Fact]
         public void TestAddMetricWithNullValue()
         {
-            Assert.Throws<ArgumentException>(() =>
-            {
-                metrics.AddMetric(metricName, null);
-            });
+            metrics.AddMetric(metricName, null);
+
+            Assert.Equal("", metrics.GetMetric(metricName));
         }
 
         [Fact]
         public void TestAddMetricWithEmptyValue()
         {
-            Assert.Throws<ArgumentException>(() =>
-            {
-                metrics.AddMetric(metricName, "");
-            });
+            metrics.AddMetric(metricName, "");
+
+            Assert.Equal("", metrics.GetMetric(metricName));
         }
 
         [Fact]

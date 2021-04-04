@@ -20,7 +20,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\src\Models\MetricsIntegrator.csproj" />
+    <ProjectReference Include="..\src\MetricsIntegrator.csproj" />
   </ItemGroup>
 
 </Project>

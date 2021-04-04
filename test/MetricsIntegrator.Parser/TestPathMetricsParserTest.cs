@@ -14,8 +14,8 @@ namespace MetricsIntegrator.Parser
         //---------------------------------------------------------------------
         private readonly string basePath;
         private string filename;
-        private List<Metrics> obtained;
-        private List<Metrics> expected;
+        private IDictionary<string, List<Metrics>> obtained;
+        private List<Metrics> expectedMetrics;
         private Metrics metrics;
 
 
@@ -26,7 +26,7 @@ namespace MetricsIntegrator.Parser
         {
             basePath = GenerateBasePath();
             metrics = new Metrics();
-            expected = new List<Metrics>();
+            expectedMetrics = new List<Metrics>();
         }
 
 
@@ -38,7 +38,7 @@ namespace MetricsIntegrator.Parser
         {
             UsingFile("tp-test.csv");
 
-            WithMetric("id", "pkg1.pkg2.ClassName1.testedMethod1(int)");
+            WithMetric("id", "pkgname1.pkgname2.ClassName1.testedMethod1()");
             WithMetric("field1", "1");
             WithMetric("field2", "2");
             WithMetric("field3", "3");
@@ -118,7 +118,7 @@ namespace MetricsIntegrator.Parser
 
         private void BindMetrics()
         {
-            expected.Add(metrics);
+            expectedMetrics.Add(metrics);
             metrics = new Metrics();
         }
 
@@ -130,6 +130,9 @@ namespace MetricsIntegrator.Parser
 
         private void AssertParsingIsCorrect()
         {
+            Dictionary<string, List<Metrics>> expected = new Dictionary<string, List<Metrics>>();
+            expected.Add(expectedMetrics[0].GetID(), expectedMetrics);
+
             Assert.Equal(expected, obtained);
         }
     }

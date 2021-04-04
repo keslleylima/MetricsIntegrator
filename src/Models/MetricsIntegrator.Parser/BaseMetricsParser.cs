@@ -6,6 +6,9 @@ using System.Linq;
 
 namespace MetricsIntegrator.Parser
 {
+    /// <summary>
+    ///     Responsible for parsing test path and test case metrics.
+    /// </summary>
     public class BaseMetricsParser
     {
         //---------------------------------------------------------------------
@@ -13,7 +16,6 @@ namespace MetricsIntegrator.Parser
         //---------------------------------------------------------------------
         private readonly string filepath;
         private readonly string delimiter;
-        private readonly ISet<string> filterMetrics;
 
 
         //---------------------------------------------------------------------
@@ -46,38 +48,55 @@ namespace MetricsIntegrator.Parser
         //---------------------------------------------------------------------
         //		Methods
         //---------------------------------------------------------------------
-        public List<Metrics> Parse()
+        public IDictionary<string, List<Metrics>> Parse()
         {
-            List<Metrics> metrics = new List<Metrics>();
+            string[] lines = File.ReadAllLines(filepath);
 
-            string[] testPathMetricsFile = File.ReadAllLines(filepath);
-            string[] fieldKey = testPathMetricsFile[0].Split(delimiter);
+            StoreFieldKeys(lines);
+            
+            return ParseMetrics(lines, FieldKeys);
+        }
 
-            StoreFieldKeys(fieldKey);
+        private IDictionary<string, List<Metrics>> ParseMetrics(string[] lines, List<string> fieldKeys)
+        {
+            IDictionary<string, List<Metrics>> metrics = new Dictionary<string, List<Metrics>>();
 
-            foreach (string line in testPathMetricsFile.Skip(1).ToArray())
+            foreach (string line in lines.Skip(1).ToArray())
             {
-                metrics.Add(CreateBaseMetrics(line.Split(delimiter), fieldKey));
+                Metrics metric = CreateBaseMetrics(line.Split(delimiter), fieldKeys);
+
+                if (metrics.ContainsKey(metric.GetID()))
+                {
+                    metrics.TryGetValue(metric.GetID(), out List<Metrics> listMetrics);
+                    listMetrics.Add(metric);
+                }
+                else
+                {
+                    List<Metrics> listMetrics = new List<Metrics>();
+                    listMetrics.Add(metric);
+
+                    metrics.Add(metric.GetID(), listMetrics);
+                }
             }
 
             return metrics;
         }
 
-        private void StoreFieldKeys(string[] fieldKey)
+        private void StoreFieldKeys(string[] lines)
         {
-            for (int i = 0; i < fieldKey.Length; i++)
+            foreach (string field in lines[0].Split(delimiter))
             {
-                FieldKeys.Add(fieldKey[i]);
+                FieldKeys.Add(field);
             }
         }
 
-        private Metrics CreateBaseMetrics(string[] fieldValue, string[] fieldKey)
+        private Metrics CreateBaseMetrics(string[] fieldValue, List<string> fieldKeys)
         {
             Metrics metrics = new Metrics();
 
-            for (int i = 0; i < fieldKey.Length; i++)
+            for (int i = 0; i < fieldKeys.Count; i++)
             {
-                metrics.AddMetric(fieldKey[i], fieldValue[i]);
+                metrics.AddMetric(fieldKeys[i], fieldValue[i]);
             }
 
             return metrics;

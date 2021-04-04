@@ -1,0 +1,3 @@
+﻿pkg.ClassName1.testedMethod1();pkg.ClassName2.testMethod1();pkg.ClassName2.testMethod2();
+pkg.ClassName1.testedMethod2(SomeClass<T>, SomeClass2...);pkg.ClassName2.testMethod1();
+pkg.ClassName1.testedMethod3(SomeClass2...);pkg.ClassName2.testMethod1();;
