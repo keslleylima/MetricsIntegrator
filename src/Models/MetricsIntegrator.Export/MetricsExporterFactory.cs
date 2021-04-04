@@ -4,6 +4,9 @@ using System.Collections.Generic;
 
 namespace MetricsIntegrator.Export
 {
+    /// <summary>
+    ///     Responsible for creating metrics exporters.
+    /// </summary>
     public class MetricsExporterFactory
     {
         //---------------------------------------------------------------------

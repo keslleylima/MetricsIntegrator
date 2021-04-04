@@ -1,7 +1,7 @@
 ﻿namespace MetricsIntegrator.IO
 {
     /// <summary>
-    ///     Responsible for finding metrics files.
+    ///     Responsible for storing metrics files.
     /// </summary>
     public class MetricsFileManager
     {

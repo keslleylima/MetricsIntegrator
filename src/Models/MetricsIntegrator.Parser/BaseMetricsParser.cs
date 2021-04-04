@@ -6,6 +6,9 @@ using System.Linq;
 
 namespace MetricsIntegrator.Parser
 {
+    /// <summary>
+    ///     Responsible for parsing test path and test case metrics.
+    /// </summary>
     public class BaseMetricsParser
     {
         //---------------------------------------------------------------------

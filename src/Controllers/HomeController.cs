@@ -1,18 +1,14 @@
 ﻿using Avalonia.Controls;
 using MetricsIntegrator.Integrator;
 using MetricsIntegrator.Views;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
-using System.Drawing;
-using System.Reflection;
-using Image = Avalonia.Controls.Image;
 using MetricsIntegrator.IO;
 
 namespace MetricsIntegrator.Controllers
 {
+    /// <summary>
+    ///     Responsible for controlling the behavior of 'HomeView'.
+    /// </summary>
     public class HomeController
     {
         //---------------------------------------------------------------------

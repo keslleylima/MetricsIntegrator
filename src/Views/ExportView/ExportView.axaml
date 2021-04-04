@@ -12,16 +12,31 @@
       <Image Height="80" Width="700" Source="/Assets/Images/header-700x80.png" />
     </StackPanel>
 
-    <ProgressBar Minimum="0" Maximum="100" Value="50" Foreground="#21b721" Background="#3311B25A" />
+    <ProgressBar  Minimum="0" 
+                  Maximum="100" 
+                  Value="50" 
+                  Foreground="#21b721" 
+                  Background="#3311B25A" 
+    />
 
     <StackPanel Height="500">
-      <StackPanel Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Stretch">
+      <StackPanel Orientation="Horizontal" 
+                  VerticalAlignment="Center" 
+                  HorizontalAlignment="Stretch"
+      >
         <Button Click="OnBack"
-            VerticalAlignment="Top"
-            HorizontalAlignment="Left"
-            Content="BACK"
+                VerticalAlignment="Top"
+                HorizontalAlignment="Left"
+                Content="BACK"
         />
-        <TextBlock x:Name="maintitle" Width="620" TextAlignment="Center" Text="Export - metrics selections" FontSize="20" VerticalAlignment="Center" Margin="10 0 0 3" />
+        <TextBlock  x:Name="maintitle"
+                    Width="620" 
+                    TextAlignment="Center" 
+                    Text="Export - metrics selections" 
+                    FontSize="20" 
+                    VerticalAlignment="Center" 
+                    Margin="10 0 0 3" 
+        />
       </StackPanel>
 
       <Grid Margin="10 20 10 10">
@@ -32,7 +47,11 @@
         <Grid.RowDefinitions>
           <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
-        <ScrollViewer Grid.Column="0" VerticalScrollBarVisibility="Visible" HorizontalScrollBarVisibility="Disabled" Height="450">
+        <ScrollViewer Grid.Column="0" 
+                      VerticalScrollBarVisibility="Visible" 
+                      HorizontalScrollBarVisibility="Disabled" 
+                      Height="450"
+        >
           <Grid>
             <Grid.ColumnDefinitions>
               <ColumnDefinition Width="*"/>
@@ -46,7 +65,12 @@
             </StackPanel>
           </Grid>
         </ScrollViewer>
-        <ScrollViewer Grid.Row="0" Grid.Column="1" VerticalScrollBarVisibility="Visible" HorizontalScrollBarVisibility="Disabled" Height="450">
+        <ScrollViewer Grid.Row="0" 
+                      Grid.Column="1" 
+                      VerticalScrollBarVisibility="Visible" 
+                      HorizontalScrollBarVisibility="Disabled" 
+                      Height="450"
+        >
           <Grid>
             <Grid.ColumnDefinitions>
               <ColumnDefinition Width="*"/>
@@ -58,9 +82,19 @@
               <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
             <TextBlock Text="Test path metrics" Grid.Row="0" Margin="0 0 0 10" />
-            <StackPanel Grid.Row="1" Name="pnlTestPathMetrics" Spacing="5" Margin="20 0 0 0"></StackPanel>
+            <StackPanel Grid.Row="1" 
+                        Name="pnlTestPathMetrics" 
+                        Spacing="5" 
+                        Margin="20 0 0 0"
+            >
+            </StackPanel>
             <TextBlock Text="Test case metrics" Grid.Row="2" Margin="10 10 0 10" />
-            <StackPanel Grid.Row="3" Name="pnlTestCaseMetrics" Spacing="5" Margin="20 0 0 0"></StackPanel>
+            <StackPanel Grid.Row="3" 
+                        Name="pnlTestCaseMetrics" 
+                        Spacing="5" 
+                        Margin="20 0 0 0"
+            >
+            </StackPanel>
           </Grid>
         </ScrollViewer>
       </Grid>
@@ -72,9 +106,28 @@
         <ColumnDefinition Width="*"/>
         <ColumnDefinition Width="*"/>
       </Grid.ColumnDefinitions>
-      <Button Content="Check all" Grid.Column="0" Margin="10,0,10,0" Click="OnCheckAll"  HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
-      <Button Content="Check none" Grid.Column="1" Margin="10,0,10,0" Click="OnCheckNone" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
-      <Button Content="Export" Grid.Column="2" Margin="10,0,10,0"  Click="OnExport" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Background="#21b721" />
+      <Button Content="Check all" 
+              Grid.Column="0" 
+              Margin="10,0,10,0" 
+              Click="OnCheckAll"  
+              HorizontalAlignment="Stretch" 
+              VerticalAlignment="Stretch"
+      />
+      <Button Content="Check none" 
+              Grid.Column="1" 
+              Margin="10,0,10,0" 
+              Click="OnCheckNone" 
+              HorizontalAlignment="Stretch" 
+              VerticalAlignment="Stretch"
+      />
+      <Button Content="Export" 
+              Grid.Column="2" 
+              Margin="10,0,10,0"  
+              Click="OnExport" 
+              HorizontalAlignment="Stretch" 
+              VerticalAlignment="Stretch" 
+              Background="#21b721" 
+      />
     </Grid>
   </StackPanel>
 </UserControl>

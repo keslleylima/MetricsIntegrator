@@ -3,14 +3,14 @@ using MetricsIntegrator.Data;
 using MetricsIntegrator.Integrator;
 using MetricsIntegrator.Parser;
 using MetricsIntegrator.Views;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace MetricsIntegrator.Controllers
 {
+    /// <summary>
+    ///     Responsible for controlling the behavior of 'ExportView'.
+    /// </summary>
     public class ExportController
     {
         //---------------------------------------------------------------------

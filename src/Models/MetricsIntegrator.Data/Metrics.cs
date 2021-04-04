@@ -1,7 +1,6 @@
 ﻿using MetricsIntegrator.Utils;
 using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace MetricsIntegrator.Data
 {

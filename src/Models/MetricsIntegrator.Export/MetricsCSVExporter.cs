@@ -6,6 +6,9 @@ using System.Text;
 
 namespace MetricsIntegrator.Export
 {
+    /// <summary>
+    ///     Responsible for exporting metrics to a CSV file.
+    /// </summary>
     public class MetricsCSVExporter : IExporter
     {
         //---------------------------------------------------------------------

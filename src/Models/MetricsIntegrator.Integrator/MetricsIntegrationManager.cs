@@ -2,7 +2,6 @@
 using MetricsIntegrator.Export;
 using MetricsIntegrator.IO;
 using MetricsIntegrator.Parser;
-using System.Collections.Generic;
 using System.IO;
 
 namespace MetricsIntegrator.Integrator

@@ -1,7 +1,6 @@
 ﻿using MetricsIntegrator.Data;
 using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace MetricsIntegrator.Export
 {

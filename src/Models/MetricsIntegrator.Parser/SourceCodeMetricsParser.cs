@@ -7,6 +7,9 @@ using MetricsIntegrator.Data;
 
 namespace MetricsIntegrator.Parser
 {
+    /// <summary>
+    ///     Responsible for parsing source code metrics.
+    /// </summary>
     public class SourceCodeMetricsParser
     {
         //---------------------------------------------------------------------
