@@ -1,4 +1,6 @@
-![logo](https://raw.githubusercontent.com/williamniemiec/MetricsIntegrator/master/docs/img/logo/logo.png?raw=true)
+<p align='center'>
+<img src='https://raw.githubusercontent.com/williamniemiec/MetricsIntegrator/master/docs/img/logo/logo.png?raw=true' />
+</p>
 
 <h1 align='center'>Metrics Integrator</h1>
 <p align='center'>A simple tool that uses as input the source code metrics file and the mapping between application methods and the test methods. As output, our application yields a file where each instance involves source code metrics of one test method and the particular application method under test.</p>
