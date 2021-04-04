@@ -24,7 +24,5 @@ jobs:
       run: dotnet build --no-restore
     - name: Test
       run: dotnet test --no-build --verbosity normal
-    - name: Install opencover-portable
-      run: choco install opencover.portable
     - name: Coverage report
       run: OpenCover.Console.exe -register:user -target:"xunit.console.x86.exe" -targetargs:".\MyUnitTests\bin\Debug\MyUnitTests.dll -noshadow" -filter:"+[UnitTestTargetProject*]* -[MyUnitTests*]*" -output:".\MetricsIntegrator_coverage.xml"
