@@ -55,6 +55,7 @@ namespace MetricsIntegrator.Parser
             TestPathMetrics = new Dictionary<string, List<Metrics>>();
             TestCaseMetrics = new Dictionary<string, List<Metrics>>();
             TestCaseFieldKeys = new List<string>();
+            TestPathFieldKeys = new List<string>();
             SourceCodeFieldKeys = new List<string>();
         }
 
@@ -67,6 +68,7 @@ namespace MetricsIntegrator.Parser
         public Dictionary<string, Metrics> TestCodeMetrics { get; private set; }
         public IDictionary<string, List<Metrics>> TestPathMetrics { get; private set; }
         public IDictionary<string, List<Metrics>> TestCaseMetrics { get; private set; }
+        public List<string> TestPathFieldKeys { get; private set; }
         public List<string> TestCaseFieldKeys { get; private set; }
         public List<string> SourceCodeFieldKeys { get; private set; }
 
@@ -100,6 +102,7 @@ namespace MetricsIntegrator.Parser
             );
 
             TestPathMetrics = tpParser.Parse();
+            TestPathFieldKeys = tpParser.FieldKeys;
         }
 
         private void DoTestCaseMetricsParsing()

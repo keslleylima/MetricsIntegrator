@@ -23,6 +23,7 @@ namespace MetricsIntegrator.Views
         private MetricsIntegrationManager integrator;
         private StackPanel pnlSourceCodeMetrics;
         private StackPanel pnlTestCaseMetrics;
+        private StackPanel pnlTestPathMetrics;
         private string inDirectoryChoose;
         private ExportController exportController;
 
@@ -34,6 +35,7 @@ namespace MetricsIntegrator.Views
         {
             InitializeComponent();
             pnlSourceCodeMetrics = this.FindControl<StackPanel>("pnlSrcCodeMetrics");
+            pnlTestPathMetrics = this.FindControl<StackPanel>("pnlTestPathMetrics");
             pnlTestCaseMetrics = this.FindControl<StackPanel>("pnlTestCaseMetrics");
         }
 
@@ -61,6 +63,7 @@ namespace MetricsIntegrator.Views
                 exportController.ParseMetrics();
 
                 BuildSourceCodeMetricsSelector(exportController.SourceCodeFieldKeys);
+                BuildTestPathMetricsSelector(exportController.TestPathFieldKeys);
                 BuildTestCaseMetricsSelector(exportController.TestCaseFieldKeys);
             }
             catch (Exception e)
@@ -83,6 +86,11 @@ namespace MetricsIntegrator.Views
             {
                 panel.Children.Add(CreateCheckBoxForField(labels[i]));
             }
+        }
+
+        private void BuildTestPathMetricsSelector(List<string> fieldKeys)
+        {
+            BuildCheckBoxColumn(pnlTestPathMetrics, fieldKeys);
         }
 
         private void BuildTestCaseMetricsSelector(List<string> fieldKeys)
@@ -117,12 +125,18 @@ namespace MetricsIntegrator.Views
         private void OnCheckAll(object sender, RoutedEventArgs e)
         {
             CheckAllSourceCodeMetrics();
+            CheckAllTestPathMetrics();
             CheckAllTestCaseMetrics();
         }
 
         private void CheckAllSourceCodeMetrics()
         {
             CheckAllCheckBoxFromEnumerator(pnlSourceCodeMetrics.Children.GetEnumerator());
+        }
+
+        private void CheckAllTestPathMetrics()
+        {
+            CheckAllCheckBoxFromEnumerator(pnlTestPathMetrics.Children.GetEnumerator());
         }
 
         private void CheckAllTestCaseMetrics()
@@ -141,12 +155,18 @@ namespace MetricsIntegrator.Views
         private void OnCheckNone(object sender, RoutedEventArgs e)
         {
             UncheckAllSourceCodeMetrics();
+            UncheckAllTestPathMetrics();
             UncheckAllTestCaseMetrics();
         }
 
         private void UncheckAllSourceCodeMetrics()
         {
             UncheckAllCheckBoxFromEnumerator(pnlSourceCodeMetrics.Children.GetEnumerator());
+        }
+
+        private void UncheckAllTestPathMetrics()
+        {
+            UncheckAllCheckBoxFromEnumerator(pnlTestPathMetrics.Children.GetEnumerator());
         }
 
         private void UncheckAllTestCaseMetrics()
@@ -183,6 +203,7 @@ namespace MetricsIntegrator.Views
             FilterMetrics filterMetrics = new FilterMetrics();
 
             ParseUnselectedSourceCodeMetrics(filterMetrics);
+            ParseUnselectedTestPathMetrics(filterMetrics);
             ParseUnselectedTestCaseMetrics(filterMetrics);
 
             return filterMetrics;
@@ -199,6 +220,20 @@ namespace MetricsIntegrator.Views
 
                 if (!isChecked)
                     filterMetrics.AddSourceCodeFilter((string) cbx.Content);
+            }
+        }
+
+        private void ParseUnselectedTestPathMetrics(FilterMetrics filterMetrics)
+        {
+            var cbxMetrics = pnlTestPathMetrics.Children.GetEnumerator();
+
+            while (cbxMetrics.MoveNext())
+            {
+                CheckBox cbx = (CheckBox)cbxMetrics.Current;
+                bool isChecked = cbx.IsChecked ?? false;
+
+                if (!isChecked)
+                    filterMetrics.AddTestPathFilter((string) cbx.Content);
             }
         }
 

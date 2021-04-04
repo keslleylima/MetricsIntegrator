@@ -11,8 +11,9 @@ namespace MetricsIntegrator.Data
         //---------------------------------------------------------------------
         //		Attributes
         //---------------------------------------------------------------------
-        private ISet<string> testCaseMetricsFilter = new HashSet<string>();
         private ISet<string> sourceCodeMetricsFilter = new HashSet<string>();
+        private ISet<string> testPathMetricsFilter = new HashSet<string>();
+        private ISet<string> testCaseMetricsFilter = new HashSet<string>();
 
 
         //---------------------------------------------------------------------
@@ -20,8 +21,9 @@ namespace MetricsIntegrator.Data
         //---------------------------------------------------------------------
         public FilterMetrics()
         {
-            testCaseMetricsFilter = new HashSet<string>();
             sourceCodeMetricsFilter = new HashSet<string>();
+            testPathMetricsFilter = new HashSet<string>();
+            testCaseMetricsFilter = new HashSet<string>();
         }
 
 
@@ -33,19 +35,29 @@ namespace MetricsIntegrator.Data
             sourceCodeMetricsFilter.Add(metric);
         }
 
+        public void AddTestPathFilter(string metric)
+        {
+            testPathMetricsFilter.Add(metric);
+        }
+
         public void AddTestCaseFilter(string metric)
         {
             testCaseMetricsFilter.Add(metric);
         }
 
-        public bool IsFilteredByBaseMetric(string metricValue)
-        {
-            return testCaseMetricsFilter.Contains(metricValue);
-        }
-
         public bool IsFilteredBySourceCodeMetric(string metricValue)
         {
             return sourceCodeMetricsFilter.Contains(metricValue);
+        }
+
+        public bool IsFilteredByTestPathMetric(string metricValue)
+        {
+            return testPathMetricsFilter.Contains(metricValue);
+        }
+
+        public bool IsFilteredByTestCaseMetric(string metricValue)
+        {
+            return testCaseMetricsFilter.Contains(metricValue);
         }
     }
 }
