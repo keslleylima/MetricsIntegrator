@@ -36,15 +36,15 @@ namespace MetricsIntegrator.Data
         /// <param name="value">Metric value</param>
         /// 
         /// <exception cref="System.ArgumentException">
-        ///     If metrics or value is null or empty.
+        ///     If metrics is null or empty.
         /// </exception>
         public void AddMetric(string metric, string value)
         {
             if ((metric == null) || metric.Length == 0)
                 throw new ArgumentException("Metric cannot be empty");
 
-            if ((value == null) || value.Length == 0)
-                throw new ArgumentException("Value cannot be empty");
+            if (value == null)
+                value = "";
 
             metrics.Add(metric, value);
         }

@@ -196,16 +196,27 @@ namespace MetricsIntegrator.Views
         {
             string outputPath = await exportController.AskUserForWhereToSaveExportation();
             FilterMetrics filter = ParseUnselectedMetrics();
-            
-            //try
-            //{
+
+            try
+            {
                 exportController.OnExport(outputPath, filter);
-            //}
-            //catch (Exception e2)
-            //{
-            //    ErrorDialog dialog = new ErrorDialog(e2.ToString());
-            //    dialog.Show();
-            //}
+            }
+            catch (ArgumentException)
+            {
+                ErrorDialog dialog = new ErrorDialog(
+                    "No metrics after parsing.\n\n" +
+                    "Please check for missing data. If there is no missing data, " +
+                    "then it is not possible to generate metrics with the data " +
+                    "provided ;(. Try to provide more data in the metrics files."
+                );
+
+                dialog.Show();
+            }
+            catch (Exception e2)
+            {
+                ErrorDialog dialog = new ErrorDialog(e2.ToString());
+                dialog.Show();
+            }
         }
 
         private FilterMetrics ParseUnselectedMetrics()
