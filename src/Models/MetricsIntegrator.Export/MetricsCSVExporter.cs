@@ -17,8 +17,9 @@ namespace MetricsIntegrator.Export
         private readonly Dictionary<string, Metrics> testCodeMetrics;
         private readonly string delimiter;
         private readonly StringBuilder lines;
-        private readonly FilterMetrics filterMetrics;
-        
+        private readonly ISet<string> sourceCodeMetricsFilter;
+        private readonly ISet<string> baseMetricsFilter;
+
         // Base: Test path or test case
         private readonly IDictionary<string, List<Metrics>> baseMetrics; 
 
@@ -32,7 +33,8 @@ namespace MetricsIntegrator.Export
                                    Dictionary<string, Metrics> dictSourceCode,
                                    Dictionary<string, Metrics> dictSourceTest,
                                    IDictionary<string, List<Metrics>> baseMetrics,
-                                   FilterMetrics filterMetrics)
+                                   ISet<string> sourceCodeMetricsFilter,
+                                   ISet<string> baseMetricsFilter)
         {
             this.outputPath = outputPath;
             this.mapping = mapping;
@@ -41,7 +43,8 @@ namespace MetricsIntegrator.Export
             this.delimiter = delimiter;
             this.baseMetrics = baseMetrics;
             lines = new StringBuilder();
-            this.filterMetrics = filterMetrics;
+            this.sourceCodeMetricsFilter = sourceCodeMetricsFilter;
+            this.baseMetricsFilter = baseMetricsFilter;
         }
 
 
@@ -67,7 +70,8 @@ namespace MetricsIntegrator.Export
             private Dictionary<string, Metrics> sourceCodeMetrics;
             private Dictionary<string, Metrics> testCodeMetrics;
             private IDictionary<string, List<Metrics>> baseMetrics;
-            private FilterMetrics filterMetrics;
+            private ISet<string> sourceCodeMetricsFilter;
+            private ISet<string> baseMetricsFilter;
 
             public Builder()
             {
@@ -115,9 +119,16 @@ namespace MetricsIntegrator.Export
                 return this;
             }
 
-            public Builder FilterMetrics(FilterMetrics filterMetrics)
+            public Builder SourceCodeMetricsFilter(ISet<string> sourceCodeMetricsFilter)
             {
-                this.filterMetrics = filterMetrics;
+                this.sourceCodeMetricsFilter = sourceCodeMetricsFilter;
+
+                return this;
+            }
+
+            public Builder BaseMetricsFilter(ISet<string> baseMetricsFilter)
+            {
+                this.baseMetricsFilter = baseMetricsFilter;
 
                 return this;
             }
@@ -146,7 +157,8 @@ namespace MetricsIntegrator.Export
                     sourceCodeMetrics, 
                     testCodeMetrics, 
                     baseMetrics,
-                    filterMetrics
+                    sourceCodeMetricsFilter,
+                    baseMetricsFilter
                 );
             }
 
@@ -290,7 +302,7 @@ namespace MetricsIntegrator.Export
 
             foreach (string metricValue in metricsSourceCode.GetAllMetricValues())
             {
-                if (filterMetrics.IsFilteredBySourceCodeMetric(metricValue))
+                if (sourceCodeMetricsFilter.Contains(metricValue))
                     continue;
 
                 lines.Append(metricValue);
@@ -304,7 +316,7 @@ namespace MetricsIntegrator.Export
 
             foreach (string metricValue in metricsSourceTest.GetAllMetricValues())
             {
-                if (filterMetrics.IsFilteredBySourceCodeMetric(metricValue))
+                if (sourceCodeMetricsFilter.Contains(metricValue))
                     continue;
 
                 lines.Append(metricValue);
@@ -316,7 +328,7 @@ namespace MetricsIntegrator.Export
         {
             foreach (string metricValue in metrics.GetAllMetricValues())
             {
-                if (filterMetrics.IsFilteredByBaseMetric(metricValue))
+                if (baseMetricsFilter.Contains(metricValue))
                     continue;
 
                 lines.Append(metricValue);

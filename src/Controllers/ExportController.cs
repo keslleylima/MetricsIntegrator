@@ -18,7 +18,6 @@ namespace MetricsIntegrator.Controllers
         //---------------------------------------------------------------------
         private MainWindow window;
         private MetricsIntegrationManager integrator;
-        private string inDirectoryChoose;
 
 
         //---------------------------------------------------------------------
@@ -51,14 +50,14 @@ namespace MetricsIntegrator.Controllers
             TestCaseFieldKeys = parser.TestCaseFieldKeys;
         }
 
-        public void OnExport(string outputPath, FilterMetrics filterMetrics)
+        public void OnExport(string outputDirectory, FilterMetrics filterMetrics)
         {
-            if (inDirectoryChoose.Length == 0)
+            if (outputDirectory.Length == 0)
                 return;
 
-            string output = integrator.DoExportation(inDirectoryChoose, filterMetrics);
+            string outputPath = integrator.DoExportation(outputDirectory, filterMetrics);
 
-            window.NavigateToEndView(output);
+            window.NavigateToEndView(outputPath);
         }
 
         public async Task<string> AskUserForWhereToSaveExportation()

@@ -58,28 +58,28 @@ namespace MetricsIntegrator.Controllers
         }
 
         public void OnIntegrate(string projectName, string mapPath, 
-                                string sourceCodePath, string testCasePath, 
-                                string testPathsPath)
+                                string sourceCodePath, string testPathsPath,
+                                string testCasePath)
         {
             MetricsIntegrationManager integrator = new MetricsIntegrationManager(
                 projectName,
-                CreateMetricsFileManager(mapPath, sourceCodePath, testCasePath, testPathsPath)
+                CreateMetricsFileManager(mapPath, sourceCodePath, testPathsPath, testCasePath)
             );
 
             window.NavigateToExportView(integrator);
         }
 
         private MetricsFileManager CreateMetricsFileManager(string mapPath,
-                                                            string sourceCodePath, 
-                                                            string testCasePath,
-                                                            string testPathsPath)
+                                                            string sourceCodePath,
+                                                            string testPathsPath,
+                                                            string testCasePath)
         {
             MetricsFileManager metricsFileManager = new MetricsFileManager();
 
             metricsFileManager.MapPath = mapPath;
             metricsFileManager.SourceCodePath = sourceCodePath;
-            metricsFileManager.TestCasePath = testCasePath;
             metricsFileManager.TestPathsPath = testPathsPath;
+            metricsFileManager.TestCasePath = testCasePath;
 
             return metricsFileManager;
         }

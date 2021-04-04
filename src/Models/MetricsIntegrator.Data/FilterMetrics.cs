@@ -9,22 +9,22 @@ namespace MetricsIntegrator.Data
     public class FilterMetrics
     {
         //---------------------------------------------------------------------
-        //		Attributes
-        //---------------------------------------------------------------------
-        private ISet<string> sourceCodeMetricsFilter = new HashSet<string>();
-        private ISet<string> testPathMetricsFilter = new HashSet<string>();
-        private ISet<string> testCaseMetricsFilter = new HashSet<string>();
-
-
-        //---------------------------------------------------------------------
         //		Constructor
         //---------------------------------------------------------------------
         public FilterMetrics()
         {
-            sourceCodeMetricsFilter = new HashSet<string>();
-            testPathMetricsFilter = new HashSet<string>();
-            testCaseMetricsFilter = new HashSet<string>();
+            SourceCodeMetricsFilter = new HashSet<string>();
+            TestPathMetricsFilter = new HashSet<string>();
+            TestCaseMetricsFilter = new HashSet<string>();
         }
+
+
+        //---------------------------------------------------------------------
+        //		Properties
+        //---------------------------------------------------------------------
+        public ISet<string> SourceCodeMetricsFilter { get; private set; }
+        public ISet<string> TestPathMetricsFilter { get; private set; }
+        public ISet<string> TestCaseMetricsFilter { get; private set; }
 
 
         //---------------------------------------------------------------------
@@ -32,32 +32,32 @@ namespace MetricsIntegrator.Data
         //---------------------------------------------------------------------
         public void AddSourceCodeFilter(string metric)
         {
-            sourceCodeMetricsFilter.Add(metric);
+            SourceCodeMetricsFilter.Add(metric);
         }
 
         public void AddTestPathFilter(string metric)
         {
-            testPathMetricsFilter.Add(metric);
+            TestPathMetricsFilter.Add(metric);
         }
 
         public void AddTestCaseFilter(string metric)
         {
-            testCaseMetricsFilter.Add(metric);
+            TestCaseMetricsFilter.Add(metric);
         }
 
         public bool IsFilteredBySourceCodeMetric(string metricValue)
         {
-            return sourceCodeMetricsFilter.Contains(metricValue);
+            return SourceCodeMetricsFilter.Contains(metricValue);
         }
 
         public bool IsFilteredByTestPathMetric(string metricValue)
         {
-            return testPathMetricsFilter.Contains(metricValue);
+            return TestPathMetricsFilter.Contains(metricValue);
         }
 
         public bool IsFilteredByTestCaseMetric(string metricValue)
         {
-            return testCaseMetricsFilter.Contains(metricValue);
+            return TestCaseMetricsFilter.Contains(metricValue);
         }
     }
 }

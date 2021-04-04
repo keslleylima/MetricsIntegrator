@@ -140,7 +140,7 @@ namespace MetricsIntegrator.Export
 
             string outputPath = outputDirectoryPath + @"\TC_dataset_resulting_" + projectName + ".csv";
 
-            return CreateMetricsCSVExporter(outputPath, metrics);
+            return CreateMetricsCSVExporter(outputPath, metrics, filterMetrics.TestCaseMetricsFilter);
         }
 
         public IExporter CreateTestPathCSVExporter(IDictionary<string, 
@@ -151,7 +151,7 @@ namespace MetricsIntegrator.Export
 
             string outputPath = outputDirectoryPath + @"\TP_dataset_resulting_" + projectName + ".csv";
 
-            return CreateMetricsCSVExporter(outputPath, metrics);
+            return CreateMetricsCSVExporter(outputPath, metrics, filterMetrics.TestPathMetricsFilter);
         }
 
 
@@ -159,7 +159,8 @@ namespace MetricsIntegrator.Export
         //		Methods
         //---------------------------------------------------------------------
         private IExporter CreateMetricsCSVExporter(string outputPath, 
-                                                   IDictionary<string, List<Metrics>> metrics)
+                                                   IDictionary<string, List<Metrics>> metrics,
+                                                   ISet<string> baseMetricsFilter)
         {
             return new MetricsCSVExporter.Builder()
                .OutputPath(outputPath)
@@ -168,7 +169,8 @@ namespace MetricsIntegrator.Export
                .TestCodeMetrics(testCodeMetrics)
                .BaseMetrics(metrics)
                .UsingDelimiter(DELIMITER)
-               .FilterMetrics(filterMetrics)
+               .SourceCodeMetricsFilter(filterMetrics.SourceCodeMetricsFilter)
+               .BaseMetricsFilter(baseMetricsFilter)
                .Build();
         }
     }

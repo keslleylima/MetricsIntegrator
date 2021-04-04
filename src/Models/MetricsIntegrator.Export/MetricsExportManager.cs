@@ -16,7 +16,6 @@ namespace MetricsIntegrator.Export
         private readonly IDictionary<string, List<Metrics>> testPathMetrics;
         private readonly IDictionary<string, List<Metrics>> testCaseMetrics;
         private readonly MetricsExporterFactory exportFactory;
-        private readonly FilterMetrics filterMetrics;
 
 
         //---------------------------------------------------------------------
@@ -33,7 +32,6 @@ namespace MetricsIntegrator.Export
         {
             this.testPathMetrics = testPathMetrics;
             this.testCaseMetrics = testCaseMetrics;
-            this.filterMetrics = filterMetrics;
 
             exportFactory = new MetricsExporterFactory.Builder()
                 .OutputDirectory(outputDirectoryPath)

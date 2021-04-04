@@ -148,7 +148,12 @@ namespace MetricsIntegrator.Views
         {
             while (enumerator.MoveNext())
             {
-                ((CheckBox) enumerator.Current).IsChecked = true;
+                CheckBox cbx = (CheckBox) enumerator.Current;
+
+                if (!cbx.IsEnabled)
+                    continue;
+                
+                cbx.IsChecked = true;
             }
         }
 
@@ -178,7 +183,12 @@ namespace MetricsIntegrator.Views
         {
             while (enumerator.MoveNext())
             {
-                ((CheckBox) enumerator.Current).IsChecked = false;
+                CheckBox cbx = (CheckBox) enumerator.Current;
+
+                if (!cbx.IsEnabled)
+                    continue;
+
+                cbx.IsChecked = false;
             }
         }
 
@@ -187,15 +197,15 @@ namespace MetricsIntegrator.Views
             string outputPath = await exportController.AskUserForWhereToSaveExportation();
             FilterMetrics filter = ParseUnselectedMetrics();
             
-            try
-            {
+            //try
+            //{
                 exportController.OnExport(outputPath, filter);
-            }
-            catch (Exception e2)
-            {
-                ErrorDialog dialog = new ErrorDialog(e2.Message);
-                dialog.Show();
-            }
+            //}
+            //catch (Exception e2)
+            //{
+            //    ErrorDialog dialog = new ErrorDialog(e2.ToString());
+            //    dialog.Show();
+            //}
         }
 
         private FilterMetrics ParseUnselectedMetrics()
