@@ -140,7 +140,7 @@ namespace MetricsIntegrator.Parser
         {
             Metrics metricsSourceTest = new Metrics();
 
-            for (int i = 1; i < fields.Count; i++)
+            for (int i = 0; i < fields.Count; i++)
             {
                 metricsSourceTest.AddMetric(fields[i], row[i]);
             }
