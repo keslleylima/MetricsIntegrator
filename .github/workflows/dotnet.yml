@@ -18,11 +18,9 @@ jobs:
         dotnet-version: 5.0.x
     - name: Restore dependencies
       run: dotnet restore
-    - name: Restore dependencies
-      run: dotnet restore
     - name: Build
       run: dotnet build --no-restore /p:ContinuousIntegrationBuild=true
     - name: Test
-      run: dotnet test --no-build --verbosity normal /p:CollectCoverage=true /p:CoverletOutputFormat=opencover
+      run: dotnet test --collect:"XPlat Code Coverage" --settings coverlet.runsettings --no-restore
     - name: Codecov
       uses: codecov/codecov-action@v1
