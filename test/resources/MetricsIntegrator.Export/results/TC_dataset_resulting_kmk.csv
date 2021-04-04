@@ -1,0 +1,3 @@
+scName;scfield1;scfield2;scfield3;scName;scfield1;scfield2;scfield3;idtc;tcfield1;tcfield2;
+pkg.ClassName1.testedMethod1();Method;1;1;pkg.ClassName2.testMethod1();Method;1;1;pkg.ClassName2.testMethod1();1;2;
+
