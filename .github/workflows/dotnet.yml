@@ -21,6 +21,6 @@ jobs:
     - name: Build
       run: dotnet build --no-restore /p:ContinuousIntegrationBuild=true
     - name: Test
-      run: dotnet test --collect:"XPlat Code Coverage" --settings coverlet.runsettings --no-restore
+      run: dotnet test --collect:"XPlat Code Coverage" --no-restore
     - name: Codecov
       uses: codecov/codecov-action@v1
