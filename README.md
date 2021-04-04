@@ -1,4 +1,4 @@
-![](https://raw.githubusercontent.com/williamniemiec/MetricsIntegrator/master/docs/img/logo/logo.png?raw=true)
+![logo](https://raw.githubusercontent.com/williamniemiec/MetricsIntegrator/master/docs/img/logo/logo.png?raw=true)
 
 <h1 align='center'>Metrics Integrator</h1>
 <p align='center'>A simple tool that uses as input the source code metrics file and the mapping between application methods and the test methods. As output, our application yields a file where each instance involves source code metrics of one test method and the particular application method under test.</p>
@@ -20,6 +20,14 @@ We developed this tool to generate the defined metrics to build the dataset deta
 ## ⚠ Requirements
 - CSV separated by ';'
 - First column of source code metrics, test code metrics and test path metrics must be the method signature 
+
+## Gallery
+
+#### Home
+![home-img](https://raw.githubusercontent.com/williamniemiec/MetricsIntegrator/master/docs/img/screens/home.png?raw=true)
+
+#### Export selection
+![export-gif](https://raw.githubusercontent.com/williamniemiec/MetricsIntegrator/master/docs/gif/screens/export.gif?raw=true)
 
 ## 📁 Files
 ### /
