@@ -5,7 +5,12 @@ on:
     branches: [ master ]
   pull_request:
     branches: [ master ]
-
+env:
+  DOTNET_CLI_TELEMETRY_OPTOUT: true
+  DOTNET_NOLOGO: true
+  NUGET_XMLDOC_MODE: skip
+  NUGET_PACKAGES: ${{ github.workspace }}/.nuget/packages
+  
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -22,7 +27,8 @@ jobs:
       run: dotnet build --no-restore
     - name: Test
       run: dotnet test --no-build --verbosity normal
-    - name: Install OpenCover
-      run: dotnet add package OpenCover --version 4.7.922
-    - name: Coverage report
-      run: OpenCover.Console.exe -register:user -target:"xunit.console.x86.exe" -targetargs:".\MyUnitTests\bin\Debug\MyUnitTests.dll -noshadow" -filter:"+[UnitTestTargetProject*]* -[MyUnitTests*]*" -output:".\MetricsIntegrator_coverage.xml"
+    - name: Upload coverage to Codecov
+      uses: codecov/codecov-action@v1
+      with:
+        file: "!**/.nuget/packages/**/*.*"
+        flags: ${{ runner.os }},${{ matrix.dotnet.framework }
