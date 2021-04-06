@@ -16,8 +16,8 @@ namespace MetricsIntegrator.Controllers
         //---------------------------------------------------------------------
         //		Attributes
         //---------------------------------------------------------------------
-        private MainWindow window;
-        private MetricsIntegrationManager integrator;
+        private readonly MainWindow window;
+        private readonly MetricsIntegrationManager integrator;
 
 
         //---------------------------------------------------------------------
@@ -34,8 +34,7 @@ namespace MetricsIntegrator.Controllers
         //		Properties
         //---------------------------------------------------------------------
         public List<string> SourceCodeFieldKeys { get; private set; }
-        public List<string> TestPathFieldKeys { get; private set; }
-        public List<string> TestCaseFieldKeys { get; private set; }
+        public List<string> CodeCoverageFieldKeys { get; private set; }
 
 
         //---------------------------------------------------------------------
@@ -46,8 +45,7 @@ namespace MetricsIntegrator.Controllers
             MetricsParseManager parser = integrator.DoParsing();
             
             SourceCodeFieldKeys = parser.SourceCodeFieldKeys;
-            TestPathFieldKeys = parser.TestPathFieldKeys;
-            TestCaseFieldKeys = parser.TestCaseFieldKeys;
+            CodeCoverageFieldKeys = parser.CodeCoverageFieldKeys;
         }
 
         public void OnExport(string outputDirectory, FilterMetrics filterMetrics)

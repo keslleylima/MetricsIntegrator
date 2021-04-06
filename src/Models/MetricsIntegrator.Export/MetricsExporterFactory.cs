@@ -15,9 +15,9 @@ namespace MetricsIntegrator.Export
         private static readonly string DELIMITER = ";";
         private readonly string outputDirectoryPath;
         private readonly string projectName;
-        private readonly Dictionary<string, List<string>> mapping;
-        private readonly Dictionary<string, Metrics> sourceCodeMetrics;
-        private readonly Dictionary<string, Metrics> testCodeMetrics;
+        private readonly IDictionary<string, List<string>> mapping;
+        private readonly IDictionary<string, Metrics> sourceCodeMetrics;
+        private readonly IDictionary<string, Metrics> testCodeMetrics;
         private readonly FilterMetrics filterMetrics;
 
 
@@ -26,9 +26,9 @@ namespace MetricsIntegrator.Export
         //---------------------------------------------------------------------
         private MetricsExporterFactory(string outputDirectoryPath,
                                        string projectName,
-                                       Dictionary<string, List<string>> mapping,
-                                       Dictionary<string, Metrics> sourceCodeMetrics,
-                                       Dictionary<string, Metrics> testCodeMetrics,
+                                       IDictionary<string, List<string>> mapping,
+                                       IDictionary<string, Metrics> sourceCodeMetrics,
+                                       IDictionary<string, Metrics> testCodeMetrics,
                                        FilterMetrics filterMetrics)
         {
             this.outputDirectoryPath = outputDirectoryPath;
@@ -47,9 +47,9 @@ namespace MetricsIntegrator.Export
         {
             private string outputDirectoryPath;
             private string projectName;
-            private Dictionary<string, List<string>> mapping;
-            private Dictionary<string, Metrics> sourceCodeMetrics;
-            private Dictionary<string, Metrics> testCodeMetrics;
+            private IDictionary<string, List<string>> mapping;
+            private IDictionary<string, Metrics> sourceCodeMetrics;
+            private IDictionary<string, Metrics> testCodeMetrics;
             private FilterMetrics filterMetrics;
 
             public Builder()
@@ -70,21 +70,21 @@ namespace MetricsIntegrator.Export
                 return this;
             }
 
-            public Builder Mapping(Dictionary<string, List<string>> map)
+            public Builder Mapping(IDictionary<string, List<string>> map)
             {
                 mapping = map;
 
                 return this;
             }
 
-            public Builder SourceCodeMetrics(Dictionary<string, Metrics> metrics)
+            public Builder SourceCodeMetrics(IDictionary<string, Metrics> metrics)
             {
                 sourceCodeMetrics = metrics;
 
                 return this;
             }
 
-            public Builder TestCodeMetrics(Dictionary<string, Metrics> metrics)
+            public Builder TestCodeMetrics(IDictionary<string, Metrics> metrics)
             {
                 testCodeMetrics = metrics;
 
@@ -135,26 +135,15 @@ namespace MetricsIntegrator.Export
         //---------------------------------------------------------------------
         //		Factories
         //---------------------------------------------------------------------
-        public IExporter CreateTestCaseCSVExporter(IDictionary<string, 
-                                                   List<Metrics>> metrics)
+        public IExporter CreateCodeCoverageCSVExporter(IDictionary<string, 
+                                                       List<Metrics>> metrics)
         {
             if ((metrics == null) || metrics.Count == 0)
-                throw new ArgumentException("There are no test case metrics");
+                throw new ArgumentException("There are no metrics");
 
-            string outputPath = outputDirectoryPath + @"\TC_dataset_resulting_" + projectName + ".csv";
+            string outputPath = outputDirectoryPath + @"\INTEGRATION_" + projectName + ".csv";
 
-            return CreateMetricsCSVExporter(outputPath, metrics, filterMetrics.TestCaseMetricsFilter);
-        }
-
-        public IExporter CreateTestPathCSVExporter(IDictionary<string, 
-                                                   List<Metrics>> metrics)
-        {
-            if ((metrics == null) || metrics.Count == 0)
-                throw new ArgumentException("There are no test path metrics");
-
-            string outputPath = outputDirectoryPath + @"\TP_dataset_resulting_" + projectName + ".csv";
-
-            return CreateMetricsCSVExporter(outputPath, metrics, filterMetrics.TestPathMetricsFilter);
+            return CreateMetricsCSVExporter(outputPath, metrics, filterMetrics.CodeCoverageFilter);
         }
 
 

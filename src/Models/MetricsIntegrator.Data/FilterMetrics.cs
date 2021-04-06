@@ -13,8 +13,7 @@ namespace MetricsIntegrator.Data
         public FilterMetrics()
         {
             SourceCodeMetricsFilter = new HashSet<string>();
-            TestPathMetricsFilter = new HashSet<string>();
-            TestCaseMetricsFilter = new HashSet<string>();
+            CodeCoverageFilter = new HashSet<string>();
         }
 
 
@@ -22,8 +21,7 @@ namespace MetricsIntegrator.Data
         //		Properties
         //---------------------------------------------------------------------
         public ISet<string> SourceCodeMetricsFilter { get; private set; }
-        public ISet<string> TestPathMetricsFilter { get; private set; }
-        public ISet<string> TestCaseMetricsFilter { get; private set; }
+        public ISet<string> CodeCoverageFilter { get; private set; }
 
 
         //---------------------------------------------------------------------
@@ -34,14 +32,9 @@ namespace MetricsIntegrator.Data
             SourceCodeMetricsFilter.Add(metric);
         }
 
-        public void AddTestPathFilter(string metric)
+        public void AddCodeCoverageFilter(string metric)
         {
-            TestPathMetricsFilter.Add(metric);
-        }
-
-        public void AddTestCaseFilter(string metric)
-        {
-            TestCaseMetricsFilter.Add(metric);
+            CodeCoverageFilter.Add(metric);
         }
 
         public bool IsFilteredBySourceCodeMetric(string metricValue)
@@ -49,14 +42,9 @@ namespace MetricsIntegrator.Data
             return SourceCodeMetricsFilter.Contains(metricValue);
         }
 
-        public bool IsFilteredByTestPathMetric(string metricValue)
+        public bool IsFilteredByCodeCoverage(string metricValue)
         {
-            return TestPathMetricsFilter.Contains(metricValue);
-        }
-
-        public bool IsFilteredByTestCaseMetric(string metricValue)
-        {
-            return TestCaseMetricsFilter.Contains(metricValue);
+            return CodeCoverageFilter.Contains(metricValue);
         }
     }
 }

@@ -1,4 +1,3 @@
-using Avalonia;
 using Avalonia.Collections;
 using Avalonia.Controls;
 using Avalonia.Interactivity;
@@ -6,11 +5,9 @@ using Avalonia.Markup.Xaml;
 using MetricsIntegrator.Controllers;
 using MetricsIntegrator.Data;
 using MetricsIntegrator.Integrator;
-using MetricsIntegrator.Parser;
 using MetricsIntegrator.Views.Dialog;
 using System;
 using System.Collections.Generic;
-using System.Threading.Tasks;
 
 namespace MetricsIntegrator.Views
 {
@@ -19,13 +16,9 @@ namespace MetricsIntegrator.Views
         //---------------------------------------------------------------------
         //		Attributes
         //---------------------------------------------------------------------
-        private MainWindow window;
-        private MetricsIntegrationManager integrator;
-        private StackPanel pnlSourceCodeMetrics;
-        private StackPanel pnlTestCaseMetrics;
-        private StackPanel pnlTestPathMetrics;
-        private string inDirectoryChoose;
-        private ExportController exportController;
+        private readonly StackPanel pnlSourceCodeMetrics;
+        private readonly StackPanel pnlCodeCoverage;
+        private readonly ExportController exportController;
 
 
         //---------------------------------------------------------------------
@@ -35,8 +28,7 @@ namespace MetricsIntegrator.Views
         {
             InitializeComponent();
             pnlSourceCodeMetrics = this.FindControl<StackPanel>("pnlSrcCodeMetrics");
-            pnlTestPathMetrics = this.FindControl<StackPanel>("pnlTestPathMetrics");
-            pnlTestCaseMetrics = this.FindControl<StackPanel>("pnlTestCaseMetrics");
+            pnlCodeCoverage = this.FindControl<StackPanel>("pnlCodeCoverage");
         }
 
         public ExportView(MainWindow window, MetricsIntegrationManager integrator) 
@@ -63,8 +55,7 @@ namespace MetricsIntegrator.Views
                 exportController.ParseMetrics();
 
                 BuildSourceCodeMetricsSelector(exportController.SourceCodeFieldKeys);
-                BuildTestPathMetricsSelector(exportController.TestPathFieldKeys);
-                BuildTestCaseMetricsSelector(exportController.TestCaseFieldKeys);
+                BuildCodeCoverageSelector(exportController.CodeCoverageFieldKeys);
             }
             catch (Exception e)
             {
@@ -88,14 +79,9 @@ namespace MetricsIntegrator.Views
             }
         }
 
-        private void BuildTestPathMetricsSelector(List<string> fieldKeys)
+        private void BuildCodeCoverageSelector(List<string> fieldKeys)
         {
-            BuildCheckBoxColumn(pnlTestPathMetrics, fieldKeys);
-        }
-
-        private void BuildTestCaseMetricsSelector(List<string> fieldKeys)
-        {
-            BuildCheckBoxColumn(pnlTestCaseMetrics, fieldKeys);
+            BuildCheckBoxColumn(pnlCodeCoverage, fieldKeys);
         }
 
         private CheckBox CreateCheckBoxForIdField(string field)
@@ -125,8 +111,7 @@ namespace MetricsIntegrator.Views
         private void OnCheckAll(object sender, RoutedEventArgs e)
         {
             CheckAllSourceCodeMetrics();
-            CheckAllTestPathMetrics();
-            CheckAllTestCaseMetrics();
+            CheckAllCodeCoverage();
         }
 
         private void CheckAllSourceCodeMetrics()
@@ -134,14 +119,9 @@ namespace MetricsIntegrator.Views
             CheckAllCheckBoxFromEnumerator(pnlSourceCodeMetrics.Children.GetEnumerator());
         }
 
-        private void CheckAllTestPathMetrics()
+        private void CheckAllCodeCoverage()
         {
-            CheckAllCheckBoxFromEnumerator(pnlTestPathMetrics.Children.GetEnumerator());
-        }
-
-        private void CheckAllTestCaseMetrics()
-        {
-            CheckAllCheckBoxFromEnumerator(pnlTestCaseMetrics.Children.GetEnumerator());
+            CheckAllCheckBoxFromEnumerator(pnlCodeCoverage.Children.GetEnumerator());
         }
 
         private void CheckAllCheckBoxFromEnumerator(AvaloniaList<IControl>.Enumerator enumerator)
@@ -160,8 +140,7 @@ namespace MetricsIntegrator.Views
         private void OnCheckNone(object sender, RoutedEventArgs e)
         {
             UncheckAllSourceCodeMetrics();
-            UncheckAllTestPathMetrics();
-            UncheckAllTestCaseMetrics();
+            UncheckAllCodeCoverage();
         }
 
         private void UncheckAllSourceCodeMetrics()
@@ -169,14 +148,9 @@ namespace MetricsIntegrator.Views
             UncheckAllCheckBoxFromEnumerator(pnlSourceCodeMetrics.Children.GetEnumerator());
         }
 
-        private void UncheckAllTestPathMetrics()
+        private void UncheckAllCodeCoverage()
         {
-            UncheckAllCheckBoxFromEnumerator(pnlTestPathMetrics.Children.GetEnumerator());
-        }
-
-        private void UncheckAllTestCaseMetrics()
-        {
-            UncheckAllCheckBoxFromEnumerator(pnlTestCaseMetrics.Children.GetEnumerator());
+            UncheckAllCheckBoxFromEnumerator(pnlCodeCoverage.Children.GetEnumerator());
         }
 
         private void UncheckAllCheckBoxFromEnumerator(AvaloniaList<IControl>.Enumerator enumerator)
@@ -224,8 +198,7 @@ namespace MetricsIntegrator.Views
             FilterMetrics filterMetrics = new FilterMetrics();
 
             ParseUnselectedSourceCodeMetrics(filterMetrics);
-            ParseUnselectedTestPathMetrics(filterMetrics);
-            ParseUnselectedTestCaseMetrics(filterMetrics);
+            ParseUnselectedCodeCoverage(filterMetrics);
 
             return filterMetrics;
         }
@@ -244,9 +217,9 @@ namespace MetricsIntegrator.Views
             }
         }
 
-        private void ParseUnselectedTestPathMetrics(FilterMetrics filterMetrics)
+        private void ParseUnselectedCodeCoverage(FilterMetrics filterMetrics)
         {
-            var cbxMetrics = pnlTestPathMetrics.Children.GetEnumerator();
+            var cbxMetrics = pnlCodeCoverage.Children.GetEnumerator();
 
             while (cbxMetrics.MoveNext())
             {
@@ -254,21 +227,7 @@ namespace MetricsIntegrator.Views
                 bool isChecked = cbx.IsChecked ?? false;
 
                 if (!isChecked)
-                    filterMetrics.AddTestPathFilter((string) cbx.Content);
-            }
-        }
-
-        private void ParseUnselectedTestCaseMetrics(FilterMetrics filterMetrics)
-        {
-            var cbxMetrics = pnlTestCaseMetrics.Children.GetEnumerator();
-
-            while (cbxMetrics.MoveNext())
-            {
-                CheckBox cbx = (CheckBox) cbxMetrics.Current;
-                bool isChecked = cbx.IsChecked ?? false;
-
-                if (!isChecked)
-                    filterMetrics.AddTestCaseFilter((string) cbx.Content);
+                    filterMetrics.AddCodeCoverageFilter((string) cbx.Content);
             }
         }
 

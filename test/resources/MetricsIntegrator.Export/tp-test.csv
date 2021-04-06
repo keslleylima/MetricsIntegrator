@@ -1,6 +1,0 @@
-﻿idtp;tpfield1;tpfield2;tpfield3
-pkg.ClassName1.testedMethod1();1;2;3
-pkg.ClassName1.testedMethod2(SomeClass<T>, SomeClass2...);1;2;3
-pkg.ClassName1.testedMethod3(SomeClass2...);1;2;3
-pkg.ClassName2.testMethod1();1;2;3
-pkg.ClassName2.testMethod2();1;2;3

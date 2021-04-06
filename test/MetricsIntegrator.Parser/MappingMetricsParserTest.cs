@@ -12,10 +12,10 @@ namespace MetricsIntegrator.Parser
         //		Attributes
         //---------------------------------------------------------------------
         private readonly string basePath;
+        private readonly Dictionary<string, List<string>> expected;
+        private Dictionary<string, List<string>> obtained;
         private string filename;
         private string testedInvoked;
-        private Dictionary<string, List<string>> obtained;
-        private Dictionary<string, List<string>> expected;
 
 
         //---------------------------------------------------------------------

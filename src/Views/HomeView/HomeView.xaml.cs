@@ -1,15 +1,8 @@
-using Avalonia;
 using Avalonia.Controls;
-using Avalonia.Dialogs;
 using Avalonia.Interactivity;
 using Avalonia.Markup.Xaml;
-using Avalonia.Platform;
 using MetricsIntegrator.Controllers;
-using MetricsIntegrator.Integrator;
-using MetricsIntegrator.IO;
 using MetricsIntegrator.Style.Color;
-using MetricsIntegrator.Views.Dialog;
-
 
 namespace MetricsIntegrator.Views
 {
@@ -18,13 +11,12 @@ namespace MetricsIntegrator.Views
         //---------------------------------------------------------------------
         //		Attributes
         //---------------------------------------------------------------------
+        private readonly HomeController homeController;
         private TextBox inProjectName;
         private TextBox inMapping;
         private TextBox inSourceCode;
-        private TextBox inTestPath;
-        private TextBox inTestCase;
+        private TextBox inCodeCoverage;
         private Button btnIntegrate;
-        private HomeController homeController;
 
 
         //---------------------------------------------------------------------
@@ -37,8 +29,7 @@ namespace MetricsIntegrator.Views
             BuildCleanProjectNameButton();
             BuildChooseMappingButton();
             BuildChooseSourceButton();
-            BuildChooseTestPathButton();
-            BuildChooseTestCaseButton();
+            BuildChooseCodeCoverageButton();
             BuildIntegrateButton();
             FetchInputFields();
             SetBackground();
@@ -80,18 +71,11 @@ namespace MetricsIntegrator.Views
             btnChooseSource.Background = ColorBrushFactory.ThemeAccent();
         }
 
-        private void BuildChooseTestPathButton()
+        private void BuildChooseCodeCoverageButton()
         {
-            Button btnChooseTestPath = this.FindControl<Button>("btnChooseTestPath");
+            Button btnChooseCodeCoverage = this.FindControl<Button>("btnChooseCodeCoverage");
 
-            btnChooseTestPath.Background = ColorBrushFactory.ThemeAccent();
-        }
-
-        private void BuildChooseTestCaseButton()
-        {
-            Button btnChooseTestCase = this.FindControl<Button>("btnChooseTestCase");
-
-            btnChooseTestCase.Background = ColorBrushFactory.ThemeAccent();
+            btnChooseCodeCoverage.Background = ColorBrushFactory.ThemeAccent();
         }
 
         private void BuildIntegrateButton()
@@ -106,8 +90,7 @@ namespace MetricsIntegrator.Views
         {
             inMapping = this.FindControl<TextBox>("inMapping");
             inSourceCode = this.FindControl<TextBox>("inSourceCode");
-            inTestPath = this.FindControl<TextBox>("inTestPath");
-            inTestCase = this.FindControl<TextBox>("inTestCase");
+            inCodeCoverage = this.FindControl<TextBox>("inCodeCoverage");
         }
 
         private void SetBackground()
@@ -130,10 +113,8 @@ namespace MetricsIntegrator.Views
                 && (inMapping.Text != null)
                 && (inSourceCode.Text != "")
                 && (inSourceCode.Text != null)
-                && (inTestPath.Text != "")
-                && (inTestPath.Text != null)
-                && (inTestCase.Text != "")
-                && (inTestCase.Text != null);
+                && (inCodeCoverage.Text != "")
+                && (inCodeCoverage.Text != null);
         }
 
         private void InitializeComponent()
@@ -158,15 +139,9 @@ namespace MetricsIntegrator.Views
             CheckIfIntegrateIsAvailable();
         }
 
-        private async void OnChooseTestPath(object sender, RoutedEventArgs e)
+        private async void OnChooseCodeCoverage(object sender, RoutedEventArgs e)
         {
-            inTestPath.Text = await homeController.AskUserForMetricsFile();
-            CheckIfIntegrateIsAvailable();
-        }
-
-        private async void OnChooseTestCase(object sender, RoutedEventArgs e)
-        {
-            inTestCase.Text = await homeController.AskUserForMetricsFile();
+            inCodeCoverage.Text = await homeController.AskUserForMetricsFile();
             CheckIfIntegrateIsAvailable();
         }
 
@@ -175,8 +150,7 @@ namespace MetricsIntegrator.Views
             inProjectName.Text = "";
             inMapping.Text = "";
             inSourceCode.Text = "";
-            inTestPath.Text = "";
-            inTestCase.Text = "";
+            inCodeCoverage.Text = "";
             btnIntegrate.IsEnabled = false;
         }
 
@@ -185,9 +159,8 @@ namespace MetricsIntegrator.Views
             homeController.OnIntegrate(
                 inProjectName.Text, 
                 inMapping.Text, 
-                inSourceCode.Text, 
-                inTestPath.Text,
-                inTestCase.Text
+                inSourceCode.Text,
+                inCodeCoverage.Text
             );
         }
     }

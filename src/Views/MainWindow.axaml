@@ -4,7 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:MetricsIntegrator.Views"
-        mc:Ignorable="d" d:DesignWidth="700" d:DesignHeight="650" Width="700" Height="650" CanResize="False"
+        mc:Ignorable="d" d:DesignWidth="700" d:DesignHeight="550" Width="700" Height="550" CanResize="False"
         x:Class="MetricsIntegrator.Views.MainWindow"
         Icon="/Assets/Images/icon.png"
         Title="Metrics Integrator"

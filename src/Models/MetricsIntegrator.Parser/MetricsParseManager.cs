@@ -11,8 +11,7 @@ namespace MetricsIntegrator.Parser
     ///     <list type="bullet">
     ///         <item>Source code metrics</item>
     ///         <item>Mapping of tested methods along with the test method that tests it</item>
-    ///         <item>Test path metrics</item>
-    ///         <item>Test case metrics</item>
+    ///         <item>Code coverage</item>
     ///     </list>
     /// </summary>
     public class MetricsParseManager
@@ -51,11 +50,9 @@ namespace MetricsIntegrator.Parser
 
             Mapping = new Dictionary<string, List<string>>();
             SourceCodeMetrics = new Dictionary<string, Metrics>();
-            TestCodeMetrics = new Dictionary<string, Metrics>();
-            TestPathMetrics = new Dictionary<string, List<Metrics>>();
-            TestCaseMetrics = new Dictionary<string, List<Metrics>>();
-            TestCaseFieldKeys = new List<string>();
-            TestPathFieldKeys = new List<string>();
+            TestCodeMetrics = new Dictionary<string, Metrics>(); 
+            CodeCoverage = new Dictionary<string, List<Metrics>>();
+            CodeCoverageFieldKeys = new List<string>();
             SourceCodeFieldKeys = new List<string>();
         }
 
@@ -63,13 +60,11 @@ namespace MetricsIntegrator.Parser
         //---------------------------------------------------------------------
         //		Properties
         //---------------------------------------------------------------------
-        public Dictionary<string, List<string>> Mapping { get; private set; }
-        public Dictionary<string, Metrics> SourceCodeMetrics { get; private set; }
-        public Dictionary<string, Metrics> TestCodeMetrics { get; private set; }
-        public IDictionary<string, List<Metrics>> TestPathMetrics { get; private set; }
-        public IDictionary<string, List<Metrics>> TestCaseMetrics { get; private set; }
-        public List<string> TestPathFieldKeys { get; private set; }
-        public List<string> TestCaseFieldKeys { get; private set; }
+        public IDictionary<string, List<string>> Mapping { get; private set; }
+        public IDictionary<string, Metrics> SourceCodeMetrics { get; private set; }
+        public IDictionary<string, Metrics> TestCodeMetrics { get; private set; }
+        public IDictionary<string, List<Metrics>> CodeCoverage { get; private set; }
+        public List<string> CodeCoverageFieldKeys { get; private set; }
         public List<string> SourceCodeFieldKeys { get; private set; }
 
 
@@ -79,8 +74,7 @@ namespace MetricsIntegrator.Parser
         public void Parse()
         {
             DoMappingParser();
-            DoTestPathMetricsParsing();
-            DoTestCaseMetricsParsing();
+            DoCodeCoverageParsing();
             DoSourceCodeMetricsParsing(Mapping);
         }
 
@@ -94,29 +88,18 @@ namespace MetricsIntegrator.Parser
             Mapping = mapParser.Parse();
         }
 
-        private void DoTestPathMetricsParsing()
+        private void DoCodeCoverageParsing()
         {
             BaseMetricsParser tpParser = new BaseMetricsParser(
-                metricsFileManager.TestPathsPath, 
+                metricsFileManager.CodeCoveragePath, 
                 delimiter
             );
 
-            TestPathMetrics = tpParser.Parse();
-            TestPathFieldKeys = tpParser.FieldKeys;
+            CodeCoverage = tpParser.Parse();
+            CodeCoverageFieldKeys = tpParser.FieldKeys;
         }
 
-        private void DoTestCaseMetricsParsing()
-        {
-            BaseMetricsParser tcParser = new BaseMetricsParser(
-                metricsFileManager.TestCasePath, 
-                delimiter
-            );
-
-            TestCaseMetrics = tcParser.Parse();
-            TestCaseFieldKeys = tcParser.FieldKeys;
-        }
-
-        private void DoSourceCodeMetricsParsing(Dictionary<string, List<string>> mapping)
+        private void DoSourceCodeMetricsParsing(IDictionary<string, List<string>> mapping)
         {
             SourceCodeMetricsParser scmParser = new SourceCodeMetricsParser(
                 metricsFileManager.SourceCodePath, 

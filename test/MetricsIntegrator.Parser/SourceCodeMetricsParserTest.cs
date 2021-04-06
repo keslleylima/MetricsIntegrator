@@ -13,15 +13,15 @@ namespace MetricsIntegrator.Parser
         //		Attributes
         //---------------------------------------------------------------------
         private readonly string basePath;
+        private readonly Metrics expectedTestCodeMetrics;
+        private readonly Dictionary<string, List<string>> mapping;
         private string filename;
         private string testedInvoked;
         private string testMethod;
         private bool isMetricOfTestedInvoked;
-        private Dictionary<string, List<string>> mapping;
         private Dictionary<string, Metrics> sourceCodeMetricsObtained;
         private Dictionary<string, Metrics> testCodeMetricsObtained;
         private Metrics expectedSourceCodeMetrics;
-        private Metrics expectedTestCodeMetrics;
 
 
         //---------------------------------------------------------------------

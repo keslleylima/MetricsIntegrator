@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 using Xunit;
 
 namespace MetricsIntegrator.Data
@@ -12,7 +10,7 @@ namespace MetricsIntegrator.Data
         //---------------------------------------------------------------------
         private readonly string metricName;
         private readonly string metricValue;
-        private Metrics metrics;
+        private readonly Metrics metrics;
 
 
         //---------------------------------------------------------------------
