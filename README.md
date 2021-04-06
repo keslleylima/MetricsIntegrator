@@ -21,7 +21,7 @@ We developed this tool to generate the defined metrics to build the dataset deta
 
 ## ⚠ Requirements
 - CSV separated by ';'
-- First column of source code metrics, test code metrics and test path metrics must be the method signature 
+- First column of source code metrics and code coverage must be a method signature 
 
 ## Gallery
 
