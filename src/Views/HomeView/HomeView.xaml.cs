@@ -11,12 +11,12 @@ namespace MetricsIntegrator.Views
         //---------------------------------------------------------------------
         //		Attributes
         //---------------------------------------------------------------------
+        private readonly HomeController homeController;
         private TextBox inProjectName;
         private TextBox inMapping;
         private TextBox inSourceCode;
         private TextBox inCodeCoverage;
         private Button btnIntegrate;
-        private HomeController homeController;
 
 
         //---------------------------------------------------------------------

@@ -14,8 +14,7 @@ namespace MetricsIntegrator.Controllers
         //---------------------------------------------------------------------
         //		Attributes
         //---------------------------------------------------------------------
-        private MainWindow window;
-        private string inFileChoose;
+        private readonly MainWindow window;
 
 
         //---------------------------------------------------------------------

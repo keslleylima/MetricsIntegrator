@@ -1,4 +1,3 @@
-using Avalonia;
 using Avalonia.Collections;
 using Avalonia.Controls;
 using Avalonia.Interactivity;
@@ -17,12 +16,9 @@ namespace MetricsIntegrator.Views
         //---------------------------------------------------------------------
         //		Attributes
         //---------------------------------------------------------------------
-        private MainWindow window;
-        private MetricsIntegrationManager integrator;
-        private StackPanel pnlSourceCodeMetrics;
-        private StackPanel pnlCodeCoverage;
-        private string inDirectoryChoose;
-        private ExportController exportController;
+        private readonly StackPanel pnlSourceCodeMetrics;
+        private readonly StackPanel pnlCodeCoverage;
+        private readonly ExportController exportController;
 
 
         //---------------------------------------------------------------------

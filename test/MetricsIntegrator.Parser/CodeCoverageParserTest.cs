@@ -7,22 +7,22 @@ using Xunit;
 
 namespace MetricsIntegrator.Parser
 {
-    public class TestCaseMetricsParserTest
+    public class CodeCoverageParserTest
     {
         //---------------------------------------------------------------------
         //		Attributes
         //---------------------------------------------------------------------
         private readonly string basePath;
-        private string filename;
+        private readonly List<Metrics> expectedMetrics;
         private IDictionary<string, List<Metrics>> obtained;
-        private List<Metrics> expectedMetrics;
+        private string filename;
         private Metrics metrics;
 
 
         //---------------------------------------------------------------------
         //		Constructor
         //---------------------------------------------------------------------
-        public TestCaseMetricsParserTest()
+        public CodeCoverageParserTest()
         {
             basePath = GenerateBasePath();
             metrics = new Metrics();

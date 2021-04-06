@@ -16,8 +16,8 @@ namespace MetricsIntegrator.Controllers
         //---------------------------------------------------------------------
         //		Attributes
         //---------------------------------------------------------------------
-        private MainWindow window;
-        private MetricsIntegrationManager integrator;
+        private readonly MainWindow window;
+        private readonly MetricsIntegrationManager integrator;
 
 
         //---------------------------------------------------------------------
