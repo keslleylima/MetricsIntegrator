@@ -12,8 +12,7 @@ namespace MetricsIntegrator.Export
         //---------------------------------------------------------------------
         //		Attributes
         //---------------------------------------------------------------------
-        private readonly IDictionary<string, List<Metrics>> testPathMetrics;
-        private readonly IDictionary<string, List<Metrics>> testCaseMetrics;
+        private readonly IDictionary<string, List<Metrics>> codeCoverage;
         private readonly MetricsExporterFactory exportFactory;
 
 
@@ -22,15 +21,13 @@ namespace MetricsIntegrator.Export
         //---------------------------------------------------------------------
         private MetricsExportManager(string outputDirectoryPath,
                                     string projectName,
-                                    Dictionary<string, List<string>> mapping,
-                                    Dictionary<string, Metrics> sourceCodeMetrics,
-                                    Dictionary<string, Metrics> testCodeMetrics,
-                                    IDictionary<string, List<Metrics>> testPathMetrics,
-                                    IDictionary<string, List<Metrics>> testCaseMetrics,
+                                    IDictionary<string, List<string>> mapping,
+                                    IDictionary<string, Metrics> sourceCodeMetrics,
+                                    IDictionary<string, Metrics> testCodeMetrics,
+                                    IDictionary<string, List<Metrics>> codeCoverage,
                                     FilterMetrics filterMetrics)
         {
-            this.testPathMetrics = testPathMetrics;
-            this.testCaseMetrics = testCaseMetrics;
+            this.codeCoverage = codeCoverage;
 
             exportFactory = new MetricsExporterFactory.Builder()
                 .OutputDirectory(outputDirectoryPath)
@@ -50,10 +47,10 @@ namespace MetricsIntegrator.Export
         {
             private string outputDirectoryPath;
             private string projectName;
-            private Dictionary<string, List<string>> mapping;
-            private Dictionary<string, Metrics> sourceCodeMetrics;
-            private Dictionary<string, Metrics> testCodeMetrics;
-            private IDictionary<string, List<Metrics>> testPathMetrics;
+            private IDictionary<string, List<string>> mapping;
+            private IDictionary<string, Metrics> sourceCodeMetrics;
+            private IDictionary<string, Metrics> testCodeMetrics;
+            private IDictionary<string, List<Metrics>> codeCoverage;
             private IDictionary<string, List<Metrics>> testCaseMetrics;
             private FilterMetrics filterMetrics;
 
@@ -76,37 +73,30 @@ namespace MetricsIntegrator.Export
                 return this;
             }
 
-            public Builder Mapping(Dictionary<string, List<string>> map)
+            public Builder Mapping(IDictionary<string, List<string>> map)
             {
                 mapping = map;
 
                 return this;
             }
 
-            public Builder SourceCodeMetrics(Dictionary<string, Metrics> metrics)
+            public Builder SourceCodeMetrics(IDictionary<string, Metrics> metrics)
             {
                 sourceCodeMetrics = metrics;
 
                 return this;
             }
 
-            public Builder TestCodeMetrics(Dictionary<string, Metrics> metrics)
+            public Builder TestCodeMetrics(IDictionary<string, Metrics> metrics)
             {
                 testCodeMetrics = metrics;
 
                 return this;
             }
 
-            public Builder TestPathMetrics(IDictionary<string, List<Metrics>> metrics)
+            public Builder CodeCoverage(IDictionary<string, List<Metrics>> metrics)
             {
-                testPathMetrics = metrics;
-
-                return this;
-            }
-
-            public Builder TestCaseMetrics(IDictionary<string, List<Metrics>> metrics)
-            {
-                testCaseMetrics = metrics;
+                codeCoverage = metrics;
 
                 return this;
             }
@@ -128,8 +118,7 @@ namespace MetricsIntegrator.Export
                     mapping,
                     sourceCodeMetrics,
                     testCodeMetrics,
-                    testPathMetrics,
-                    testCaseMetrics,
+                    codeCoverage,
                     filterMetrics
                 );
             }
@@ -151,7 +140,7 @@ namespace MetricsIntegrator.Export
                 if (testCodeMetrics == null)
                     throw new ArgumentException("Test code metrics cannot be null");
 
-                if ((testPathMetrics == null) && (testCaseMetrics == null))
+                if ((codeCoverage == null) && (testCaseMetrics == null))
                     throw new ArgumentException("Test path or test case metrics must be provided");
             }
         }
@@ -162,19 +151,12 @@ namespace MetricsIntegrator.Export
         //---------------------------------------------------------------------
         public void Export()
         {
-            ExportUsingTestPathMetrics();
-            ExportUsingTestCaseMetrics();
+            ExportUsingCodeCoverage();
         }
 
-        private void ExportUsingTestPathMetrics()
+        private void ExportUsingCodeCoverage()
         {
-            IExporter csvExporter = exportFactory.CreateTestPathCSVExporter(testPathMetrics);
-            csvExporter.Export();
-        }
-
-        private void ExportUsingTestCaseMetrics()
-        {
-            IExporter csvExporter = exportFactory.CreateTestCaseCSVExporter(testCaseMetrics);
+            IExporter csvExporter = exportFactory.CreateCodeCoverageCSVExporter(codeCoverage);
             csvExporter.Export();
         }
     }

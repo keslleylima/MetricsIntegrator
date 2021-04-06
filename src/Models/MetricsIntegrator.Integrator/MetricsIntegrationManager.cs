@@ -61,8 +61,7 @@ namespace MetricsIntegrator.Integrator
                 .Mapping(metricsParseManager.Mapping)
                 .SourceCodeMetrics(metricsParseManager.SourceCodeMetrics)
                 .TestCodeMetrics(metricsParseManager.TestCodeMetrics)
-                .TestPathMetrics(metricsParseManager.TestPathMetrics)
-                .TestCaseMetrics(metricsParseManager.TestCaseMetrics)
+                .CodeCoverage(metricsParseManager.CodeCoverage)
                 .FilterMetrics(filterMetrics)
                 .Build();
 

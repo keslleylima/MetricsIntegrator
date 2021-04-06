@@ -16,7 +16,7 @@ namespace MetricsIntegrator.Parser
         //		Attributes
         //---------------------------------------------------------------------
         private readonly string filepath;
-        private readonly Dictionary<string, List<string>> mapping;
+        private readonly IDictionary<string, List<string>> mapping;
         private readonly string delimiter;
 
 
@@ -24,7 +24,7 @@ namespace MetricsIntegrator.Parser
         //		Constructor
         //---------------------------------------------------------------------
         public SourceCodeMetricsParser(string filepath, 
-                                       Dictionary<string, List<string>> mapping,
+                                       IDictionary<string, List<string>> mapping,
                                        string delimiter)
         {
             if ((filepath == null) || filepath.Length == 0)

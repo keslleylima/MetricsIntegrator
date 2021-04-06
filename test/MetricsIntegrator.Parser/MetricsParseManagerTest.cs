@@ -18,14 +18,12 @@ namespace MetricsIntegrator.Parser
         private string testMethod;
         private string mapFile;
         private string scFile;
-        private string tpFile;
-        private string tcFile;
-        private Dictionary<string, Metrics> sourceCodeObtained;
-        private Dictionary<string, Metrics> testCodeObtained;
-        private IDictionary<string, List<Metrics>> testPathObtained;
-        private IDictionary<string, List<Metrics>> testCaseObtained;
-        private Dictionary<string, List<string>> mappingObtained;
-        private Dictionary<string, List<string>> expectedMapping;
+        private string codeCoverageFile;
+        private IDictionary<string, Metrics> sourceCodeObtained;
+        private IDictionary<string, Metrics> testCodeObtained;
+        private IDictionary<string, List<Metrics>> codeCoverageObtained;
+        private IDictionary<string, List<string>> mappingObtained;
+        private IDictionary<string, List<string>> expectedMapping;
         private List<Metrics> expectedMetrics;
         private Metrics metrics;
        
@@ -50,8 +48,7 @@ namespace MetricsIntegrator.Parser
         {
             UsingMappingFile("map-test.csv");
             UsingSourceCodeMetricsFile("sc-test.csv");
-            UsingTestPathMetricsFile("tp-test.csv");
-            UsingTestCaseMetricsFile("tc-test.csv");
+            UsingCodeCoverageFile("tc-test.csv");
 
             DoParsing();
 
@@ -84,15 +81,7 @@ namespace MetricsIntegrator.Parser
             WithMetric("field1", "1");
             WithMetric("field2", "2");
             BindMetrics();
-            AssertTestCaseMetricsAreCorrect();
-
-            WithTestedInvoked("pkgname1.pkgname2.ClassName1.testedMethod1()");
-            WithMetric("id", "pkgname1.pkgname2.ClassName1.testedMethod1()");
-            WithMetric("field1", "1");
-            WithMetric("field2", "2");
-            WithMetric("field3", "3");
-            BindMetrics();
-            AssertTestPathMetricsAreCorrect();
+            AssertCodeCoverageIsCorrect();
         }
 
         [Fact]
@@ -144,14 +133,9 @@ namespace MetricsIntegrator.Parser
             scFile = filepath;
         }
 
-        private void UsingTestPathMetricsFile(string filepath)
+        private void UsingCodeCoverageFile(string filepath)
         {
-            tpFile = filepath;
-        }
-
-        private void UsingTestCaseMetricsFile(string filepath)
-        {
-            tcFile = filepath;
+            codeCoverageFile = filepath;
         }
 
         private void DoParsing()
@@ -162,8 +146,7 @@ namespace MetricsIntegrator.Parser
 
             sourceCodeObtained = parser.SourceCodeMetrics;
             testCodeObtained = parser.TestCodeMetrics;
-            testPathObtained = parser.TestPathMetrics;
-            testCaseObtained = parser.TestCaseMetrics;
+            codeCoverageObtained = parser.CodeCoverage;
             mappingObtained = parser.Mapping;
         }
 
@@ -173,8 +156,7 @@ namespace MetricsIntegrator.Parser
             {
                 MapPath = basePath + mapFile,
                 SourceCodePath = basePath + scFile,
-                TestCasePath = basePath + tcFile,
-                TestPathsPath = basePath + tpFile
+                CodeCoveragePath = basePath + codeCoverageFile,
             };
         }
 
@@ -185,24 +167,13 @@ namespace MetricsIntegrator.Parser
             expectedMapping = new Dictionary<string, List<string>>();
         }
 
-        private void AssertTestCaseMetricsAreCorrect()
+        private void AssertCodeCoverageIsCorrect()
         {
             IDictionary<string, List<Metrics>> expected = new Dictionary<string, List<Metrics>>();
 
             expected.Add(testMethod, expectedMetrics);
 
-            Assert.Equal(expected, testCaseObtained);
-
-            expectedMetrics = new List<Metrics>();
-        }
-
-        private void AssertTestPathMetricsAreCorrect()
-        {
-            IDictionary<string, List<Metrics>> expected = new Dictionary<string, List<Metrics>>();
-            
-            expected.Add(testedInvoked, expectedMetrics);
-            
-            Assert.Equal(expected, testPathObtained);
+            Assert.Equal(expected, codeCoverageObtained);
 
             expectedMetrics = new List<Metrics>();
         }

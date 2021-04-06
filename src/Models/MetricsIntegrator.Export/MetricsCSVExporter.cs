@@ -15,9 +15,9 @@ namespace MetricsIntegrator.Export
         //		Attributes
         //---------------------------------------------------------------------
         private readonly string outputPath;
-        private readonly Dictionary<string, List<string>> mapping;
-        private readonly Dictionary<string, Metrics> sourceCodeMetrics;
-        private readonly Dictionary<string, Metrics> testCodeMetrics;
+        private readonly IDictionary<string, List<string>> mapping;
+        private readonly IDictionary<string, Metrics> sourceCodeMetrics;
+        private readonly IDictionary<string, Metrics> testCodeMetrics;
         private readonly string delimiter;
         private readonly StringBuilder lines;
         private readonly ISet<string> sourceCodeMetricsFilter;
@@ -32,9 +32,9 @@ namespace MetricsIntegrator.Export
         //---------------------------------------------------------------------
         private MetricsCSVExporter(string outputPath,
                                    string delimiter,
-                                   Dictionary<string, List<string>> mapping,
-                                   Dictionary<string, Metrics> dictSourceCode,
-                                   Dictionary<string, Metrics> dictSourceTest,
+                                   IDictionary<string, List<string>> mapping,
+                                   IDictionary<string, Metrics> dictSourceCode,
+                                   IDictionary<string, Metrics> dictSourceTest,
                                    IDictionary<string, List<Metrics>> baseMetrics,
                                    ISet<string> sourceCodeMetricsFilter,
                                    ISet<string> baseMetricsFilter)
@@ -69,9 +69,9 @@ namespace MetricsIntegrator.Export
         {
             private string outputPath;
             private string delimiter;
-            private Dictionary<string, List<string>> mapping;
-            private Dictionary<string, Metrics> sourceCodeMetrics;
-            private Dictionary<string, Metrics> testCodeMetrics;
+            private IDictionary<string, List<string>> mapping;
+            private IDictionary<string, Metrics> sourceCodeMetrics;
+            private IDictionary<string, Metrics> testCodeMetrics;
             private IDictionary<string, List<Metrics>> baseMetrics;
             private ISet<string> sourceCodeMetricsFilter;
             private ISet<string> baseMetricsFilter;
@@ -87,21 +87,21 @@ namespace MetricsIntegrator.Export
                 return this;
             }
 
-            public Builder Mapping(Dictionary<string, List<string>> mapping)
+            public Builder Mapping(IDictionary<string, List<string>> mapping)
             {
                 this.mapping = mapping;
 
                 return this;
             }
 
-            public Builder SourceCodeMetrics(Dictionary<string, Metrics> metrics)
+            public Builder SourceCodeMetrics(IDictionary<string, Metrics> metrics)
             {
                 sourceCodeMetrics = metrics;
 
                 return this;
             }
 
-            public Builder TestCodeMetrics(Dictionary<string, Metrics> metrics)
+            public Builder TestCodeMetrics(IDictionary<string, Metrics> metrics)
             {
                 testCodeMetrics = metrics;
 
@@ -218,7 +218,7 @@ namespace MetricsIntegrator.Export
             return GetFirstMetricFrom(testCodeMetrics).GetAllMetrics();
         }
 
-        private Metrics GetFirstMetricFrom(Dictionary<string, Metrics> dictionary)
+        private Metrics GetFirstMetricFrom(IDictionary<string, Metrics> dictionary)
         {
             var dictEnum = dictionary.GetEnumerator();
             dictEnum.MoveNext();
