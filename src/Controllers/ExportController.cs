@@ -35,6 +35,8 @@ namespace MetricsIntegrator.Controllers
         //---------------------------------------------------------------------
         public List<string> SourceCodeFieldKeys { get; private set; }
         public List<string> CodeCoverageFieldKeys { get; private set; }
+        public string SourceCodeIdentifierKey { get; private set; }
+        public string CodeCoverageIdentifierKey { get; private set; }
 
 
         //---------------------------------------------------------------------
@@ -46,6 +48,8 @@ namespace MetricsIntegrator.Controllers
             
             SourceCodeFieldKeys = parser.SourceCodeFieldKeys;
             CodeCoverageFieldKeys = parser.CodeCoverageFieldKeys;
+            SourceCodeIdentifierKey = parser.SourceCodeIdentifierKey;
+            CodeCoverageIdentifierKey = parser.CodeCoverageIdentifierKey;
         }
 
         public void OnExport(string outputDirectory, FilterMetrics filterMetrics)

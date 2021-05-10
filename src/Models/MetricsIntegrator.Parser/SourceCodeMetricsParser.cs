@@ -42,6 +42,7 @@ namespace MetricsIntegrator.Parser
             SourceCodeMetrics = new Dictionary<string, Metrics>();
             SourceTestMetrics = new Dictionary<string, Metrics>();
             FieldKeys = new List<string>();
+            SourceCodeIdentifierKey = default!;
         }
 
 
@@ -59,6 +60,7 @@ namespace MetricsIntegrator.Parser
         public Dictionary<string, Metrics> SourceTestMetrics { get; private set; }
 
         public List<string> FieldKeys { get; private set; }
+        public string SourceCodeIdentifierKey { get; private set; }
 
 
         //---------------------------------------------------------------------
@@ -80,6 +82,8 @@ namespace MetricsIntegrator.Parser
 
             if (identifierColumnIndex == -1)
                 throw new ApplicationException("Identifier column not found");
+
+            SourceCodeIdentifierKey = FieldKeys[identifierColumnIndex];
         }
 
         private static string ExtractDelimiterFrom(string header)
