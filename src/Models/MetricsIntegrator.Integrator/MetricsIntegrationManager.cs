@@ -22,17 +22,14 @@ namespace MetricsIntegrator.Integrator
         //		Attributes
         //---------------------------------------------------------------------
         private readonly static string DELIMITER = ";";
-        private readonly string projectName;
         private readonly MetricsParseManager metricsParseManager;
 
 
         //---------------------------------------------------------------------
         //		Constructor
         //---------------------------------------------------------------------
-        public MetricsIntegrationManager(string projectName, 
-                                         MetricsFileManager metricsFileManager)
+        public MetricsIntegrationManager(MetricsFileManager metricsFileManager)
         {
-            this.projectName = projectName;
             metricsParseManager = new MetricsParseManager(
                 metricsFileManager, 
                 DELIMITER
@@ -50,14 +47,10 @@ namespace MetricsIntegrator.Integrator
             return metricsParseManager;
         }
 
-        public string DoExportation(string outputDirectory,
-                                    FilterMetrics filterMetrics)
+        public string DoExportation(string outputPath, FilterMetrics filterMetrics)
         {
-            string outputPath = outputDirectory + Path.DirectorySeparatorChar + "results";
-
             IExporter exportManager = new MetricsExportManager.Builder()
-                .OutputDirectory(outputPath)
-                .ProjectName(projectName)
+                .OutputPath(outputPath)
                 .Mapping(metricsParseManager.Mapping)
                 .SourceCodeMetrics(metricsParseManager.SourceCodeMetrics)
                 .TestCodeMetrics(metricsParseManager.TestCodeMetrics)

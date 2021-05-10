@@ -53,7 +53,7 @@ namespace MetricsIntegrator.Parser
         {
             Assert.Throws<ArgumentException>(() => 
             {
-                new BaseMetricsParser(null, ";");
+                new CodeCoverageMetricsParser(null, ";");
             });
         }
 
@@ -62,7 +62,7 @@ namespace MetricsIntegrator.Parser
         {
             Assert.Throws<ArgumentException>(() =>
             {
-                new BaseMetricsParser("", ";");
+                new CodeCoverageMetricsParser("", ";");
             });
         }
 
@@ -71,7 +71,7 @@ namespace MetricsIntegrator.Parser
         {
             Assert.Throws<ArgumentException>(() =>
             {
-                new BaseMetricsParser("foo/bar.csv", ";");
+                new CodeCoverageMetricsParser("foo/bar.csv", ";");
             });
         }
 
@@ -80,7 +80,7 @@ namespace MetricsIntegrator.Parser
         {
             Assert.Throws<ArgumentException>(() =>
             {
-                new BaseMetricsParser(basePath + "tc-test.csv", null);
+                new CodeCoverageMetricsParser(basePath + "tc-test.csv", null);
             });
         }
 
@@ -89,7 +89,7 @@ namespace MetricsIntegrator.Parser
         {
             Assert.Throws<ArgumentException>(() =>
             {
-                new BaseMetricsParser(basePath + "tc-test.csv", "");
+                new CodeCoverageMetricsParser(basePath + "tc-test.csv", "");
             });
         }
 
@@ -123,7 +123,7 @@ namespace MetricsIntegrator.Parser
 
         private void DoParsing()
         {
-            BaseMetricsParser parser = new BaseMetricsParser(basePath + filename, ";");
+            CodeCoverageMetricsParser parser = new CodeCoverageMetricsParser(basePath + filename, ";");
             obtained = parser.Parse();
         }
 

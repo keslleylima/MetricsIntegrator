@@ -176,7 +176,7 @@ namespace MetricsIntegrator.Views
 
         private async void OnExport(object sender, RoutedEventArgs e)
         {
-            string outputPath = await exportController.AskUserForWhereToSaveExportation();
+            string outputPath = await exportController.AskUserForSavePath();
             FilterMetrics filter = ParseUnselectedMetrics();
 
             try

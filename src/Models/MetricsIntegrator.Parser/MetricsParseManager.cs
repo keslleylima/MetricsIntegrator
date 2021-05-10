@@ -95,8 +95,7 @@ namespace MetricsIntegrator.Parser
         private void DoCodeCoverageParsing()
         {
             CodeCoverageMetricsParser tpParser = new CodeCoverageMetricsParser(
-                metricsFileManager.CodeCoveragePath, 
-                delimiter
+                metricsFileManager.CodeCoveragePath
             );
 
             CodeCoverage = tpParser.Parse();

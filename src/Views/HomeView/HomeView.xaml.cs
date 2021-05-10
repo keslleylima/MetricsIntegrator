@@ -12,7 +12,6 @@ namespace MetricsIntegrator.Views
         //		Attributes
         //---------------------------------------------------------------------
         private readonly HomeController homeController;
-        private TextBox inProjectName;
         private TextBox inMapping;
         private TextBox inSourceCode;
         private TextBox inCodeCoverage;
@@ -25,8 +24,6 @@ namespace MetricsIntegrator.Views
         public HomeView()
         {
             InitializeComponent();
-            BuildProjectNameInput();
-            BuildCleanProjectNameButton();
             BuildChooseMappingButton();
             BuildChooseSourceButton();
             BuildChooseCodeCoverageButton();
@@ -44,19 +41,6 @@ namespace MetricsIntegrator.Views
         //---------------------------------------------------------------------
         //		Methods
         //---------------------------------------------------------------------
-        private void BuildProjectNameInput()
-        {
-            inProjectName = this.FindControl<TextBox>("inProjectName");
-            inProjectName.KeyUp += (o, e) => { CheckIfIntegrateIsAvailable(); };
-        }
-
-        private void BuildCleanProjectNameButton()
-        {
-            Button btnClearProjectName = this.FindControl<Button>("btnClearProjectName");
-
-            btnClearProjectName.Background = ColorBrushFactory.ThemeAccent();
-        }
-
         private void BuildChooseMappingButton()
         {
             Button btnChooseMapping = this.FindControl<Button>("btnChooseMapping");
@@ -107,9 +91,7 @@ namespace MetricsIntegrator.Views
 
         private bool AreAllFilesProvided()
         {
-            return (inProjectName.Text != "") 
-                && (inProjectName.Text != null)
-                && (inMapping.Text != "")
+            return (inMapping.Text != "")
                 && (inMapping.Text != null)
                 && (inSourceCode.Text != "")
                 && (inSourceCode.Text != null)
@@ -128,11 +110,6 @@ namespace MetricsIntegrator.Views
             CheckIfIntegrateIsAvailable();
         }
 
-        private void OnClearProjectName(object sender, RoutedEventArgs e)
-        {
-            inProjectName.Text = "";
-        }
-
         private async void OnChooseSourceCode(object sender, RoutedEventArgs e)
         {
             inSourceCode.Text = await homeController.AskUserForMetricsFile();
@@ -147,7 +124,6 @@ namespace MetricsIntegrator.Views
 
         private void OnClear(object sender, RoutedEventArgs e)
         {
-            inProjectName.Text = "";
             inMapping.Text = "";
             inSourceCode.Text = "";
             inCodeCoverage.Text = "";
@@ -157,7 +133,6 @@ namespace MetricsIntegrator.Views
         private void OnIntegrate(object sender, RoutedEventArgs e)
         {
             homeController.OnIntegrate(
-                inProjectName.Text, 
                 inMapping.Text, 
                 inSourceCode.Text,
                 inCodeCoverage.Text

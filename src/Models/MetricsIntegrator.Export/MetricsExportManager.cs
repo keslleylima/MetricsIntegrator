@@ -19,8 +19,7 @@ namespace MetricsIntegrator.Export
         //---------------------------------------------------------------------
         //		Constructor
         //---------------------------------------------------------------------
-        private MetricsExportManager(string outputDirectoryPath,
-                                    string projectName,
+        private MetricsExportManager(string outputPath,
                                     IDictionary<string, List<string>> mapping,
                                     IDictionary<string, Metrics> sourceCodeMetrics,
                                     IDictionary<string, Metrics> testCodeMetrics,
@@ -30,8 +29,7 @@ namespace MetricsIntegrator.Export
             this.codeCoverage = codeCoverage;
 
             exportFactory = new MetricsExporterFactory.Builder()
-                .OutputDirectory(outputDirectoryPath)
-                .ProjectName(projectName)
+                .OutputPath(outputPath)
                 .Mapping(mapping)
                 .SourceCodeMetrics(sourceCodeMetrics)
                 .TestCodeMetrics(testCodeMetrics)
@@ -45,8 +43,7 @@ namespace MetricsIntegrator.Export
         //---------------------------------------------------------------------
         public class Builder
         {
-            private string outputDirectoryPath;
-            private string projectName;
+            private string outputPath;
             private IDictionary<string, List<string>> mapping;
             private IDictionary<string, Metrics> sourceCodeMetrics;
             private IDictionary<string, Metrics> testCodeMetrics;
@@ -59,17 +56,10 @@ namespace MetricsIntegrator.Export
             {
             }
 
-            public Builder OutputDirectory(string path)
+            public Builder OutputPath(string path)
             {
-                outputDirectoryPath = path;
+                outputPath = path;
                 
-                return this;
-            }
-
-            public Builder ProjectName(string name)
-            {
-                projectName = name;
-
                 return this;
             }
 
@@ -113,8 +103,7 @@ namespace MetricsIntegrator.Export
                 ValidateRequiredFields();
 
                 return new MetricsExportManager(
-                    outputDirectoryPath,
-                    projectName,
+                    outputPath,
                     mapping,
                     sourceCodeMetrics,
                     testCodeMetrics,
@@ -125,11 +114,8 @@ namespace MetricsIntegrator.Export
 
             private void ValidateRequiredFields()
             {
-                if ((outputDirectoryPath == null) || outputDirectoryPath.Length == 0)
-                    throw new ArgumentException("Output directory cannot be empty");
-
-                if ((projectName == null) || projectName.Length == 0)
-                    throw new ArgumentException("Project name cannot be empty");
+                if ((outputPath == null) || outputPath.Length == 0)
+                    throw new ArgumentException("Output path cannot be empty");
 
                 if (mapping == null)
                     throw new ArgumentException("Mapping cannot be null");

@@ -52,11 +52,10 @@ namespace MetricsIntegrator.Controllers
             return AskUserForCSVFileOfType("Metrics file");
         }
 
-        public void OnIntegrate(string projectName, string mapPath, 
-                                string sourceCodePath, string codeCoveragePath)
+        public void OnIntegrate(string mapPath, string sourceCodePath, 
+                                string codeCoveragePath)
         {
             MetricsIntegrationManager integrator = new MetricsIntegrationManager(
-                projectName,
                 CreateMetricsFileManager(mapPath, sourceCodePath, codeCoveragePath)
             );
 

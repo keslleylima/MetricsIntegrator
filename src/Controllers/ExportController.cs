@@ -52,19 +52,28 @@ namespace MetricsIntegrator.Controllers
             CodeCoverageIdentifierKey = parser.CodeCoverageIdentifierKey;
         }
 
-        public void OnExport(string outputDirectory, FilterMetrics filterMetrics)
+        public void OnExport(string outputPath, FilterMetrics filterMetrics)
         {
-            if (outputDirectory.Length == 0)
+            if (outputPath.Length == 0)
                 return;
 
-            string outputPath = integrator.DoExportation(outputDirectory, filterMetrics);
+            integrator.DoExportation(outputPath, filterMetrics);
 
             window.NavigateToEndView(outputPath);
         }
 
-        public async Task<string> AskUserForWhereToSaveExportation()
+        public async Task<string> AskUserForSavePath()
         {
-            OpenFolderDialog dialog = new OpenFolderDialog();
+            SaveFileDialog dialog = new SaveFileDialog();
+
+            dialog.DefaultExtension = "csv";
+            dialog.InitialFileName = "Dataset";
+            dialog.Title = "Save dataset file";
+            dialog.Filters.Add(new FileDialogFilter()
+            {
+                Name = "Dataset file",
+                Extensions = { "csv" }
+            });
 
             string result = await dialog.ShowAsync(window);
 

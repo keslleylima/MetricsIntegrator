@@ -23,7 +23,7 @@ namespace MetricsIntegrator.Parser
         //---------------------------------------------------------------------
         //		Constructor
         //---------------------------------------------------------------------
-        public CodeCoverageMetricsParser(string filepath, string delimiter)
+        public CodeCoverageMetricsParser(string filepath)
         {
             if ((filepath == null) || filepath.Length == 0)
                 throw new ArgumentException("File path cannot be empty");
@@ -34,6 +34,7 @@ namespace MetricsIntegrator.Parser
             this.filepath = filepath;
 
             FieldKeys = new List<string>();
+            CodeCoverageIdentifierKey = default!;
         }
 
 
