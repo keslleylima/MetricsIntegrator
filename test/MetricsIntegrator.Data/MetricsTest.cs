@@ -20,7 +20,7 @@ namespace MetricsIntegrator.Data
         {
             metricName = "m";
             metricValue = "v";
-            metrics = new Metrics();
+            metrics = new Metrics("id");
         }
 
 

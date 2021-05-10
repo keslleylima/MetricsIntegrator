@@ -161,9 +161,9 @@ namespace MetricsIntegrator.Views.Dialog
             return new Avalonia.Media.Imaging.Bitmap(OpenAsset(uri));
         }
 
-        private string GetAssemblyName()
+        private string? GetAssemblyName()
         {
-            return Assembly.GetEntryAssembly().GetName().Name;
+            return Assembly.GetEntryAssembly()?.GetName().Name;
         }
 
         private Stream OpenAsset(Uri uri)

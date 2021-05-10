@@ -26,6 +26,7 @@ namespace MetricsIntegrator.Views
         //---------------------------------------------------------------------
         public ExportView()
         {
+            exportController = default!;
             InitializeComponent();
             pnlSourceCodeMetrics = this.FindControl<StackPanel>("pnlSrcCodeMetrics");
             pnlCodeCoverage = this.FindControl<StackPanel>("pnlCodeCoverage");

@@ -23,6 +23,12 @@ namespace MetricsIntegrator.Views
         //---------------------------------------------------------------------
         public HomeView()
         {
+            homeController = default!;
+            inMapping = default!;
+            inSourceCode = default!;
+            inCodeCoverage = default!;
+            btnIntegrate = default!;
+
             InitializeComponent();
             BuildChooseMappingButton();
             BuildChooseSourceButton();
@@ -130,7 +136,7 @@ namespace MetricsIntegrator.Views
             btnIntegrate.IsEnabled = false;
         }
 
-        private void OnIntegrate(object sender, RoutedEventArgs e)
+        private void OnIntegrate(object? sender, RoutedEventArgs e)
         {
             homeController.OnIntegrate(
                 inMapping.Text, 

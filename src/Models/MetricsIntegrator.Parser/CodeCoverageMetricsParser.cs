@@ -115,8 +115,8 @@ namespace MetricsIntegrator.Parser
 
                 if (metrics.ContainsKey(metric.GetID()))
                 {
-                    metrics.TryGetValue(metric.GetID(), out List<Metrics> listMetrics);
-                    listMetrics.Add(metric);
+                    metrics.TryGetValue(metric.GetID(), out List<Metrics>? listMetrics);
+                    listMetrics?.Add(metric);
                 }
                 else
                 {

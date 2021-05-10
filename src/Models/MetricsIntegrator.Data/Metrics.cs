@@ -60,7 +60,7 @@ namespace MetricsIntegrator.Data
             return ToString().GetHashCode();
         }
 
-        public override bool Equals(object other)
+        public override bool Equals(object? other)
         {
             if (other == null)
                 return false;
@@ -95,7 +95,7 @@ namespace MetricsIntegrator.Data
 
         public string GetMetric(string metric)
         {
-            string value;
+            string? value;
 
             metrics.TryGetValue(metric, out value);
 

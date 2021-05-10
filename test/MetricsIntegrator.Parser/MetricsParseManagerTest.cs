@@ -35,7 +35,7 @@ namespace MetricsIntegrator.Parser
         {
             expectedMapping = new Dictionary<string, List<string>>();
             expectedMetrics = new List<Metrics>();
-            metrics = new Metrics();
+            metrics = new Metrics("id");
             basePath = GenerateBasePath();
         }
 
@@ -53,7 +53,7 @@ namespace MetricsIntegrator.Parser
             DoParsing();
 
             WithTestedInvoked("pkgname1.pkgname2.ClassName1.testedMethod1()");
-            WithMetric("Name", "pkgname1.pkgname2.ClassName1.testedMethod1()");
+            WithMetric("id", "pkgname1.pkgname2.ClassName1.testedMethod1()");
             WithMetric("field1", "Method");
             WithMetric("field2", "1");
             WithMetric("field3", "1");
@@ -61,7 +61,7 @@ namespace MetricsIntegrator.Parser
             AssertSourceCodeMetricsIsCorrect();
 
             WithTestMethod("pkgname3.ClassName2.testMethod1()");
-            WithMetric("Name", "pkgname3.ClassName2.testMethod1()");
+            WithMetric("id", "pkgname3.ClassName2.testMethod1()");
             WithMetric("field1", "Method");
             WithMetric("field2", "1");
             WithMetric("field3", "1");
@@ -192,7 +192,7 @@ namespace MetricsIntegrator.Parser
         {
             expectedMetrics.Add(metrics);
 
-            metrics = new Metrics();
+            metrics = new Metrics("id");
         }
 
         private void AssertSourceCodeMetricsIsCorrect()

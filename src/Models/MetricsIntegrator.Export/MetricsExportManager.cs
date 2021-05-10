@@ -48,12 +48,17 @@ namespace MetricsIntegrator.Export
             private IDictionary<string, Metrics> sourceCodeMetrics;
             private IDictionary<string, Metrics> testCodeMetrics;
             private IDictionary<string, List<Metrics>> codeCoverage;
-            private IDictionary<string, List<Metrics>> testCaseMetrics;
             private FilterMetrics filterMetrics;
 
 
             public Builder()
             {
+                outputPath = default!;
+                mapping = default!;
+                sourceCodeMetrics = default!;
+                testCodeMetrics = default!;
+                codeCoverage = default!;
+                filterMetrics = default!;
             }
 
             public Builder OutputPath(string path)
@@ -126,8 +131,8 @@ namespace MetricsIntegrator.Export
                 if (testCodeMetrics == null)
                     throw new ArgumentException("Test code metrics cannot be null");
 
-                if ((codeCoverage == null) && (testCaseMetrics == null))
-                    throw new ArgumentException("Test path or test case metrics must be provided");
+                if (codeCoverage == null)
+                    throw new ArgumentException("Code coverage metrics cannot be null");
             }
         }
 

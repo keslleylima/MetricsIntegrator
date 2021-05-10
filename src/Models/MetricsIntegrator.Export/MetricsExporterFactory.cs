@@ -50,6 +50,11 @@ namespace MetricsIntegrator.Export
 
             public Builder()
             {
+                outputPath = default!;
+                mapping = default!;
+                sourceCodeMetrics = default!;
+                testCodeMetrics = default!;
+                filterMetrics = default!;
             }
 
             public Builder OutputPath(string path)

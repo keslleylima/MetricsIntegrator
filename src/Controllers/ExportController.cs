@@ -27,6 +27,11 @@ namespace MetricsIntegrator.Controllers
         {
             this.window = window;
             this.integrator = integrator;
+
+            SourceCodeFieldKeys = new List<string>();
+            CodeCoverageFieldKeys = new List<string>();
+            SourceCodeIdentifierKey = default!;
+            CodeCoverageIdentifierKey = default!;
         }
 
 

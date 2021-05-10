@@ -25,7 +25,7 @@ namespace MetricsIntegrator.Parser
         public CodeCoverageParserTest()
         {
             basePath = GenerateBasePath();
-            metrics = new Metrics();
+            metrics = new Metrics("id");
             expectedMetrics = new List<Metrics>();
         }
 
@@ -53,7 +53,7 @@ namespace MetricsIntegrator.Parser
         {
             Assert.Throws<ArgumentException>(() => 
             {
-                new CodeCoverageMetricsParser(null, ";");
+                new CodeCoverageMetricsParser(null);
             });
         }
 
@@ -62,7 +62,7 @@ namespace MetricsIntegrator.Parser
         {
             Assert.Throws<ArgumentException>(() =>
             {
-                new CodeCoverageMetricsParser("", ";");
+                new CodeCoverageMetricsParser("");
             });
         }
 
@@ -71,25 +71,7 @@ namespace MetricsIntegrator.Parser
         {
             Assert.Throws<ArgumentException>(() =>
             {
-                new CodeCoverageMetricsParser("foo/bar.csv", ";");
-            });
-        }
-
-        [Fact]
-        public void TestConstructorWithNullDelimiter()
-        {
-            Assert.Throws<ArgumentException>(() =>
-            {
-                new CodeCoverageMetricsParser(basePath + "tc-test.csv", null);
-            });
-        }
-
-        [Fact]
-        public void TestConstructorWithEmptyDelimiter()
-        {
-            Assert.Throws<ArgumentException>(() =>
-            {
-                new CodeCoverageMetricsParser(basePath + "tc-test.csv", "");
+                new CodeCoverageMetricsParser("foo/bar.csv");
             });
         }
 
@@ -118,12 +100,12 @@ namespace MetricsIntegrator.Parser
         private void BindMetrics()
         {
             expectedMetrics.Add(metrics);
-            metrics = new Metrics();
+            metrics = new Metrics("id");
         }
 
         private void DoParsing()
         {
-            CodeCoverageMetricsParser parser = new CodeCoverageMetricsParser(basePath + filename, ";");
+            CodeCoverageMetricsParser parser = new CodeCoverageMetricsParser(basePath + filename);
             obtained = parser.Parse();
         }
 
