@@ -7,7 +7,7 @@
 
 2. Go to `src\bin\Release\net5.0\linux-x64\publish` and rename `MetricsIntegrator` to `metrics-integrator-X.Y.Z-ubuntu-x64`, where `X`, `Y` amd `Z` are the version number
 
-3. Add the renamed file to a zip file with the following name: `metrics-integratorX.Y.Z-ubuntu-x64.zip`
+3. Add the renamed file to a zip file with the following name: `metrics-integrator-X.Y.Z-ubuntu-x64.zip`
 
 4. Move the zip to dist/`X`.x/`X.Y.Z`
 
@@ -19,9 +19,9 @@
 2. Go to `src\bin\Release\net5.0\osx-x64\publish` and rename `MetricsIntegrator` to `metrics-integrator-X.Y.Z-osx-x64`, where `X`, `Y` amd `Z` are the version number
 
 3. Run the following command:
-> chmod +x `metrics-integratorX.Y.Z-osx-x64`
+> chmod +x `metrics-integrator-X.Y.Z-osx-x64`
 
-4. Add the renamed file to a zip file with the following name: `metrics-integratorX.Y.Z-osx-x64.zip`
+4. Add the renamed file to a zip file with the following name: `metrics-integrator-X.Y.Z-osx-x64.zip`
 
 5. Move the zip to dist/`X`.x/`X.Y.Z`
 
