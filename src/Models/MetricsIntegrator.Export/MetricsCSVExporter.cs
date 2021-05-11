@@ -159,8 +159,6 @@ namespace MetricsIntegrator.Export
             {
                 CheckRequiredFields();
 
-                delimiter = delimiter ?? ";";
-
                 return new MetricsCSVExporter(
                     outputPath,
                     delimiter,
@@ -221,9 +219,9 @@ namespace MetricsIntegrator.Export
             }
         }
 
-        private string[] GetTestedMethodMetrics()
+        private List<string> GetTestedMethodMetrics()
         {
-            return GetFirstMetricFrom(testCodeMetrics).GetAllMetrics();
+            return GetFirstMetricFrom(testCodeMetrics).GetAllMetrics(sourceCodeMetricsFilter);
         }
 
         private Metrics GetFirstMetricFrom(IDictionary<string, Metrics> dictionary)
@@ -243,12 +241,12 @@ namespace MetricsIntegrator.Export
             }
         }
 
-        private string[] GetTestMethodMetrics()
+        private List<string> GetTestMethodMetrics()
         {
             if (testCodeMetrics.Count == 0)
-                return new string[0];
+                return new List<string>();
 
-            return GetFirstMetricFrom(testCodeMetrics).GetAllMetrics();
+            return GetFirstMetricFrom(testCodeMetrics).GetAllMetrics(sourceCodeMetricsFilter);
         }
 
         private void WriteBaseMetrics()
@@ -260,7 +258,7 @@ namespace MetricsIntegrator.Export
             }
         }
 
-        private string[] GetBaseMetrics()
+        private List<string> GetBaseMetrics()
         {
             var firstOfBaseMetrics = baseMetrics.GetEnumerator();
             firstOfBaseMetrics.MoveNext();
@@ -268,7 +266,7 @@ namespace MetricsIntegrator.Export
             var firstMetric = firstOfBaseMetrics.Current.Value.GetEnumerator();
             firstMetric.MoveNext();
 
-            return firstMetric.Current.GetAllMetrics();
+            return firstMetric.Current.GetAllMetrics(baseMetricsFilter);
         }
 
         private void WriteBody()
@@ -313,13 +311,12 @@ namespace MetricsIntegrator.Export
         {
             sourceCodeMetrics.TryGetValue(testedMethod, out Metrics? metricsSourceCode);
 
-            string[] metricValues = metricsSourceCode?.GetAllMetricValues() ?? new string[0];
+            List<string> metricValues = metricsSourceCode
+                ?.GetAllMetricValues(sourceCodeMetricsFilter) 
+                ?? new List<string>();
 
             foreach (string metricValue in metricValues)
             {
-                if (sourceCodeMetricsFilter.Contains(metricValue))
-                    continue;
-
                 lines.Append(metricValue);
                 lines.Append(delimiter);
             }
@@ -329,13 +326,12 @@ namespace MetricsIntegrator.Export
         {
             testCodeMetrics.TryGetValue(testMethod, out Metrics? metricsSourceTest);
 
-            string[]? metricValues = metricsSourceTest?.GetAllMetricValues() ?? new string[0];
+            List<string>? metricValues = metricsSourceTest
+                    ?.GetAllMetricValues(sourceCodeMetricsFilter) 
+                    ?? new List<string>();
 
             foreach (string metricValue in metricValues)
             {
-                if (sourceCodeMetricsFilter.Contains(metricValue))
-                    continue;
-
                 lines.Append(metricValue);
                 lines.Append(delimiter);
             }
@@ -343,11 +339,8 @@ namespace MetricsIntegrator.Export
 
         private void WriteMetricsOfBaseMetrics(Metrics metrics)
         {
-            foreach (string metricValue in metrics.GetAllMetricValues())
+            foreach (string metricValue in metrics.GetAllMetricValues(baseMetricsFilter))
             {
-                if (baseMetricsFilter.Contains(metricValue))
-                    continue;
-
                 lines.Append(metricValue);
                 lines.Append(delimiter);
             }
