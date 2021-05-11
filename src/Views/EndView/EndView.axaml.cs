@@ -18,6 +18,8 @@ namespace MetricsIntegrator.Views
         //---------------------------------------------------------------------
         public EndView()
         {
+            window = default!;
+
             InitializeComponent();
         }
 
@@ -39,7 +41,7 @@ namespace MetricsIntegrator.Views
             AvaloniaXamlLoader.Load(this);
         }
 
-        private async void OnGoBackToHome(object sender, RoutedEventArgs e)
+        private void OnGoBackToHome(object sender, RoutedEventArgs e)
         {
             window.NavigateToHomeView();
         }

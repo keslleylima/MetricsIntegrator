@@ -13,14 +13,16 @@ namespace MetricsIntegrator.Data
         //		Attributes
         //---------------------------------------------------------------------
         private readonly Dictionary<string, string> metrics;
+        private readonly string identifier;
 
 
         //---------------------------------------------------------------------
         //		Constructor
         //---------------------------------------------------------------------
-        public Metrics()
+        public Metrics(string identifier)
         {
             metrics = new Dictionary<string, string>();
+            this.identifier = identifier;
         }
 
 
@@ -58,7 +60,7 @@ namespace MetricsIntegrator.Data
             return ToString().GetHashCode();
         }
 
-        public override bool Equals(object other)
+        public override bool Equals(object? other)
         {
             if (other == null)
                 return false;
@@ -93,7 +95,7 @@ namespace MetricsIntegrator.Data
 
         public string GetMetric(string metric)
         {
-            string value;
+            string? value;
 
             metrics.TryGetValue(metric, out value);
 
@@ -104,13 +106,10 @@ namespace MetricsIntegrator.Data
         ///     Gets metrics identifier.
         /// </summary>
         /// 
-        /// <returns>Value associated with the first metric found</returns>
+        /// <returns>Value associated with the identifier</returns>
         public string GetID()
         {
-            var iterator = metrics.GetEnumerator();
-            iterator.MoveNext();
-
-            return iterator.Current.Value;
+            return GetMetric(identifier);
         }
     }
 }

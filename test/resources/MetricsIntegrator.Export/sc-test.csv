@@ -1,4 +1,4 @@
-﻿scName;scfield1;scfield2;scfield3
+﻿id;scfield1;scfield2;scfield3
 pkg;Package;123;456
 pkg.ClassName1;Public Class;1;1
 pkg.ClassName1.testedMethod1();Method;1;1

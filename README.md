@@ -31,6 +31,12 @@ We developed this tool to generate the defined metrics to build the dataset deta
 #### Export selection
 ![export-gif](https://raw.githubusercontent.com/williamniemiec/MetricsIntegrator/master/docs/gif/screens/export.gif?raw=true)
 
+## 🚩 Changelog
+Details about each version are documented in the [releases section](https://github.com/williamniemiec/MetricsIntegrator/releases).
+
+## 🤝 Contribute!
+See the documentation on how you can contribute to the project [here](https://github.com/williamniemiec/MetricsIntegrator/blob/master/CONTRIBUTING.md).
+
 ## 📁 Files
 ### /
 |        Name 	|Type|Description|

@@ -17,15 +17,15 @@ namespace MetricsIntegrator.Parser
         //---------------------------------------------------------------------
         private readonly string filepath;
         private readonly IDictionary<string, List<string>> mapping;
-        private readonly string delimiter;
+        private string delimiter = default!;
+        private int identifierColumnIndex = default!;
 
 
         //---------------------------------------------------------------------
         //		Constructor
         //---------------------------------------------------------------------
         public SourceCodeMetricsParser(string filepath, 
-                                       IDictionary<string, List<string>> mapping,
-                                       string delimiter)
+                                       IDictionary<string, List<string>> mapping)
         {
             if ((filepath == null) || filepath.Length == 0)
                 throw new ArgumentException("File path cannot be empty");
@@ -36,21 +36,13 @@ namespace MetricsIntegrator.Parser
             if (mapping == null)
                 throw new ArgumentException("Mapping cannot be null");
 
-            if ((delimiter == null) || delimiter.Length == 0)
-                throw new ArgumentException("Delimiter cannot be empty");
-
             this.filepath = filepath;
             this.mapping = mapping;
-            this.delimiter = delimiter;
 
             SourceCodeMetrics = new Dictionary<string, Metrics>();
             SourceTestMetrics = new Dictionary<string, Metrics>();
-        }
-
-        public SourceCodeMetricsParser(string filepath, 
-                                       Dictionary<string, List<string>> mapping)
-            : this(filepath, mapping, ";")
-        {
+            FieldKeys = new List<string>();
+            SourceCodeIdentifierKey = default!;
         }
 
 
@@ -68,6 +60,7 @@ namespace MetricsIntegrator.Parser
         public Dictionary<string, Metrics> SourceTestMetrics { get; private set; }
 
         public List<string> FieldKeys { get; private set; }
+        public string SourceCodeIdentifierKey { get; private set; }
 
 
         //---------------------------------------------------------------------
@@ -76,9 +69,57 @@ namespace MetricsIntegrator.Parser
         public void Parse()
         {
             string[] lines = File.ReadAllLines(filepath);
-            FieldKeys = ExtractFieldKeys(lines);
             
+            ParseHeader(lines[0]);
             ParseMetrics(lines, FieldKeys);
+        }
+
+        private void ParseHeader(string header)
+        {
+            delimiter = ExtractDelimiterFrom(header);
+            FieldKeys = ExtractFieldKeysFrom(header, delimiter);
+            identifierColumnIndex = ExtractIdentifierColumnIndexFrom(FieldKeys);
+
+            if (identifierColumnIndex == -1)
+                throw new ApplicationException("Identifier column not found");
+
+            SourceCodeIdentifierKey = FieldKeys[identifierColumnIndex];
+        }
+
+        private static string ExtractDelimiterFrom(string header)
+        {
+            Regex text = new Regex("[A-z0-9\\s\\t\\n\\r]+");
+            
+            for (int i = 0; i < header.Length; i++)
+            {
+                if (!text.IsMatch(char.ToString(header[i])))
+                {
+                    return char.ToString(header[i]);
+                }
+            }
+
+            return "";
+        }
+
+        private List<string> ExtractFieldKeysFrom(string header, string delimiter)
+        {
+            return header.Split(delimiter).ToList<string>();
+        }
+
+        private static int ExtractIdentifierColumnIndexFrom(List<string> fieldKeys)
+        {
+            Regex identifier = new Regex(
+                "(id|identifier|name|idx|index|signature)",
+                RegexOptions.IgnoreCase
+            );
+
+            for (int i = 0; i < fieldKeys.Count; i++)
+            {
+                if (identifier.IsMatch(fieldKeys[i].Trim()))
+                    return i;
+            }
+
+            return -1;
         }
 
         private void ParseMetrics(string[] lines, List<string> fields)
@@ -87,10 +128,10 @@ namespace MetricsIntegrator.Parser
             {
                 string[] columns = line.Split(delimiter);
 
-                if (!IsMethodOrConstructorSignature(columns[0]))
+                if (!IsMethodOrConstructorSignature(columns[identifierColumnIndex]))
                     continue;
                 
-                if (IsTestMethod(columns[0]))
+                if (IsTestMethod(columns[identifierColumnIndex]))
                     ParseTestMethod(columns, fields);
                 else
                     ParseTestedMethodOrConstructor(columns, fields);
@@ -120,9 +161,13 @@ namespace MetricsIntegrator.Parser
 
                 foreach (string testMethod in testMethods)
                 {
-                    if (testMethod == columns[0] && !SourceTestMetrics.ContainsKey(columns[0]))
+                    if (testMethod == columns[identifierColumnIndex] && 
+                        !SourceTestMetrics.ContainsKey(columns[identifierColumnIndex]))
                     {
-                        SourceTestMetrics.Add(columns[0], CreateMetricsContainer(columns, fields));
+                        SourceTestMetrics.Add(
+                            columns[identifierColumnIndex], 
+                            CreateMetricsContainer(columns, fields)
+                        );
                     }
                 }
 
@@ -131,21 +176,19 @@ namespace MetricsIntegrator.Parser
 
         private void ParseTestedMethodOrConstructor(string[] columns, List<string> fields)
         {
-            SourceCodeMetrics.Add(columns[0], CreateMetricsContainer(columns, fields));
+            SourceCodeMetrics.Add(
+                columns[identifierColumnIndex], 
+                CreateMetricsContainer(columns, fields)
+            );
         }
 
-        private List<string> ExtractFieldKeys(string[] lines)
+        private Metrics CreateMetricsContainer(string[] columns, List<string> fields)
         {
-            return lines[0].Split(delimiter).ToList<string>();
-        }
-
-        private Metrics CreateMetricsContainer(string[] row, List<string> fields)
-        {
-            Metrics metricsSourceTest = new Metrics();
+            Metrics metricsSourceTest = new Metrics(fields[identifierColumnIndex]);
 
             for (int i = 0; i < fields.Count; i++)
             {
-                metricsSourceTest.AddMetric(fields[i], row[i]);
+                metricsSourceTest.AddMetric(fields[i], columns[i]);
             }
 
             return metricsSourceTest;

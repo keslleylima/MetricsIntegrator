@@ -27,6 +27,11 @@ namespace MetricsIntegrator.Controllers
         {
             this.window = window;
             this.integrator = integrator;
+
+            SourceCodeFieldKeys = new List<string>();
+            CodeCoverageFieldKeys = new List<string>();
+            SourceCodeIdentifierKey = default!;
+            CodeCoverageIdentifierKey = default!;
         }
 
 
@@ -35,6 +40,8 @@ namespace MetricsIntegrator.Controllers
         //---------------------------------------------------------------------
         public List<string> SourceCodeFieldKeys { get; private set; }
         public List<string> CodeCoverageFieldKeys { get; private set; }
+        public string SourceCodeIdentifierKey { get; private set; }
+        public string CodeCoverageIdentifierKey { get; private set; }
 
 
         //---------------------------------------------------------------------
@@ -46,21 +53,32 @@ namespace MetricsIntegrator.Controllers
             
             SourceCodeFieldKeys = parser.SourceCodeFieldKeys;
             CodeCoverageFieldKeys = parser.CodeCoverageFieldKeys;
+            SourceCodeIdentifierKey = parser.SourceCodeIdentifierKey;
+            CodeCoverageIdentifierKey = parser.CodeCoverageIdentifierKey;
         }
 
-        public void OnExport(string outputDirectory, FilterMetrics filterMetrics)
+        public void OnExport(string outputPath, FilterMetrics filterMetrics)
         {
-            if (outputDirectory.Length == 0)
+            if (outputPath.Length == 0)
                 return;
 
-            string outputPath = integrator.DoExportation(outputDirectory, filterMetrics);
+            integrator.DoExportation(outputPath, filterMetrics);
 
             window.NavigateToEndView(outputPath);
         }
 
-        public async Task<string> AskUserForWhereToSaveExportation()
+        public async Task<string> AskUserForSavePath()
         {
-            OpenFolderDialog dialog = new OpenFolderDialog();
+            SaveFileDialog dialog = new SaveFileDialog();
+
+            dialog.DefaultExtension = "csv";
+            dialog.InitialFileName = "Dataset";
+            dialog.Title = "Save dataset file";
+            dialog.Filters.Add(new FileDialogFilter()
+            {
+                Name = "Dataset file",
+                Extensions = { "csv" }
+            });
 
             string result = await dialog.ShowAsync(window);
 

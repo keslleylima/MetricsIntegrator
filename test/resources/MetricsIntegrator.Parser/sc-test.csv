@@ -1,4 +1,4 @@
-﻿Name;field1;field2;field3
+﻿id;field1;field2;field3
 pkgname1.pkgname2;Package;123;456
 pkgname1.pkgname2.ClassName1;Public Class;1;1
 pkgname1.pkgname2.ClassName1.testedMethod1();Method;1;1

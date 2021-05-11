@@ -54,6 +54,8 @@ namespace MetricsIntegrator.Parser
             CodeCoverage = new Dictionary<string, List<Metrics>>();
             CodeCoverageFieldKeys = new List<string>();
             SourceCodeFieldKeys = new List<string>();
+            SourceCodeIdentifierKey = default!;
+            CodeCoverageIdentifierKey = default!;
         }
 
 
@@ -66,6 +68,8 @@ namespace MetricsIntegrator.Parser
         public IDictionary<string, List<Metrics>> CodeCoverage { get; private set; }
         public List<string> CodeCoverageFieldKeys { get; private set; }
         public List<string> SourceCodeFieldKeys { get; private set; }
+        public string SourceCodeIdentifierKey { get; private set; }
+        public string CodeCoverageIdentifierKey { get; private set; }
 
 
         //---------------------------------------------------------------------
@@ -90,21 +94,20 @@ namespace MetricsIntegrator.Parser
 
         private void DoCodeCoverageParsing()
         {
-            BaseMetricsParser tpParser = new BaseMetricsParser(
-                metricsFileManager.CodeCoveragePath, 
-                delimiter
+            CodeCoverageMetricsParser tpParser = new CodeCoverageMetricsParser(
+                metricsFileManager.CodeCoveragePath
             );
 
             CodeCoverage = tpParser.Parse();
             CodeCoverageFieldKeys = tpParser.FieldKeys;
+            CodeCoverageIdentifierKey = tpParser.CodeCoverageIdentifierKey;
         }
 
         private void DoSourceCodeMetricsParsing(IDictionary<string, List<string>> mapping)
         {
             SourceCodeMetricsParser scmParser = new SourceCodeMetricsParser(
                 metricsFileManager.SourceCodePath, 
-                mapping, 
-                delimiter
+                mapping
             );
             
             scmParser.Parse();
@@ -112,6 +115,7 @@ namespace MetricsIntegrator.Parser
             SourceCodeMetrics = scmParser.SourceCodeMetrics;
             TestCodeMetrics = scmParser.SourceTestMetrics;
             SourceCodeFieldKeys = scmParser.FieldKeys;
+            SourceCodeIdentifierKey = scmParser.SourceCodeIdentifierKey;
         }
     }
 }

@@ -13,8 +13,7 @@ namespace MetricsIntegrator.Export
         //		Attributes
         //---------------------------------------------------------------------
         private static readonly string DELIMITER = ";";
-        private readonly string outputDirectoryPath;
-        private readonly string projectName;
+        private readonly string outputPath;
         private readonly IDictionary<string, List<string>> mapping;
         private readonly IDictionary<string, Metrics> sourceCodeMetrics;
         private readonly IDictionary<string, Metrics> testCodeMetrics;
@@ -24,15 +23,13 @@ namespace MetricsIntegrator.Export
         //---------------------------------------------------------------------
         //		Constructor
         //---------------------------------------------------------------------
-        private MetricsExporterFactory(string outputDirectoryPath,
-                                       string projectName,
+        private MetricsExporterFactory(string outputPath,
                                        IDictionary<string, List<string>> mapping,
                                        IDictionary<string, Metrics> sourceCodeMetrics,
                                        IDictionary<string, Metrics> testCodeMetrics,
                                        FilterMetrics filterMetrics)
         {
-            this.outputDirectoryPath = outputDirectoryPath;
-            this.projectName = projectName;
+            this.outputPath = outputPath;
             this.mapping = mapping;
             this.sourceCodeMetrics = sourceCodeMetrics;
             this.testCodeMetrics = testCodeMetrics;
@@ -45,8 +42,7 @@ namespace MetricsIntegrator.Export
         //---------------------------------------------------------------------
         public class Builder
         {
-            private string outputDirectoryPath;
-            private string projectName;
+            private string outputPath;
             private IDictionary<string, List<string>> mapping;
             private IDictionary<string, Metrics> sourceCodeMetrics;
             private IDictionary<string, Metrics> testCodeMetrics;
@@ -54,18 +50,16 @@ namespace MetricsIntegrator.Export
 
             public Builder()
             {
+                outputPath = default!;
+                mapping = default!;
+                sourceCodeMetrics = default!;
+                testCodeMetrics = default!;
+                filterMetrics = default!;
             }
 
-            public Builder OutputDirectory(string path)
+            public Builder OutputPath(string path)
             {
-                outputDirectoryPath = path;
-
-                return this;
-            }
-
-            public Builder ProjectName(string name)
-            {
-                projectName = name;
+                outputPath = path;
 
                 return this;
             }
@@ -103,8 +97,7 @@ namespace MetricsIntegrator.Export
                 ValidateRequiredFields();
 
                 return new MetricsExporterFactory(
-                    outputDirectoryPath,
-                    projectName,
+                    outputPath,
                     mapping,
                     sourceCodeMetrics,
                     testCodeMetrics,
@@ -114,11 +107,8 @@ namespace MetricsIntegrator.Export
 
             private void ValidateRequiredFields()
             {
-                if ((outputDirectoryPath == null) || outputDirectoryPath.Length == 0)
+                if ((outputPath == null) || outputPath.Length == 0)
                     throw new ArgumentException("Output directory cannot be empty");
-
-                if ((projectName == null) || projectName.Length == 0)
-                    throw new ArgumentException("Project name cannot be empty");
 
                 if (mapping == null)
                     throw new ArgumentException("Mapping cannot be null");
@@ -140,8 +130,6 @@ namespace MetricsIntegrator.Export
         {
             if ((metrics == null) || metrics.Count == 0)
                 throw new ArgumentException("There are no metrics");
-
-            string outputPath = outputDirectoryPath + @"\INTEGRATION_" + projectName + ".csv";
 
             return CreateMetricsCSVExporter(outputPath, metrics, filterMetrics.CodeCoverageFilter);
         }

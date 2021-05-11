@@ -26,6 +26,7 @@ namespace MetricsIntegrator.Views
         //---------------------------------------------------------------------
         public ExportView()
         {
+            exportController = default!;
             InitializeComponent();
             pnlSourceCodeMetrics = this.FindControl<StackPanel>("pnlSrcCodeMetrics");
             pnlCodeCoverage = this.FindControl<StackPanel>("pnlCodeCoverage");
@@ -54,8 +55,15 @@ namespace MetricsIntegrator.Views
             {
                 exportController.ParseMetrics();
 
-                BuildSourceCodeMetricsSelector(exportController.SourceCodeFieldKeys);
-                BuildCodeCoverageSelector(exportController.CodeCoverageFieldKeys);
+                BuildSourceCodeMetricsSelector(
+                    exportController.SourceCodeFieldKeys, 
+                    exportController.SourceCodeIdentifierKey
+                );
+                
+                BuildCodeCoverageSelector(
+                    exportController.CodeCoverageFieldKeys, 
+                    exportController.CodeCoverageIdentifierKey
+                );
             }
             catch (Exception e)
             {
@@ -64,24 +72,25 @@ namespace MetricsIntegrator.Views
             }
         }
 
-        private void BuildSourceCodeMetricsSelector(List<string> fieldKeys)
+        private void BuildSourceCodeMetricsSelector(List<string> fieldKeys, string id)
         {
-            BuildCheckBoxColumn(pnlSourceCodeMetrics, fieldKeys);
+            BuildCheckBoxColumn(pnlSourceCodeMetrics, fieldKeys, id);
         }
 
-        private void BuildCheckBoxColumn(StackPanel panel, List<string> labels)
+        private void BuildCheckBoxColumn(StackPanel panel, List<string> labels, string id)
         {
-            panel.Children.Add(CreateCheckBoxForIdField(labels[0]));
-
-            for (int i = 1; i < labels.Count; i++)
+            for (int i = 0; i < labels.Count; i++)
             {
-                panel.Children.Add(CreateCheckBoxForField(labels[i]));
+                if (labels[i] == id)
+                    panel.Children.Add(CreateCheckBoxForIdField(labels[i]));
+                else
+                    panel.Children.Add(CreateCheckBoxForField(labels[i]));
             }
         }
 
-        private void BuildCodeCoverageSelector(List<string> fieldKeys)
+        private void BuildCodeCoverageSelector(List<string> fieldKeys, string id)
         {
-            BuildCheckBoxColumn(pnlCodeCoverage, fieldKeys);
+            BuildCheckBoxColumn(pnlCodeCoverage, fieldKeys, id);
         }
 
         private CheckBox CreateCheckBoxForIdField(string field)
@@ -168,7 +177,7 @@ namespace MetricsIntegrator.Views
 
         private async void OnExport(object sender, RoutedEventArgs e)
         {
-            string outputPath = await exportController.AskUserForWhereToSaveExportation();
+            string outputPath = await exportController.AskUserForSavePath();
             FilterMetrics filter = ParseUnselectedMetrics();
 
             try

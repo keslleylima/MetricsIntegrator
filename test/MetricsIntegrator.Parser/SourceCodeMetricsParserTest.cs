@@ -34,8 +34,8 @@ namespace MetricsIntegrator.Parser
             mapping = new Dictionary<string, List<string>>();
             sourceCodeMetricsObtained = new Dictionary<string, Metrics>();
             testCodeMetricsObtained = new Dictionary<string, Metrics>();
-            expectedSourceCodeMetrics = new Metrics();
-            expectedTestCodeMetrics = new Metrics();
+            expectedSourceCodeMetrics = new Metrics("id");
+            expectedTestCodeMetrics = new Metrics("id");
         }
 
 
@@ -49,13 +49,13 @@ namespace MetricsIntegrator.Parser
             UsingMapping("pkgname1.pkgname2.ClassName1.testedMethod1()", "pkgname3.ClassName2.testMethod1()");
 
             WithTestedInvoked("pkgname1.pkgname2.ClassName1.testedMethod1()");
-            BindMetric("Name", "pkgname1.pkgname2.ClassName1.testedMethod1()");
+            BindMetric("id", "pkgname1.pkgname2.ClassName1.testedMethod1()");
             BindMetric("field1", "Method");
             BindMetric("field2", "1");
             BindMetric("field3", "1");
 
             WithTestMethod("pkgname3.ClassName2.testMethod1()");
-            BindMetric("Name", "pkgname3.ClassName2.testMethod1()");
+            BindMetric("id", "pkgname3.ClassName2.testMethod1()");
             BindMetric("field1", "Method");
             BindMetric("field2", "1");
             BindMetric("field3", "1");
@@ -101,24 +101,6 @@ namespace MetricsIntegrator.Parser
                 new SourceCodeMetricsParser(basePath + "sc-test.csv", null);
             });
         }
-        [Fact]
-        public void TestConstructorWithNullDelimiter()
-        {
-            Assert.Throws<ArgumentException>(() =>
-            {
-                new SourceCodeMetricsParser(basePath + "sc-test.csv", mapping, null);
-            });
-        }
-
-        [Fact]
-        public void TestConstructorWithEmptyDelimiter()
-        {
-            Assert.Throws<ArgumentException>(() =>
-            {
-                new SourceCodeMetricsParser(basePath + "sc-test.csv", mapping, "");
-            });
-        }
-
 
 
         //---------------------------------------------------------------------
@@ -182,7 +164,7 @@ namespace MetricsIntegrator.Parser
 
             Assert.Equal(expectedMetrics, sourceCodeMetricsObtained);
 
-            expectedSourceCodeMetrics = new Metrics();
+            expectedSourceCodeMetrics = new Metrics("id");
         }
 
         private void AssertTestCodeMetricsIsCorrect()

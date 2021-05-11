@@ -78,6 +78,14 @@ namespace MetricsIntegrator.Export
 
             public Builder()
             {
+                outputPath = default!;
+                delimiter = default!;
+                mapping = default!;
+                sourceCodeMetrics = default!;
+                testCodeMetrics = default!;
+                baseMetrics = default!;
+                sourceCodeMetricsFilter = default!;
+                baseMetricsFilter = default!;
             }
 
             public Builder OutputPath(string outputPath)
@@ -287,9 +295,11 @@ namespace MetricsIntegrator.Export
                 if (!baseMetrics.ContainsKey(testMethod))
                     continue;
 
-                baseMetrics.TryGetValue(testMethod, out List<Metrics> baseMetricsList);
+                baseMetrics.TryGetValue(testMethod, out List<Metrics>? baseMetricsList);
 
-                foreach (Metrics metrics in baseMetricsList)
+                List<Metrics> metricValues = baseMetricsList ?? new List<Metrics>();
+
+                foreach (Metrics metrics in metricValues)
                 {
                     WriteMetricsOfTestedMethod(testedMethod);
                     WriteMetricsOfTestMethod(testMethod);
@@ -301,9 +311,11 @@ namespace MetricsIntegrator.Export
 
         private void WriteMetricsOfTestedMethod(string testedMethod)
         {
-            sourceCodeMetrics.TryGetValue(testedMethod, out Metrics metricsSourceCode);
+            sourceCodeMetrics.TryGetValue(testedMethod, out Metrics? metricsSourceCode);
 
-            foreach (string metricValue in metricsSourceCode.GetAllMetricValues())
+            string[] metricValues = metricsSourceCode?.GetAllMetricValues() ?? new string[0];
+
+            foreach (string metricValue in metricValues)
             {
                 if (sourceCodeMetricsFilter.Contains(metricValue))
                     continue;
@@ -315,9 +327,11 @@ namespace MetricsIntegrator.Export
 
         private void WriteMetricsOfTestMethod(string testMethod)
         {
-            testCodeMetrics.TryGetValue(testMethod, out Metrics metricsSourceTest);
+            testCodeMetrics.TryGetValue(testMethod, out Metrics? metricsSourceTest);
 
-            foreach (string metricValue in metricsSourceTest.GetAllMetricValues())
+            string[]? metricValues = metricsSourceTest?.GetAllMetricValues() ?? new string[0];
+
+            foreach (string metricValue in metricValues)
             {
                 if (sourceCodeMetricsFilter.Contains(metricValue))
                     continue;
@@ -349,7 +363,9 @@ namespace MetricsIntegrator.Export
             if (File.Exists(outputPath))
                 File.Delete(outputPath);
 
-            Directory.CreateDirectory(Directory.GetParent(outputPath).FullName);
+            string? path = Directory.GetParent(outputPath)?.FullName;
+
+            Directory.CreateDirectory(path ?? "");
 
             File.WriteAllText(outputPath, lines.ToString());
         }
