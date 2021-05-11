@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Xunit;
 
 namespace MetricsIntegrator.Data
@@ -76,7 +77,7 @@ namespace MetricsIntegrator.Data
             metrics.AddMetric(metricName + "2", metricValue + "2");
 
             Assert.Equal(
-                new string[] { metricValue, metricValue + "2" }, 
+                new List<string>(new string[] { metricValue, metricValue + "2" }), 
                 metrics.GetAllMetricValues()
             );
         }
@@ -88,7 +89,7 @@ namespace MetricsIntegrator.Data
             metrics.AddMetric(metricName + "2", metricValue + "2");
 
             Assert.Equal(
-                new string[] { metricName, metricName + "2" },
+                new List<string>(new string[] { metricName, metricName + "2" }),
                 metrics.GetAllMetrics()
             );
         }

@@ -75,7 +75,12 @@ namespace MetricsIntegrator.Data
         //---------------------------------------------------------------------
         //		Getters
         //---------------------------------------------------------------------
-        public List<string> GetAllMetrics(ISet<string> filter = default!)
+        public List<string> GetAllMetrics()
+        {
+            return GetAllMetrics(new HashSet<string>());
+        }
+
+        public List<string> GetAllMetrics(ISet<string> filter)
         {
             List<string> metricKeys = new List<string>();
 
@@ -88,7 +93,12 @@ namespace MetricsIntegrator.Data
             return metricKeys;
         }
 
-        public List<string> GetAllMetricValues(ISet<string> filter = default!)
+        public List<string> GetAllMetricValues()
+        {
+            return GetAllMetricValues(new HashSet<string>());
+        }
+
+        public List<string> GetAllMetricValues(ISet<string> filter)
         {
             List<string> metricValues = new List<string>();
 
