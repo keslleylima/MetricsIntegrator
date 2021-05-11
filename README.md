@@ -5,9 +5,9 @@
 <h1 align='center'>Metrics Integrator</h1>
 <p align='center'>A simple tool that uses as input the source code metrics file and the mapping between application methods and the test methods. As output, our application yields a file where each instance involves source code metrics of one test method and the particular application method under test.</p>
 <p align="center">
-	<a href="https://github.com/williamniemiec/MetricsIntegrator/actions?query=workflow%3AWindows"><img src="https://img.shields.io/github/workflow/status/williamniemiec/MetricsIntegrator/Windows?label=Windows" alt=""></a>
-	<a href="https://github.com/williamniemiec/MetricsIntegrator/actions?query=workflow%3AMacOS"><img src="https://img.shields.io/github/workflow/status/williamniemiec/MetricsIntegrator/MacOS?label=MacOS" alt=""></a>
-	<a href="https://github.com/williamniemiec/MetricsIntegrator/actions?query=workflow%3AUbuntu"><img src="https://img.shields.io/github/workflow/status/williamniemiec/MetricsIntegrator/Ubuntu?label=Ubuntu" alt=""></a>
+	<a href="https://github.com/williamniemiec/MetricsIntegrator/actions/workflows/windows.yml"><img src="https://github.com/williamniemiec/MetricsIntegrator/actions/workflows/windows.yml/badge.svg" alt=""></a>
+	<a href="https://github.com/williamniemiec/MetricsIntegrator/actions/workflows/macos.yml"><img src="https://github.com/williamniemiec/MetricsIntegrator/actions/workflows/macos.yml/badge.svg" alt=""></a>
+	<a href="https://github.com/williamniemiec/MetricsIntegrator/actions/workflows/ubuntu.yml"><img src="https://github.com/williamniemiec/MetricsIntegrator/actions/workflows/ubuntu.yml/badge.svg" alt=""></a>
 	<a href="https://codecov.io/gh/williamniemiec/MetricsIntegrator"><img src="https://codecov.io/gh/williamniemiec/MetricsIntegrator/branch/master/graph/badge.svg?token=R2SFS4SP86" alt="Coverage status"></a>
 	<a href="http://java.oracle.com"><img src="https://img.shields.io/badge/.NET-5.0+-D0008F.svg" alt="Dotnet compatibility"></a>
 	<a href="https://github.com/williamniemiec/MetricsIntegrator/releases"><img src="https://img.shields.io/github/v/release/williamniemiec/MetricsIntegrator" alt="Release"></a>
