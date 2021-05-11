@@ -75,21 +75,39 @@ namespace MetricsIntegrator.Data
         //---------------------------------------------------------------------
         //		Getters
         //---------------------------------------------------------------------
-        public string[] GetAllMetrics()
+        public List<string> GetAllMetrics()
         {
-            string[] metricKeys = new string[metrics.Count];
+            return GetAllMetrics(new HashSet<string>());
+        }
 
-            metrics.Keys.CopyTo(metricKeys, 0);
+        public List<string> GetAllMetrics(ISet<string> filter)
+        {
+            List<string> metricKeys = new List<string>();
+
+            foreach (KeyValuePair<string, string> metric in metrics)
+            {
+                if (!filter.Contains(metric.Key))
+                    metricKeys.Add(metric.Key);
+            }
 
             return metricKeys;
         }
 
-        public string[] GetAllMetricValues()
+        public List<string> GetAllMetricValues()
         {
-            string[] metricValues = new string[metrics.Count];
+            return GetAllMetricValues(new HashSet<string>());
+        }
 
-            metrics.Values.CopyTo(metricValues, 0);
+        public List<string> GetAllMetricValues(ISet<string> filter)
+        {
+            List<string> metricValues = new List<string>();
 
+            foreach (KeyValuePair<string, string> metric in metrics)
+            {
+                if (!filter.Contains(metric.Key))
+                    metricValues.Add(metric.Value);
+            }
+  
             return metricValues;
         }
 
