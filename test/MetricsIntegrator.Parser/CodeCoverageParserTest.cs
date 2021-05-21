@@ -13,8 +13,8 @@ namespace MetricsIntegrator.Parser
         //		Attributes
         //---------------------------------------------------------------------
         private readonly string basePath;
-        private readonly List<Metrics> expectedMetrics;
-        private IDictionary<string, List<Metrics>> obtained;
+        private Metrics expectedMetrics;
+        private IDictionary<string, Metrics> obtained;
         private string filename;
         private Metrics metrics;
 
@@ -25,8 +25,8 @@ namespace MetricsIntegrator.Parser
         public CodeCoverageParserTest()
         {
             basePath = GenerateBasePath();
-            metrics = new Metrics("id");
-            expectedMetrics = new List<Metrics>();
+            metrics = default!;
+            expectedMetrics = default!;
         }
 
 
@@ -38,7 +38,12 @@ namespace MetricsIntegrator.Parser
         {
             UsingFile("tc-test.csv");
 
-            WithMetric("id", "pkgname3.ClassName2.testMethod1()");
+            WithTestAndCoveredMethod(
+                "pkg.ClassName2.testMethod1()", 
+                "pkg.ClassName2.testedMethod1()"
+            );
+            WithMetric("TestMethod", "pkg.ClassName2.testMethod1()");
+            WithMetric("TestedMethod", "pkg.ClassName2.testedMethod1()");
             WithMetric("field1", "1");
             WithMetric("field2", "2");
             BindMetrics();
@@ -92,6 +97,11 @@ namespace MetricsIntegrator.Parser
             this.filename = filename;
         }
 
+        private void WithTestAndCoveredMethod(string testMethod, string coveredMethod)
+        {
+            metrics = new Metrics(testMethod + coveredMethod);
+        }
+
         private void WithMetric(string metricName, string metricValue)
         {
             metrics.AddMetric(metricName, metricValue);
@@ -99,8 +109,8 @@ namespace MetricsIntegrator.Parser
 
         private void BindMetrics()
         {
-            expectedMetrics.Add(metrics);
-            metrics = new Metrics("id");
+            expectedMetrics = metrics;
+            metrics = default!;
         }
 
         private void DoParsing()
@@ -111,10 +121,9 @@ namespace MetricsIntegrator.Parser
 
         private void AssertParsingIsCorrect()
         {
-            Dictionary<string, List<Metrics>> expected = new Dictionary<string, List<Metrics>>();
-            expected.Add(expectedMetrics[0].GetID(), expectedMetrics);
+            obtained.TryGetValue(expectedMetrics.GetID(), out Metrics? obtainedMetrics);
 
-            Assert.Equal(expected, obtained);
+            Assert.Equal(expectedMetrics, obtainedMetrics);
         }
     }
 }

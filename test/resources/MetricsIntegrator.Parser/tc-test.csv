@@ -1,2 +1,3 @@
-﻿id;field1;field2
-pkgname3.ClassName2.testMethod1();1;2
+﻿TestMethod;TestedMethod;field1;field2
+pkg.ClassName2.testMethod1();pkg.ClassName2.testedMethod1();1;2
+pkg.ClassName2.testMethod2();pkg.ClassName2.testedMethod2();1;2

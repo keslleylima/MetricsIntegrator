@@ -90,7 +90,7 @@ namespace MetricsIntegrator.Views
 
         private void BuildCodeCoverageSelector(List<string> fieldKeys, string id)
         {
-            BuildCheckBoxColumn(pnlCodeCoverage, fieldKeys, id);
+            BuildCheckBoxColumn(pnlCodeCoverage, fieldKeys, "");
         }
 
         private CheckBox CreateCheckBoxForIdField(string field)
