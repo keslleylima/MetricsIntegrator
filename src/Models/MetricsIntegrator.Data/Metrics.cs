@@ -124,10 +124,10 @@ namespace MetricsIntegrator.Data
         ///     Gets metrics identifier.
         /// </summary>
         /// 
-        /// <returns>Value associated with the identifier</returns>
+        /// <returns>Identifier</returns>
         public string GetID()
         {
-            return GetMetric(identifier);
+            return identifier;
         }
     }
 }

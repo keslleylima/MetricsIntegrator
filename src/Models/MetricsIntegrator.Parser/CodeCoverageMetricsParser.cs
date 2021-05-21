@@ -48,7 +48,7 @@ namespace MetricsIntegrator.Parser
         //---------------------------------------------------------------------
         //		Methods
         //---------------------------------------------------------------------
-        public IDictionary<string, List<Metrics>> Parse()
+        public IDictionary<string, Metrics> Parse()
         {
             string[] lines = File.ReadAllLines(filepath);
 
@@ -105,26 +105,15 @@ namespace MetricsIntegrator.Parser
             return -1;
         }
 
-        private IDictionary<string, List<Metrics>> ParseMetrics(string[] lines, List<string> fieldKeys)
+        private IDictionary<string, Metrics> ParseMetrics(string[] lines, List<string> fieldKeys)
         {
-            IDictionary<string, List<Metrics>> metrics = new Dictionary<string, List<Metrics>>();
+            IDictionary<string, Metrics> metrics = new Dictionary<string, Metrics>();
 
             foreach (string line in lines.Skip(1).ToArray())
             {
                 Metrics metric = CreateCodeCoverageMetrics(line.Split(delimiter), fieldKeys);
-
-                if (metrics.ContainsKey(metric.GetID()))
-                {
-                    metrics.TryGetValue(metric.GetID(), out List<Metrics>? listMetrics);
-                    listMetrics?.Add(metric);
-                }
-                else
-                {
-                    List<Metrics> listMetrics = new List<Metrics>();
-                    listMetrics.Add(metric);
-
-                    metrics.Add(metric.GetID(), listMetrics);
-                }
+                
+                metrics.Add(metric.GetID(), metric);
             }
 
             return metrics;
@@ -132,7 +121,10 @@ namespace MetricsIntegrator.Parser
 
         private Metrics CreateCodeCoverageMetrics(string[] fieldValue, List<string> fieldKeys)
         {
-            Metrics metrics = new Metrics(fieldKeys[identifierColumnIndex]);
+            Metrics metrics = new Metrics(
+                fieldValue[0] 
+                + fieldValue[1]
+            );
 
             for (int i = 0; i < fieldKeys.Count; i++)
             {

@@ -51,7 +51,7 @@ namespace MetricsIntegrator.Parser
             Mapping = new Dictionary<string, List<string>>();
             SourceCodeMetrics = new Dictionary<string, Metrics>();
             TestCodeMetrics = new Dictionary<string, Metrics>(); 
-            CodeCoverage = new Dictionary<string, List<Metrics>>();
+            CodeCoverage = new Dictionary<string, Metrics>();
             CodeCoverageFieldKeys = new List<string>();
             SourceCodeFieldKeys = new List<string>();
             SourceCodeIdentifierKey = default!;
@@ -65,7 +65,7 @@ namespace MetricsIntegrator.Parser
         public IDictionary<string, List<string>> Mapping { get; private set; }
         public IDictionary<string, Metrics> SourceCodeMetrics { get; private set; }
         public IDictionary<string, Metrics> TestCodeMetrics { get; private set; }
-        public IDictionary<string, List<Metrics>> CodeCoverage { get; private set; }
+        public IDictionary<string, Metrics> CodeCoverage { get; private set; }
         public List<string> CodeCoverageFieldKeys { get; private set; }
         public List<string> SourceCodeFieldKeys { get; private set; }
         public string SourceCodeIdentifierKey { get; private set; }

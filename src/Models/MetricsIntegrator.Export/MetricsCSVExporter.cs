@@ -9,7 +9,7 @@ namespace MetricsIntegrator.Export
     /// <summary>
     ///     Responsible for exporting metrics to a CSV file.
     /// </summary>
-    public class MetricsCSVExporter : IExporter
+    public class MetricsCsvExporter : IExporter
     {
         //---------------------------------------------------------------------
         //		Attributes
@@ -22,20 +22,18 @@ namespace MetricsIntegrator.Export
         private readonly StringBuilder lines;
         private readonly ISet<string> sourceCodeMetricsFilter;
         private readonly ISet<string> baseMetricsFilter;
-
-        // Base: Test path or test case
-        private readonly IDictionary<string, List<Metrics>> baseMetrics; 
+        private readonly IDictionary<string, Metrics> coverageMetrics; 
 
 
         //---------------------------------------------------------------------
         //		Constructor
         //---------------------------------------------------------------------
-        private MetricsCSVExporter(string outputPath,
+        private MetricsCsvExporter(string outputPath,
                                    string delimiter,
                                    IDictionary<string, List<string>> mapping,
                                    IDictionary<string, Metrics> dictSourceCode,
                                    IDictionary<string, Metrics> dictSourceTest,
-                                   IDictionary<string, List<Metrics>> baseMetrics,
+                                   IDictionary<string, Metrics> coverageMetrics,
                                    ISet<string> sourceCodeMetricsFilter,
                                    ISet<string> baseMetricsFilter)
         {
@@ -44,7 +42,7 @@ namespace MetricsIntegrator.Export
             this.sourceCodeMetrics = dictSourceCode;
             this.testCodeMetrics = dictSourceTest;
             this.delimiter = delimiter;
-            this.baseMetrics = baseMetrics;
+            this.coverageMetrics = coverageMetrics;
             lines = new StringBuilder();
             this.sourceCodeMetricsFilter = sourceCodeMetricsFilter;
             this.baseMetricsFilter = baseMetricsFilter;
@@ -72,7 +70,7 @@ namespace MetricsIntegrator.Export
             private IDictionary<string, List<string>> mapping;
             private IDictionary<string, Metrics> sourceCodeMetrics;
             private IDictionary<string, Metrics> testCodeMetrics;
-            private IDictionary<string, List<Metrics>> baseMetrics;
+            private IDictionary<string, Metrics> coverageMetrics;
             private ISet<string> sourceCodeMetricsFilter;
             private ISet<string> baseMetricsFilter;
 
@@ -83,7 +81,7 @@ namespace MetricsIntegrator.Export
                 mapping = default!;
                 sourceCodeMetrics = default!;
                 testCodeMetrics = default!;
-                baseMetrics = default!;
+                coverageMetrics = default!;
                 sourceCodeMetricsFilter = default!;
                 baseMetricsFilter = default!;
             }
@@ -116,9 +114,9 @@ namespace MetricsIntegrator.Export
                 return this;
             }
 
-            public Builder BaseMetrics(IDictionary<string, List<Metrics>> metrics)
+            public Builder CoverageMetrics(IDictionary<string, Metrics> metrics)
             {
-                baseMetrics = metrics;
+                coverageMetrics = metrics;
 
                 return this;
             }
@@ -155,17 +153,17 @@ namespace MetricsIntegrator.Export
             /// <exception cref="System.ArgumentException">
             ///     If any required field has not been provided.
             /// </exception>
-            public MetricsCSVExporter Build()
+            public MetricsCsvExporter Build()
             {
                 CheckRequiredFields();
 
-                return new MetricsCSVExporter(
+                return new MetricsCsvExporter(
                     outputPath,
                     delimiter,
                     mapping, 
                     sourceCodeMetrics, 
-                    testCodeMetrics, 
-                    baseMetrics,
+                    testCodeMetrics,
+                    coverageMetrics,
                     sourceCodeMetricsFilter,
                     baseMetricsFilter
                 );
@@ -185,8 +183,8 @@ namespace MetricsIntegrator.Export
                 if ((testCodeMetrics == null) || (testCodeMetrics.Count == 0))
                     throw new ArgumentException("Test code metrics cannot be empty");
 
-                if ((baseMetrics == null) || (baseMetrics.Count == 0))
-                    throw new ArgumentException("Base metrics cannot be empty");
+                if ((coverageMetrics == null) || (coverageMetrics.Count == 0))
+                    throw new ArgumentException("Coverage metrics cannot be empty");
             }
         }
 
@@ -260,13 +258,12 @@ namespace MetricsIntegrator.Export
 
         private List<string> GetBaseMetrics()
         {
-            var firstOfBaseMetrics = baseMetrics.GetEnumerator();
+            var firstOfBaseMetrics = coverageMetrics.GetEnumerator();
             firstOfBaseMetrics.MoveNext();
 
-            var firstMetric = firstOfBaseMetrics.Current.Value.GetEnumerator();
-            firstMetric.MoveNext();
-
-            return firstMetric.Current.GetAllMetrics(baseMetricsFilter);
+            var firstMetric = firstOfBaseMetrics.Current.Value;
+   
+            return firstMetric.GetAllMetrics(baseMetricsFilter);
         }
 
         private void WriteBody()
@@ -290,14 +287,15 @@ namespace MetricsIntegrator.Export
                 if (!testCodeMetrics.ContainsKey(testMethod))
                     continue;
 
-                if (!baseMetrics.ContainsKey(testMethod))
+                if (!coverageMetrics.ContainsKey(testMethod + testedMethod))
                     continue;
 
-                baseMetrics.TryGetValue(testMethod, out List<Metrics>? baseMetricsList);
+                coverageMetrics.TryGetValue(
+                    testMethod + testedMethod, 
+                    out Metrics? metrics
+                );
 
-                List<Metrics> metricValues = baseMetricsList ?? new List<Metrics>();
-
-                foreach (Metrics metrics in metricValues)
+                if (metrics != null)
                 {
                     WriteMetricsOfTestedMethod(testedMethod);
                     WriteMetricsOfTestMethod(testMethod);

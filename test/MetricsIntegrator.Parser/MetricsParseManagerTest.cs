@@ -14,17 +14,17 @@ namespace MetricsIntegrator.Parser
         //		Attributes
         //---------------------------------------------------------------------
         private readonly string basePath;
-        private string testedInvoked;
+        private string coveredMethod;
         private string testMethod;
         private string mapFile;
         private string scFile;
         private string codeCoverageFile;
         private IDictionary<string, Metrics> sourceCodeObtained;
         private IDictionary<string, Metrics> testCodeObtained;
-        private IDictionary<string, List<Metrics>> codeCoverageObtained;
+        private IDictionary<string, Metrics> codeCoverageObtained;
         private IDictionary<string, List<string>> mappingObtained;
         private IDictionary<string, List<string>> expectedMapping;
-        private List<Metrics> expectedMetrics;
+        private Metrics expectedMetrics;
         private Metrics metrics;
        
 
@@ -34,8 +34,7 @@ namespace MetricsIntegrator.Parser
         public MetricsParseManagerTest()
         {
             expectedMapping = new Dictionary<string, List<string>>();
-            expectedMetrics = new List<Metrics>();
-            metrics = new Metrics("id");
+            expectedMetrics = default!;
             basePath = GenerateBasePath();
         }
 
@@ -52,7 +51,11 @@ namespace MetricsIntegrator.Parser
 
             DoParsing();
 
-            WithTestedInvoked("pkgname1.pkgname2.ClassName1.testedMethod1()");
+            WithTestAndCoveredMethod(
+               "pkg.ClassName2.testMethod1()",
+               "pkg.ClassName2.testedMethod1()"
+           );
+            WithCoveredMethod("pkgname1.pkgname2.ClassName1.testedMethod1()");
             WithMetric("id", "pkgname1.pkgname2.ClassName1.testedMethod1()");
             WithMetric("field1", "Method");
             WithMetric("field2", "1");
@@ -60,6 +63,10 @@ namespace MetricsIntegrator.Parser
             BindMetrics();
             AssertSourceCodeMetricsIsCorrect();
 
+            WithTestAndCoveredMethod(
+               "pkg.ClassName2.testMethod1()",
+               "pkg.ClassName2.testedMethod1()"
+           );
             WithTestMethod("pkgname3.ClassName2.testMethod1()");
             WithMetric("id", "pkgname3.ClassName2.testMethod1()");
             WithMetric("field1", "Method");
@@ -68,16 +75,20 @@ namespace MetricsIntegrator.Parser
             BindMetrics();
             AssertTestCodeMetricsIsCorrect();
 
-            WithTestedInvoked("pkgname1.pkgname2.ClassName1.testedMethod1()");
+            WithCoveredMethod("pkgname1.pkgname2.ClassName1.testedMethod1()");
             BindTestMethods("pkgname3.ClassName2.testMethod1()", "pkgname3.ClassName2.testMethod2()");
-            WithTestedInvoked("pkgname1.pkgname2.ClassName1.testedMethod2(SomeClass<T>, SomeClass2...)");
+            WithCoveredMethod("pkgname1.pkgname2.ClassName1.testedMethod2(SomeClass<T>, SomeClass2...)");
             BindTestMethods("pkgname3.ClassName2.testMethod1()");
-            WithTestedInvoked("pkgname1.pkgname2.ClassName1.testedMethod3(SomeClass2...)");
+            WithCoveredMethod("pkgname1.pkgname2.ClassName1.testedMethod3(SomeClass2...)");
             BindTestMethods("pkgname3.ClassName2.testMethod1()");
             AssertMappingIsCorrect();
 
-            WithTestMethod("pkgname3.ClassName2.testMethod1()");
-            WithMetric("id", "pkgname3.ClassName2.testMethod1()");
+            WithTestAndCoveredMethod(
+               "pkg.ClassName2.testMethod1()",
+               "pkg.ClassName2.testedMethod1()"
+           );
+            WithMetric("TestMethod", "pkg.ClassName2.testMethod1()");
+            WithMetric("TestedMethod", "pkg.ClassName2.testedMethod1()");
             WithMetric("field1", "1");
             WithMetric("field2", "2");
             BindMetrics();
@@ -167,20 +178,26 @@ namespace MetricsIntegrator.Parser
             expectedMapping = new Dictionary<string, List<string>>();
         }
 
-        private void AssertCodeCoverageIsCorrect()
+        private void WithTestAndCoveredMethod(string testMethod, string coveredMethod)
         {
-            IDictionary<string, List<Metrics>> expected = new Dictionary<string, List<Metrics>>();
-
-            expected.Add(testMethod, expectedMetrics);
-
-            Assert.Equal(expected, codeCoverageObtained);
-
-            expectedMetrics = new List<Metrics>();
+            metrics = new Metrics(testMethod + coveredMethod);
         }
 
-        private void WithTestedInvoked(string signature)
+        private void AssertCodeCoverageIsCorrect()
         {
-            testedInvoked = signature;
+            codeCoverageObtained.TryGetValue(
+                expectedMetrics.GetID(), 
+                out Metrics? obtainedMetrics
+            );
+
+            Assert.Equal(expectedMetrics, obtainedMetrics);
+
+            expectedMetrics = default!;
+        }
+
+        private void WithCoveredMethod(string signature)
+        {
+            coveredMethod = signature;
         }
 
         private void WithMetric(string metricName, string metricValue)
@@ -190,19 +207,21 @@ namespace MetricsIntegrator.Parser
 
         private void BindMetrics()
         {
-            expectedMetrics.Add(metrics);
+            expectedMetrics = metrics;
 
-            metrics = new Metrics("id");
+            metrics = default!;
         }
 
         private void AssertSourceCodeMetricsIsCorrect()
         {
-            Dictionary<string, Metrics> metrics = new Dictionary<string, Metrics>();
-            metrics.Add(testedInvoked, expectedMetrics[0]);
+            sourceCodeObtained.TryGetValue(
+                coveredMethod, 
+                out Metrics? obtained
+            );
 
-            Assert.Equal(metrics, sourceCodeObtained);
+            Assert.Equal(expectedMetrics, obtained);
 
-            expectedMetrics = new List<Metrics>();
+            expectedMetrics = default!;
         }
 
         private void WithTestMethod(string signature)
@@ -212,17 +231,17 @@ namespace MetricsIntegrator.Parser
 
         private void AssertTestCodeMetricsIsCorrect()
         {
-            Dictionary<string, Metrics> metrics = new Dictionary<string, Metrics>();
-            metrics.Add(testMethod, expectedMetrics[0]);
+            Dictionary<string, Metrics> expectedMetricsMapping = new Dictionary<string, Metrics>();
+            expectedMetricsMapping.Add(testMethod, expectedMetrics);
 
-            Assert.Equal(metrics, testCodeObtained);
+            Assert.Equal(expectedMetricsMapping, testCodeObtained);
 
-            expectedMetrics = new List<Metrics>();
+            expectedMetrics = default!;
         }
 
         private void BindTestMethods(params string[] testMethods)
         {
-            expectedMapping.Add(testedInvoked, new List<string>(testMethods));
+            expectedMapping.Add(coveredMethod, new List<string>(testMethods));
         }
     }
 }

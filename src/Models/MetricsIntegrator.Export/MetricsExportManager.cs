@@ -12,7 +12,7 @@ namespace MetricsIntegrator.Export
         //---------------------------------------------------------------------
         //		Attributes
         //---------------------------------------------------------------------
-        private readonly IDictionary<string, List<Metrics>> codeCoverage;
+        private readonly IDictionary<string, Metrics> codeCoverage;
         private readonly MetricsExporterFactory exportFactory;
 
 
@@ -23,7 +23,7 @@ namespace MetricsIntegrator.Export
                                     IDictionary<string, List<string>> mapping,
                                     IDictionary<string, Metrics> sourceCodeMetrics,
                                     IDictionary<string, Metrics> testCodeMetrics,
-                                    IDictionary<string, List<Metrics>> codeCoverage,
+                                    IDictionary<string, Metrics> codeCoverage,
                                     FilterMetrics filterMetrics)
         {
             this.codeCoverage = codeCoverage;
@@ -47,7 +47,7 @@ namespace MetricsIntegrator.Export
             private IDictionary<string, List<string>> mapping;
             private IDictionary<string, Metrics> sourceCodeMetrics;
             private IDictionary<string, Metrics> testCodeMetrics;
-            private IDictionary<string, List<Metrics>> codeCoverage;
+            private IDictionary<string, Metrics> codeCoverage;
             private FilterMetrics filterMetrics;
 
 
@@ -89,7 +89,7 @@ namespace MetricsIntegrator.Export
                 return this;
             }
 
-            public Builder CodeCoverage(IDictionary<string, List<Metrics>> metrics)
+            public Builder CodeCoverage(IDictionary<string, Metrics> metrics)
             {
                 codeCoverage = metrics;
 

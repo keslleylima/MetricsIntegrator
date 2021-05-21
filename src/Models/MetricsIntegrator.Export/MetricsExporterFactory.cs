@@ -125,13 +125,16 @@ namespace MetricsIntegrator.Export
         //---------------------------------------------------------------------
         //		Factories
         //---------------------------------------------------------------------
-        public IExporter CreateCodeCoverageCSVExporter(IDictionary<string, 
-                                                       List<Metrics>> metrics)
+        public IExporter CreateCodeCoverageCSVExporter(IDictionary<string, Metrics> metrics)
         {
             if ((metrics == null) || metrics.Count == 0)
                 throw new ArgumentException("There are no metrics");
 
-            return CreateMetricsCSVExporter(outputPath, metrics, filterMetrics.CodeCoverageFilter);
+            return CreateMetricsCSVExporter(
+                outputPath, 
+                metrics, 
+                filterMetrics.CodeCoverageFilter
+            );
         }
 
 
@@ -139,15 +142,15 @@ namespace MetricsIntegrator.Export
         //		Methods
         //---------------------------------------------------------------------
         private IExporter CreateMetricsCSVExporter(string outputPath, 
-                                                   IDictionary<string, List<Metrics>> metrics,
+                                                   IDictionary<string, Metrics> metrics,
                                                    ISet<string> baseMetricsFilter)
         {
-            return new MetricsCSVExporter.Builder()
+            return new MetricsCsvExporter.Builder()
                .OutputPath(outputPath)
                .Mapping(mapping)
                .SourceCodeMetrics(sourceCodeMetrics)
                .TestCodeMetrics(testCodeMetrics)
-               .BaseMetrics(metrics)
+               .CoverageMetrics(metrics)
                .UsingDelimiter(DELIMITER)
                .SourceCodeMetricsFilter(filterMetrics.SourceCodeMetricsFilter)
                .BaseMetricsFilter(baseMetricsFilter)
