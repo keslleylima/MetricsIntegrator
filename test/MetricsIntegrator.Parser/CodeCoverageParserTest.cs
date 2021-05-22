@@ -99,7 +99,7 @@ namespace MetricsIntegrator.Parser
 
         private void WithTestAndCoveredMethod(string testMethod, string coveredMethod)
         {
-            metrics = new Metrics(testMethod + coveredMethod);
+            metrics = new Metrics(testMethod + ";" + coveredMethod);
         }
 
         private void WithMetric(string metricName, string metricValue)
@@ -121,7 +121,7 @@ namespace MetricsIntegrator.Parser
 
         private void AssertParsingIsCorrect()
         {
-            obtained.TryGetValue(expectedMetrics.GetID(), out Metrics? obtainedMetrics);
+            obtained.TryGetValue(expectedMetrics.GetID(), out Metrics obtainedMetrics);
 
             Assert.Equal(expectedMetrics, obtainedMetrics);
         }

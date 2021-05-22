@@ -22,7 +22,6 @@ namespace MetricsIntegrator.Export
         private MetricsExportManager(string outputPath,
                                     IDictionary<string, List<string>> mapping,
                                     IDictionary<string, Metrics> sourceCodeMetrics,
-                                    IDictionary<string, Metrics> testCodeMetrics,
                                     IDictionary<string, Metrics> codeCoverage,
                                     FilterMetrics filterMetrics)
         {
@@ -32,7 +31,6 @@ namespace MetricsIntegrator.Export
                 .OutputPath(outputPath)
                 .Mapping(mapping)
                 .SourceCodeMetrics(sourceCodeMetrics)
-                .TestCodeMetrics(testCodeMetrics)
                 .FilterMetrics(filterMetrics)
                 .Build();
         }
@@ -46,7 +44,6 @@ namespace MetricsIntegrator.Export
             private string outputPath;
             private IDictionary<string, List<string>> mapping;
             private IDictionary<string, Metrics> sourceCodeMetrics;
-            private IDictionary<string, Metrics> testCodeMetrics;
             private IDictionary<string, Metrics> codeCoverage;
             private FilterMetrics filterMetrics;
 
@@ -56,7 +53,6 @@ namespace MetricsIntegrator.Export
                 outputPath = default!;
                 mapping = default!;
                 sourceCodeMetrics = default!;
-                testCodeMetrics = default!;
                 codeCoverage = default!;
                 filterMetrics = default!;
             }
@@ -78,13 +74,6 @@ namespace MetricsIntegrator.Export
             public Builder SourceCodeMetrics(IDictionary<string, Metrics> metrics)
             {
                 sourceCodeMetrics = metrics;
-
-                return this;
-            }
-
-            public Builder TestCodeMetrics(IDictionary<string, Metrics> metrics)
-            {
-                testCodeMetrics = metrics;
 
                 return this;
             }
@@ -111,7 +100,6 @@ namespace MetricsIntegrator.Export
                     outputPath,
                     mapping,
                     sourceCodeMetrics,
-                    testCodeMetrics,
                     codeCoverage,
                     filterMetrics
                 );
@@ -127,9 +115,6 @@ namespace MetricsIntegrator.Export
 
                 if (sourceCodeMetrics == null)
                     throw new ArgumentException("Source code metrics cannot be null");
-
-                if (testCodeMetrics == null)
-                    throw new ArgumentException("Test code metrics cannot be null");
 
                 if (codeCoverage == null)
                     throw new ArgumentException("Code coverage metrics cannot be null");

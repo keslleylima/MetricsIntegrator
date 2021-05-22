@@ -20,7 +20,6 @@ namespace MetricsIntegrator.Parser
         private string scFile;
         private string codeCoverageFile;
         private IDictionary<string, Metrics> sourceCodeObtained;
-        private IDictionary<string, Metrics> testCodeObtained;
         private IDictionary<string, Metrics> codeCoverageObtained;
         private IDictionary<string, List<string>> mappingObtained;
         private IDictionary<string, List<string>> expectedMapping;
@@ -63,21 +62,9 @@ namespace MetricsIntegrator.Parser
             BindMetrics();
             AssertSourceCodeMetricsIsCorrect();
 
-            WithTestAndCoveredMethod(
-               "pkg.ClassName2.testMethod1()",
-               "pkg.ClassName2.testedMethod1()"
-           );
-            WithTestMethod("pkgname3.ClassName2.testMethod1()");
-            WithMetric("id", "pkgname3.ClassName2.testMethod1()");
-            WithMetric("field1", "Method");
-            WithMetric("field2", "1");
-            WithMetric("field3", "1");
-            BindMetrics();
-            AssertTestCodeMetricsIsCorrect();
-
             WithCoveredMethod("pkgname1.pkgname2.ClassName1.testedMethod1()");
             BindTestMethods("pkgname3.ClassName2.testMethod1()", "pkgname3.ClassName2.testMethod2()");
-            WithCoveredMethod("pkgname1.pkgname2.ClassName1.testedMethod2(SomeClass<T>, SomeClass2...)");
+            WithCoveredMethod("pkgname1.pkgname2.ClassName1.testedMethod2(SomeClass<T>,SomeClass2...)");
             BindTestMethods("pkgname3.ClassName2.testMethod1()");
             WithCoveredMethod("pkgname1.pkgname2.ClassName1.testedMethod3(SomeClass2...)");
             BindTestMethods("pkgname3.ClassName2.testMethod1()");
@@ -156,7 +143,6 @@ namespace MetricsIntegrator.Parser
             parser.Parse();
 
             sourceCodeObtained = parser.SourceCodeMetrics;
-            testCodeObtained = parser.TestCodeMetrics;
             codeCoverageObtained = parser.CodeCoverage;
             mappingObtained = parser.Mapping;
         }
@@ -180,14 +166,14 @@ namespace MetricsIntegrator.Parser
 
         private void WithTestAndCoveredMethod(string testMethod, string coveredMethod)
         {
-            metrics = new Metrics(testMethod + coveredMethod);
+            metrics = new Metrics(testMethod + ";" + coveredMethod);
         }
 
         private void AssertCodeCoverageIsCorrect()
         {
             codeCoverageObtained.TryGetValue(
                 expectedMetrics.GetID(), 
-                out Metrics? obtainedMetrics
+                out Metrics obtainedMetrics
             );
 
             Assert.Equal(expectedMetrics, obtainedMetrics);
@@ -216,7 +202,7 @@ namespace MetricsIntegrator.Parser
         {
             sourceCodeObtained.TryGetValue(
                 coveredMethod, 
-                out Metrics? obtained
+                out Metrics obtained
             );
 
             Assert.Equal(expectedMetrics, obtained);
@@ -227,16 +213,6 @@ namespace MetricsIntegrator.Parser
         private void WithTestMethod(string signature)
         {
             testMethod = signature;
-        }
-
-        private void AssertTestCodeMetricsIsCorrect()
-        {
-            Dictionary<string, Metrics> expectedMetricsMapping = new Dictionary<string, Metrics>();
-            expectedMetricsMapping.Add(testMethod, expectedMetrics);
-
-            Assert.Equal(expectedMetricsMapping, testCodeObtained);
-
-            expectedMetrics = default!;
         }
 
         private void BindTestMethods(params string[] testMethods)

@@ -38,7 +38,7 @@ namespace MetricsIntegrator.Parser
             WithTestedInvoked("pkgname1.pkgname2.ClassName1.testedMethod1()");
             BindTestMethods("pkgname3.ClassName2.testMethod1()", "pkgname3.ClassName2.testMethod2()");
 
-            WithTestedInvoked("pkgname1.pkgname2.ClassName1.testedMethod2(SomeClass<T>, SomeClass2...)");
+            WithTestedInvoked("pkgname1.pkgname2.ClassName1.testedMethod2(SomeClass<T>,SomeClass2...)");
             BindTestMethods("pkgname3.ClassName2.testMethod1()");
 
             WithTestedInvoked("pkgname1.pkgname2.ClassName1.testedMethod3(SomeClass2...)");

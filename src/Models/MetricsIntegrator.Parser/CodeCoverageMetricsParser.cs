@@ -17,7 +17,6 @@ namespace MetricsIntegrator.Parser
         //---------------------------------------------------------------------
         private readonly string filepath;
         private string delimiter = default!;
-        private int identifierColumnIndex = default!;
 
 
         //---------------------------------------------------------------------
@@ -61,7 +60,7 @@ namespace MetricsIntegrator.Parser
         {
             delimiter = ExtractDelimiterFrom(header);
             FieldKeys = ExtractFieldKeysFrom(header, delimiter);
-            identifierColumnIndex = ExtractIdentifierColumnIndexFrom(FieldKeys);
+            int identifierColumnIndex = ExtractIdentifierColumnIndexFrom(FieldKeys);
 
             if (identifierColumnIndex == -1)
                 throw new ApplicationException("Identifier column not found");
@@ -111,7 +110,12 @@ namespace MetricsIntegrator.Parser
 
             foreach (string line in lines.Skip(1).ToArray())
             {
-                Metrics metric = CreateCodeCoverageMetrics(line.Split(delimiter), fieldKeys);
+                string normalizedLine = line.Replace(" ", "");
+                
+                Metrics metric = CreateCodeCoverageMetrics(
+                    normalizedLine.Split(delimiter), 
+                    fieldKeys
+                );
                 
                 metrics.Add(metric.GetID(), metric);
             }
@@ -123,6 +127,7 @@ namespace MetricsIntegrator.Parser
         {
             Metrics metrics = new Metrics(
                 fieldValue[0] 
+                + ";"
                 + fieldValue[1]
             );
 
