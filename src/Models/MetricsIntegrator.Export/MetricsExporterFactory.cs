@@ -16,7 +16,6 @@ namespace MetricsIntegrator.Export
         private readonly string outputPath;
         private readonly IDictionary<string, List<string>> mapping;
         private readonly IDictionary<string, Metrics> sourceCodeMetrics;
-        private readonly IDictionary<string, Metrics> testCodeMetrics;
         private readonly FilterMetrics filterMetrics;
 
 
@@ -26,13 +25,11 @@ namespace MetricsIntegrator.Export
         private MetricsExporterFactory(string outputPath,
                                        IDictionary<string, List<string>> mapping,
                                        IDictionary<string, Metrics> sourceCodeMetrics,
-                                       IDictionary<string, Metrics> testCodeMetrics,
                                        FilterMetrics filterMetrics)
         {
             this.outputPath = outputPath;
             this.mapping = mapping;
             this.sourceCodeMetrics = sourceCodeMetrics;
-            this.testCodeMetrics = testCodeMetrics;
             this.filterMetrics = filterMetrics;
         }
 
@@ -45,7 +42,6 @@ namespace MetricsIntegrator.Export
             private string outputPath;
             private IDictionary<string, List<string>> mapping;
             private IDictionary<string, Metrics> sourceCodeMetrics;
-            private IDictionary<string, Metrics> testCodeMetrics;
             private FilterMetrics filterMetrics;
 
             public Builder()
@@ -53,7 +49,6 @@ namespace MetricsIntegrator.Export
                 outputPath = default!;
                 mapping = default!;
                 sourceCodeMetrics = default!;
-                testCodeMetrics = default!;
                 filterMetrics = default!;
             }
 
@@ -78,13 +73,6 @@ namespace MetricsIntegrator.Export
                 return this;
             }
 
-            public Builder TestCodeMetrics(IDictionary<string, Metrics> metrics)
-            {
-                testCodeMetrics = metrics;
-
-                return this;
-            }
-
             public Builder FilterMetrics(FilterMetrics filterMetrics)
             {
                 this.filterMetrics = filterMetrics;
@@ -100,7 +88,6 @@ namespace MetricsIntegrator.Export
                     outputPath,
                     mapping,
                     sourceCodeMetrics,
-                    testCodeMetrics,
                     filterMetrics
                 );
             }
@@ -115,9 +102,6 @@ namespace MetricsIntegrator.Export
 
                 if (sourceCodeMetrics == null)
                     throw new ArgumentException("Source code metrics cannot be null");
-
-                if (testCodeMetrics == null)
-                    throw new ArgumentException("Test code metrics cannot be null");
             }
         }
 
@@ -147,9 +131,7 @@ namespace MetricsIntegrator.Export
         {
             return new MetricsCsvExporter.Builder()
                .OutputPath(outputPath)
-               .Mapping(mapping)
                .SourceCodeMetrics(sourceCodeMetrics)
-               .TestCodeMetrics(testCodeMetrics)
                .CoverageMetrics(metrics)
                .UsingDelimiter(DELIMITER)
                .SourceCodeMetricsFilter(filterMetrics.SourceCodeMetricsFilter)

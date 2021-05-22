@@ -15,13 +15,11 @@ namespace MetricsIntegrator.Export
         //		Attributes
         //---------------------------------------------------------------------
         private readonly string outputPath;
-        private readonly IDictionary<string, List<string>> mapping;
         private readonly IDictionary<string, Metrics> sourceCodeMetrics;
-        private readonly IDictionary<string, Metrics> testCodeMetrics;
         private readonly string delimiter;
         private readonly StringBuilder lines;
         private readonly ISet<string> sourceCodeMetricsFilter;
-        private readonly ISet<string> baseMetricsFilter;
+        private readonly ISet<string> codeCoverageFilter;
         private readonly IDictionary<string, Metrics> coverageMetrics; 
 
 
@@ -30,22 +28,18 @@ namespace MetricsIntegrator.Export
         //---------------------------------------------------------------------
         private MetricsCsvExporter(string outputPath,
                                    string delimiter,
-                                   IDictionary<string, List<string>> mapping,
                                    IDictionary<string, Metrics> dictSourceCode,
-                                   IDictionary<string, Metrics> dictSourceTest,
                                    IDictionary<string, Metrics> coverageMetrics,
                                    ISet<string> sourceCodeMetricsFilter,
                                    ISet<string> baseMetricsFilter)
         {
             this.outputPath = outputPath;
-            this.mapping = mapping;
             this.sourceCodeMetrics = dictSourceCode;
-            this.testCodeMetrics = dictSourceTest;
             this.delimiter = delimiter;
             this.coverageMetrics = coverageMetrics;
             lines = new StringBuilder();
             this.sourceCodeMetricsFilter = sourceCodeMetricsFilter;
-            this.baseMetricsFilter = baseMetricsFilter;
+            this.codeCoverageFilter = baseMetricsFilter;
         }
 
 
@@ -67,9 +61,7 @@ namespace MetricsIntegrator.Export
         {
             private string outputPath;
             private string delimiter;
-            private IDictionary<string, List<string>> mapping;
             private IDictionary<string, Metrics> sourceCodeMetrics;
-            private IDictionary<string, Metrics> testCodeMetrics;
             private IDictionary<string, Metrics> coverageMetrics;
             private ISet<string> sourceCodeMetricsFilter;
             private ISet<string> baseMetricsFilter;
@@ -78,9 +70,7 @@ namespace MetricsIntegrator.Export
             {
                 outputPath = default!;
                 delimiter = default!;
-                mapping = default!;
                 sourceCodeMetrics = default!;
-                testCodeMetrics = default!;
                 coverageMetrics = default!;
                 sourceCodeMetricsFilter = default!;
                 baseMetricsFilter = default!;
@@ -93,23 +83,9 @@ namespace MetricsIntegrator.Export
                 return this;
             }
 
-            public Builder Mapping(IDictionary<string, List<string>> mapping)
-            {
-                this.mapping = mapping;
-
-                return this;
-            }
-
             public Builder SourceCodeMetrics(IDictionary<string, Metrics> metrics)
             {
                 sourceCodeMetrics = metrics;
-
-                return this;
-            }
-
-            public Builder TestCodeMetrics(IDictionary<string, Metrics> metrics)
-            {
-                testCodeMetrics = metrics;
 
                 return this;
             }
@@ -160,9 +136,7 @@ namespace MetricsIntegrator.Export
                 return new MetricsCsvExporter(
                     outputPath,
                     delimiter,
-                    mapping, 
                     sourceCodeMetrics, 
-                    testCodeMetrics,
                     coverageMetrics,
                     sourceCodeMetricsFilter,
                     baseMetricsFilter
@@ -174,14 +148,8 @@ namespace MetricsIntegrator.Export
                 if (outputPath == null)
                     throw new ArgumentException("Output path cannot be null");
 
-                if ((mapping == null) || (mapping.Count == 0))
-                    throw new ArgumentException("Mapping cannot be empty");
-
                 if ((sourceCodeMetrics == null) || (sourceCodeMetrics.Count == 0))
                     throw new ArgumentException("Source code metrics cannot be empty");
-
-                if ((testCodeMetrics == null) || (testCodeMetrics.Count == 0))
-                    throw new ArgumentException("Test code metrics cannot be empty");
 
                 if ((coverageMetrics == null) || (coverageMetrics.Count == 0))
                     throw new ArgumentException("Coverage metrics cannot be empty");
@@ -210,16 +178,16 @@ namespace MetricsIntegrator.Export
 
         private void WriteTestedMethodMetrics()
         {
-            foreach (string metric in GetTestedMethodMetrics())
+            foreach (string metric in GetCoveredMethodMetrics())
             {
                 lines.Append(metric);
                 lines.Append(delimiter);
             }
         }
 
-        private List<string> GetTestedMethodMetrics()
+        private List<string> GetCoveredMethodMetrics()
         {
-            return GetFirstMetricFrom(testCodeMetrics).GetAllMetrics(sourceCodeMetricsFilter);
+            return GetFirstMetricFrom(sourceCodeMetrics).GetAllMetrics(sourceCodeMetricsFilter);
         }
 
         private Metrics GetFirstMetricFrom(IDictionary<string, Metrics> dictionary)
@@ -241,10 +209,7 @@ namespace MetricsIntegrator.Export
 
         private List<string> GetTestMethodMetrics()
         {
-            if (testCodeMetrics.Count == 0)
-                return new List<string>();
-
-            return GetFirstMetricFrom(testCodeMetrics).GetAllMetrics(sourceCodeMetricsFilter);
+            return GetCoveredMethodMetrics();
         }
 
         private void WriteBaseMetrics()
@@ -263,49 +228,34 @@ namespace MetricsIntegrator.Export
 
             var firstMetric = firstOfBaseMetrics.Current.Value;
    
-            return firstMetric.GetAllMetrics(baseMetricsFilter);
+            return firstMetric.GetAllMetrics(codeCoverageFilter);
         }
 
         private void WriteBody()
         {
-            foreach (KeyValuePair<string, List<string>> kvp in mapping)
+            foreach (KeyValuePair<string, Metrics> kvp in coverageMetrics)
             {
-                string testedMethod = kvp.Key;
-                List<string> testMethods = kvp.Value;
+                string testMethod = kvp.Key.Split(";")[0];
+                string coveredMethod = kvp.Key.Split(";")[1];
+                Metrics metrics = kvp.Value;
 
-                if (!sourceCodeMetrics.ContainsKey(testedMethod))
+                if (!HasCodeMetricsOfTestAndCoveredMethod(testMethod, coveredMethod))
                     continue;
 
-                WriteMetricsOfTestedMethod(testedMethod, testMethods);
+                WriteMetricsOf(coveredMethod);
+                WriteMetricsOf(testMethod);
+                WriteCoverageMetrics(metrics);
+                WriteBreakLine();
             }
         }
 
-        private void WriteMetricsOfTestedMethod(string testedMethod, List<string> testMethods)
+        private bool HasCodeMetricsOfTestAndCoveredMethod(string testMethod, string coveredMethod)
         {
-            foreach (string testMethod in testMethods)
-            {
-                if (!testCodeMetrics.ContainsKey(testMethod))
-                    continue;
-
-                if (!coverageMetrics.ContainsKey(testMethod + testedMethod))
-                    continue;
-
-                coverageMetrics.TryGetValue(
-                    testMethod + testedMethod, 
-                    out Metrics? metrics
-                );
-
-                if (metrics != null)
-                {
-                    WriteMetricsOfTestedMethod(testedMethod);
-                    WriteMetricsOfTestMethod(testMethod);
-                    WriteMetricsOfBaseMetrics(metrics);
-                    WriteBreakLine();
-                }
-            }
+            return  sourceCodeMetrics.ContainsKey(testMethod) 
+                    && sourceCodeMetrics.ContainsKey(coveredMethod);
         }
 
-        private void WriteMetricsOfTestedMethod(string testedMethod)
+        private void WriteMetricsOf(string testedMethod)
         {
             sourceCodeMetrics.TryGetValue(testedMethod, out Metrics? metricsSourceCode);
 
@@ -320,24 +270,9 @@ namespace MetricsIntegrator.Export
             }
         }
 
-        private void WriteMetricsOfTestMethod(string testMethod)
+        private void WriteCoverageMetrics(Metrics metrics)
         {
-            testCodeMetrics.TryGetValue(testMethod, out Metrics? metricsSourceTest);
-
-            List<string>? metricValues = metricsSourceTest
-                    ?.GetAllMetricValues(sourceCodeMetricsFilter) 
-                    ?? new List<string>();
-
-            foreach (string metricValue in metricValues)
-            {
-                lines.Append(metricValue);
-                lines.Append(delimiter);
-            }
-        }
-
-        private void WriteMetricsOfBaseMetrics(Metrics metrics)
-        {
-            foreach (string metricValue in metrics.GetAllMetricValues(baseMetricsFilter))
+            foreach (string metricValue in metrics.GetAllMetricValues(codeCoverageFilter))
             {
                 lines.Append(metricValue);
                 lines.Append(delimiter);
@@ -346,7 +281,7 @@ namespace MetricsIntegrator.Export
 
         private void WriteBreakLine()
         {
-            lines.Append("\n");
+            lines.Append('\n');
         }
 
         private void SaveFile()

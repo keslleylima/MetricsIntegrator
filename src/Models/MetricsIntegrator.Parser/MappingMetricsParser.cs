@@ -79,7 +79,7 @@ namespace MetricsIntegrator.Parser
 
         private string ExtractTestedMethod(string[] columns)
         {
-            return columns[0];
+            return columns[0].Replace(" ", "");
         }
 
         private List<string> ExtractTestMethods(string[] columns)
@@ -91,7 +91,9 @@ namespace MetricsIntegrator.Parser
                 if (columns[i].Length == 0)
                     continue;
 
-                testMethods.Add(columns[i]);
+                string normalizedLine = columns[i].Replace(" ", "");
+                
+                testMethods.Add(normalizedLine);
             }
 
             return testMethods;

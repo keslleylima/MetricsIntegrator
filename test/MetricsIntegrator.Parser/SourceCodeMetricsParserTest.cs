@@ -13,14 +13,10 @@ namespace MetricsIntegrator.Parser
         //		Attributes
         //---------------------------------------------------------------------
         private readonly string basePath;
-        private readonly Metrics expectedTestCodeMetrics;
         private readonly Dictionary<string, List<string>> mapping;
         private string filename;
-        private string testedInvoked;
-        private string testMethod;
-        private bool isMetricOfTestedInvoked;
+        private string currentMethod;
         private Dictionary<string, Metrics> sourceCodeMetricsObtained;
-        private Dictionary<string, Metrics> testCodeMetricsObtained;
         private Metrics expectedSourceCodeMetrics;
 
 
@@ -30,12 +26,9 @@ namespace MetricsIntegrator.Parser
         public SourceCodeMetricsParserTest()
         {
             basePath = GenerateBasePath();
-            isMetricOfTestedInvoked = false;
             mapping = new Dictionary<string, List<string>>();
             sourceCodeMetricsObtained = new Dictionary<string, Metrics>();
-            testCodeMetricsObtained = new Dictionary<string, Metrics>();
             expectedSourceCodeMetrics = new Metrics("id");
-            expectedTestCodeMetrics = new Metrics("id");
         }
 
 
@@ -48,14 +41,8 @@ namespace MetricsIntegrator.Parser
             UsingFile("sc-test.csv");
             UsingMapping("pkgname1.pkgname2.ClassName1.testedMethod1()", "pkgname3.ClassName2.testMethod1()");
 
-            WithTestedInvoked("pkgname1.pkgname2.ClassName1.testedMethod1()");
+            WithSignature("pkgname1.pkgname2.ClassName1.testedMethod1()");
             BindMetric("id", "pkgname1.pkgname2.ClassName1.testedMethod1()");
-            BindMetric("field1", "Method");
-            BindMetric("field2", "1");
-            BindMetric("field3", "1");
-
-            WithTestMethod("pkgname3.ClassName2.testMethod1()");
-            BindMetric("id", "pkgname3.ClassName2.testMethod1()");
             BindMetric("field1", "Method");
             BindMetric("field2", "1");
             BindMetric("field3", "1");
@@ -63,7 +50,6 @@ namespace MetricsIntegrator.Parser
             DoParsing();
             
             AssertSourceCodeMetricsIsCorrect();
-            AssertTestCodeMetricsIsCorrect();
         }
 
         [Fact]
@@ -93,15 +79,6 @@ namespace MetricsIntegrator.Parser
             });
         }
 
-        [Fact]
-        public void TestConstructorWithNullMapping()
-        {
-            Assert.Throws<ArgumentException>(() =>
-            {
-                new SourceCodeMetricsParser(basePath + "sc-test.csv", null);
-            });
-        }
-
 
         //---------------------------------------------------------------------
         //		Methods
@@ -124,28 +101,14 @@ namespace MetricsIntegrator.Parser
             mapping.Add(testedInvoked, new List<string>(testMethods));
         }
 
-        private void WithTestedInvoked(string signature)
+        private void WithSignature(string signature)
         {
-            testedInvoked = signature;
-            isMetricOfTestedInvoked = true;
+            currentMethod = signature;
         }
 
         private void BindMetric(string metricName, string metricValue)
         {
-            if (isMetricOfTestedInvoked)
-            {
-                expectedSourceCodeMetrics.AddMetric(metricName, metricValue);
-            }
-            else
-            {
-                expectedTestCodeMetrics.AddMetric(metricName, metricValue);
-            }
-        }
-
-        private void WithTestMethod(string signature)
-        {
-            testMethod = signature;
-            isMetricOfTestedInvoked = false;
+            expectedSourceCodeMetrics.AddMetric(metricName, metricValue);
         }
 
         private void DoParsing()
@@ -154,27 +117,15 @@ namespace MetricsIntegrator.Parser
             parser.Parse();
 
             sourceCodeMetricsObtained = parser.SourceCodeMetrics;
-            testCodeMetricsObtained = parser.SourceTestMetrics;
         }
 
         private void AssertSourceCodeMetricsIsCorrect()
         {
-            Dictionary<string, Metrics> expectedMetrics = new Dictionary<string, Metrics>();
-            expectedMetrics.Add(testedInvoked, expectedSourceCodeMetrics);
+            sourceCodeMetricsObtained.TryGetValue(currentMethod, out Metrics obtainedMetrics);
 
-            Assert.Equal(expectedMetrics, sourceCodeMetricsObtained);
+            Assert.Equal(expectedSourceCodeMetrics, obtainedMetrics);
 
             expectedSourceCodeMetrics = new Metrics("id");
-        }
-
-        private void AssertTestCodeMetricsIsCorrect()
-        {
-            Dictionary<string, Metrics> expectedMetrics = new Dictionary<string, Metrics>();
-            expectedMetrics.Add(testMethod, expectedTestCodeMetrics);
-
-            Assert.Equal(expectedMetrics, testCodeMetricsObtained);
-
-            testCodeMetricsObtained = new Dictionary<string, Metrics>();
         }
     }
 }

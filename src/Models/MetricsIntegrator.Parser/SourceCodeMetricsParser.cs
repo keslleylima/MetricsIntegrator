@@ -16,7 +16,6 @@ namespace MetricsIntegrator.Parser
         //		Attributes
         //---------------------------------------------------------------------
         private readonly string filepath;
-        private readonly IDictionary<string, List<string>> mapping;
         private string delimiter = default!;
         private int identifierColumnIndex = default!;
 
@@ -33,14 +32,9 @@ namespace MetricsIntegrator.Parser
             if (!File.Exists(filepath))
                 throw new ArgumentException("File does not exist: " + filepath);
 
-            if (mapping == null)
-                throw new ArgumentException("Mapping cannot be null");
-
             this.filepath = filepath;
-            this.mapping = mapping;
 
             SourceCodeMetrics = new Dictionary<string, Metrics>();
-            SourceTestMetrics = new Dictionary<string, Metrics>();
             FieldKeys = new List<string>();
             SourceCodeIdentifierKey = default!;
         }
@@ -53,11 +47,6 @@ namespace MetricsIntegrator.Parser
         ///     Tested methods and constructors by a test method.
         /// </summary>
         public Dictionary<string, Metrics> SourceCodeMetrics { get; private set; }
-
-        /// <summary>
-        ///     Test methods that are tested by a test method.
-        /// </summary>
-        public Dictionary<string, Metrics> SourceTestMetrics { get; private set; }
 
         public List<string> FieldKeys { get; private set; }
         public string SourceCodeIdentifierKey { get; private set; }
@@ -126,58 +115,43 @@ namespace MetricsIntegrator.Parser
         {
             foreach (string line in lines.Skip(1).ToArray())
             {
-                string[] columns = line.Split(delimiter);
-
-                if (!IsMethodOrConstructorSignature(columns[identifierColumnIndex]))
+                if (!line.Contains(")") || !line.Contains("("))
                     continue;
-                
-                if (IsTestMethod(columns[identifierColumnIndex]))
-                    ParseTestMethod(columns, fields);
-                else
-                    ParseTestedMethodOrConstructor(columns, fields);
+
+                ParseMethod(ExtractTermsOf(line), fields);
             }
         }
 
-        private bool IsMethodOrConstructorSignature(string signature)
+        private string[] ExtractTermsOf(string line)
         {
-            Regex regexSignature = new Regex(
-                @".*([^.]\.)+[^.]+\(.*\).*",
-                RegexOptions.Compiled | RegexOptions.IgnoreCase
-            );
+            string[] terms;
+            string normalizedLine = line.Replace("\"", "");
+            string parameterSeparator = "^";
+            int parenthesesStart = normalizedLine.IndexOf("(");
+            int parenthesesEnd = normalizedLine.IndexOf(")");
+            string parenthesesContent = normalizedLine.Substring(parenthesesStart + 1, parenthesesEnd - parenthesesStart - 1);
 
-            return regexSignature.IsMatch(signature);
-        }
+            string lineWithNormalizedParametersSeparator = normalizedLine.Substring(0, parenthesesStart + 1)
+                + parenthesesContent.Replace(",", parameterSeparator)
+                + normalizedLine.Substring(parenthesesEnd);
 
-        private bool IsTestMethod(string signature)
-        {
-            return !mapping.ContainsKey(signature);
-        }
+            terms = lineWithNormalizedParametersSeparator.Split(delimiter);
 
-        private void ParseTestMethod(string[] columns, List<string> fields)
-        {
-            foreach (KeyValuePair<string, List<string>> kvp in mapping)
+            for (int i = 0; i < terms.Length; i++)
             {
-                List<string> testMethods = kvp.Value;
-
-                foreach (string testMethod in testMethods)
-                {
-                    if (testMethod == columns[identifierColumnIndex] && 
-                        !SourceTestMetrics.ContainsKey(columns[identifierColumnIndex]))
-                    {
-                        SourceTestMetrics.Add(
-                            columns[identifierColumnIndex], 
-                            CreateMetricsContainer(columns, fields)
-                        );
-                    }
-                }
-
+                terms[i] = terms[i].Replace(parameterSeparator, ",");
             }
+
+            return terms;
         }
 
-        private void ParseTestedMethodOrConstructor(string[] columns, List<string> fields)
+        private void ParseMethod(string[] columns, List<string> fields)
         {
+            if (SourceCodeMetrics.ContainsKey(columns[identifierColumnIndex]))
+                return;
+
             SourceCodeMetrics.Add(
-                columns[identifierColumnIndex], 
+                columns[identifierColumnIndex],
                 CreateMetricsContainer(columns, fields)
             );
         }
