@@ -12,7 +12,6 @@ namespace MetricsIntegrator.Views
         //		Attributes
         //---------------------------------------------------------------------
         private readonly HomeController homeController;
-        private TextBox inMapping;
         private TextBox inSourceCode;
         private TextBox inCodeCoverage;
         private Button btnIntegrate;
@@ -24,13 +23,11 @@ namespace MetricsIntegrator.Views
         public HomeView()
         {
             homeController = default!;
-            inMapping = default!;
             inSourceCode = default!;
             inCodeCoverage = default!;
             btnIntegrate = default!;
 
             InitializeComponent();
-            BuildChooseMappingButton();
             BuildChooseSourceButton();
             BuildChooseCodeCoverageButton();
             BuildIntegrateButton();
@@ -47,13 +44,6 @@ namespace MetricsIntegrator.Views
         //---------------------------------------------------------------------
         //		Methods
         //---------------------------------------------------------------------
-        private void BuildChooseMappingButton()
-        {
-            Button btnChooseMapping = this.FindControl<Button>("btnChooseMapping");
-
-            btnChooseMapping.Background = ColorBrushFactory.ThemeAccent();
-        }
-
         private void BuildChooseSourceButton()
         {
             Button btnChooseSource = this.FindControl<Button>("btnChooseSource");
@@ -78,7 +68,6 @@ namespace MetricsIntegrator.Views
 
         private void FetchInputFields()
         {
-            inMapping = this.FindControl<TextBox>("inMapping");
             inSourceCode = this.FindControl<TextBox>("inSourceCode");
             inCodeCoverage = this.FindControl<TextBox>("inCodeCoverage");
         }
@@ -97,9 +86,7 @@ namespace MetricsIntegrator.Views
 
         private bool AreAllFilesProvided()
         {
-            return (inMapping.Text != "")
-                && (inMapping.Text != null)
-                && (inSourceCode.Text != "")
+            return (inSourceCode.Text != "")
                 && (inSourceCode.Text != null)
                 && (inCodeCoverage.Text != "")
                 && (inCodeCoverage.Text != null);
@@ -108,12 +95,6 @@ namespace MetricsIntegrator.Views
         private void InitializeComponent()
         {
             AvaloniaXamlLoader.Load(this);
-        }
-
-        private async void OnChooseMapping(object sender, RoutedEventArgs e)
-        {
-            inMapping.Text = await homeController.AskUserForMappingFile();
-            CheckIfIntegrateIsAvailable();
         }
 
         private async void OnChooseSourceCode(object sender, RoutedEventArgs e)
@@ -130,7 +111,6 @@ namespace MetricsIntegrator.Views
 
         private void OnClear(object sender, RoutedEventArgs e)
         {
-            inMapping.Text = "";
             inSourceCode.Text = "";
             inCodeCoverage.Text = "";
             btnIntegrate.IsEnabled = false;
@@ -139,7 +119,6 @@ namespace MetricsIntegrator.Views
         private void OnIntegrate(object? sender, RoutedEventArgs e)
         {
             homeController.OnIntegrate(
-                inMapping.Text, 
                 inSourceCode.Text,
                 inCodeCoverage.Text
             );

@@ -15,14 +15,10 @@ namespace MetricsIntegrator.Parser
         //---------------------------------------------------------------------
         private readonly string basePath;
         private string coveredMethod;
-        private string testMethod;
-        private string mapFile;
         private string scFile;
         private string codeCoverageFile;
         private IDictionary<string, Metrics> sourceCodeObtained;
         private IDictionary<string, Metrics> codeCoverageObtained;
-        private IDictionary<string, List<string>> mappingObtained;
-        private IDictionary<string, List<string>> expectedMapping;
         private Metrics expectedMetrics;
         private Metrics metrics;
        
@@ -32,7 +28,6 @@ namespace MetricsIntegrator.Parser
         //---------------------------------------------------------------------
         public MetricsParseManagerTest()
         {
-            expectedMapping = new Dictionary<string, List<string>>();
             expectedMetrics = default!;
             basePath = GenerateBasePath();
         }
@@ -44,7 +39,6 @@ namespace MetricsIntegrator.Parser
         [Fact]
         public void TestParse()
         {
-            UsingMappingFile("map-test.csv");
             UsingSourceCodeMetricsFile("sc-test.csv");
             UsingCodeCoverageFile("tc-test.csv");
 
@@ -61,14 +55,6 @@ namespace MetricsIntegrator.Parser
             WithMetric("field3", "1");
             BindMetrics();
             AssertSourceCodeMetricsIsCorrect();
-
-            WithCoveredMethod("pkgname1.pkgname2.ClassName1.testedMethod1()");
-            BindTestMethods("pkgname3.ClassName2.testMethod1()", "pkgname3.ClassName2.testMethod2()");
-            WithCoveredMethod("pkgname1.pkgname2.ClassName1.testedMethod2(SomeClass<T>,SomeClass2...)");
-            BindTestMethods("pkgname3.ClassName2.testMethod1()");
-            WithCoveredMethod("pkgname1.pkgname2.ClassName1.testedMethod3(SomeClass2...)");
-            BindTestMethods("pkgname3.ClassName2.testMethod1()");
-            AssertMappingIsCorrect();
 
             WithTestAndCoveredMethod(
                "pkg.ClassName2.testMethod1()",
@@ -121,11 +107,6 @@ namespace MetricsIntegrator.Parser
                     + Path.DirectorySeparatorChar;
         }
 
-        private void UsingMappingFile(string filepath)
-        {
-            mapFile = filepath;
-        }
-
         private void UsingSourceCodeMetricsFile(string filepath)
         {
             scFile = filepath;
@@ -144,24 +125,15 @@ namespace MetricsIntegrator.Parser
 
             sourceCodeObtained = parser.SourceCodeMetrics;
             codeCoverageObtained = parser.CodeCoverage;
-            mappingObtained = parser.Mapping;
         }
 
         private MetricsFileManager CreateMetricsFileManager()
         {
             return new MetricsFileManager
             {
-                MapPath = basePath + mapFile,
                 SourceCodePath = basePath + scFile,
                 CodeCoveragePath = basePath + codeCoverageFile,
             };
-        }
-
-        private void AssertMappingIsCorrect()
-        {
-            Assert.Equal(expectedMapping, mappingObtained);
-
-            expectedMapping = new Dictionary<string, List<string>>();
         }
 
         private void WithTestAndCoveredMethod(string testMethod, string coveredMethod)
@@ -208,16 +180,6 @@ namespace MetricsIntegrator.Parser
             Assert.Equal(expectedMetrics, obtained);
 
             expectedMetrics = default!;
-        }
-
-        private void WithTestMethod(string signature)
-        {
-            testMethod = signature;
-        }
-
-        private void BindTestMethods(params string[] testMethods)
-        {
-            expectedMapping.Add(coveredMethod, new List<string>(testMethods));
         }
     }
 }

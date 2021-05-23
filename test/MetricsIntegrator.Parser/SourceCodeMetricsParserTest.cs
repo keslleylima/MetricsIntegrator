@@ -13,7 +13,6 @@ namespace MetricsIntegrator.Parser
         //		Attributes
         //---------------------------------------------------------------------
         private readonly string basePath;
-        private readonly Dictionary<string, List<string>> mapping;
         private string filename;
         private string currentMethod;
         private Dictionary<string, Metrics> sourceCodeMetricsObtained;
@@ -26,7 +25,6 @@ namespace MetricsIntegrator.Parser
         public SourceCodeMetricsParserTest()
         {
             basePath = GenerateBasePath();
-            mapping = new Dictionary<string, List<string>>();
             sourceCodeMetricsObtained = new Dictionary<string, Metrics>();
             expectedSourceCodeMetrics = new Metrics("id");
         }
@@ -39,7 +37,6 @@ namespace MetricsIntegrator.Parser
         public void TestParse()
         {
             UsingFile("sc-test.csv");
-            UsingMapping("pkgname1.pkgname2.ClassName1.testedMethod1()", "pkgname3.ClassName2.testMethod1()");
 
             WithSignature("pkgname1.pkgname2.ClassName1.testedMethod1()");
             BindMetric("id", "pkgname1.pkgname2.ClassName1.testedMethod1()");
@@ -57,7 +54,7 @@ namespace MetricsIntegrator.Parser
         {
             Assert.Throws<ArgumentException>(() => 
             {
-                new SourceCodeMetricsParser(null, mapping);
+                new SourceCodeMetricsParser(null);
             });
         }
 
@@ -66,7 +63,7 @@ namespace MetricsIntegrator.Parser
         {
             Assert.Throws<ArgumentException>(() =>
             {
-                new SourceCodeMetricsParser("", mapping);
+                new SourceCodeMetricsParser("");
             });
         }
 
@@ -75,7 +72,7 @@ namespace MetricsIntegrator.Parser
         {
             Assert.Throws<ArgumentException>(() =>
             {
-                new SourceCodeMetricsParser("foo/bar.csv", mapping);
+                new SourceCodeMetricsParser("foo/bar.csv");
             });
         }
 
@@ -96,11 +93,6 @@ namespace MetricsIntegrator.Parser
             this.filename = filename;
         }
 
-        private void UsingMapping(string testedInvoked, params string[] testMethods)
-        {
-            mapping.Add(testedInvoked, new List<string>(testMethods));
-        }
-
         private void WithSignature(string signature)
         {
             currentMethod = signature;
@@ -113,7 +105,7 @@ namespace MetricsIntegrator.Parser
 
         private void DoParsing()
         {
-            SourceCodeMetricsParser parser = new SourceCodeMetricsParser(basePath + filename, mapping);
+            SourceCodeMetricsParser parser = new SourceCodeMetricsParser(basePath + filename);
             parser.Parse();
 
             sourceCodeMetricsObtained = parser.SourceCodeMetrics;

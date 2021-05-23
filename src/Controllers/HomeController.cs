@@ -29,11 +29,6 @@ namespace MetricsIntegrator.Controllers
         //---------------------------------------------------------------------
         //		Methods
         //---------------------------------------------------------------------
-        public Task<string> AskUserForMappingFile()
-        {
-            return AskUserForCSVFileOfType("Mapping file");
-        }
-
         private async Task<string> AskUserForCSVFileOfType(string type)
         {
             OpenFileDialog dialog = new OpenFileDialog();
@@ -52,23 +47,20 @@ namespace MetricsIntegrator.Controllers
             return AskUserForCSVFileOfType("Metrics file");
         }
 
-        public void OnIntegrate(string mapPath, string sourceCodePath, 
-                                string codeCoveragePath)
+        public void OnIntegrate(string sourceCodePath, string codeCoveragePath)
         {
             MetricsIntegrationManager integrator = new MetricsIntegrationManager(
-                CreateMetricsFileManager(mapPath, sourceCodePath, codeCoveragePath)
+                CreateMetricsFileManager(sourceCodePath, codeCoveragePath)
             );
 
             window.NavigateToExportView(integrator);
         }
 
-        private MetricsFileManager CreateMetricsFileManager(string mapPath,
-                                                            string sourceCodePath,
+        private MetricsFileManager CreateMetricsFileManager(string sourceCodePath,
                                                             string codeCoveragePath)
         {
             MetricsFileManager metricsFileManager = new MetricsFileManager();
 
-            metricsFileManager.MapPath = mapPath;
             metricsFileManager.SourceCodePath = sourceCodePath;
             metricsFileManager.CodeCoveragePath = codeCoveragePath;
 

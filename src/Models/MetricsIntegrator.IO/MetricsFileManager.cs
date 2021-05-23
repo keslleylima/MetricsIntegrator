@@ -11,7 +11,6 @@
         public MetricsFileManager()
         {
             SourceCodePath = string.Empty;
-            MapPath = string.Empty;
             CodeCoveragePath = string.Empty;
         }
 
@@ -20,7 +19,6 @@
         //		Properties
         //---------------------------------------------------------------------
         public string SourceCodePath { get; set; }
-        public string MapPath { get; set; }
         public string CodeCoveragePath { get; set; }
     }
 }

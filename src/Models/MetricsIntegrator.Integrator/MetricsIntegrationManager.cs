@@ -51,7 +51,6 @@ namespace MetricsIntegrator.Integrator
         {
             IExporter exportManager = new MetricsExportManager.Builder()
                 .OutputPath(outputPath)
-                .Mapping(metricsParseManager.Mapping)
                 .SourceCodeMetrics(metricsParseManager.SourceCodeMetrics)
                 .CodeCoverage(metricsParseManager.CodeCoverage)
                 .FilterMetrics(filterMetrics)

@@ -19,7 +19,6 @@ namespace MetricsIntegrator.Parser
         //---------------------------------------------------------------------
         //		Attributes
         //---------------------------------------------------------------------
-        private readonly string delimiter;
         private readonly MetricsFileManager metricsFileManager;
 
 
@@ -31,7 +30,6 @@ namespace MetricsIntegrator.Parser
         /// </summary>
         /// 
         /// <param name="metricsFileManager">Metric files</param>
-        /// <param name="delimiter">Symbol used to separate data</param>
         /// <param name="filterMetrics">Metrics to be avoided</param>
         /// 
         /// <exception cref="System.ArgumentException">
@@ -46,9 +44,7 @@ namespace MetricsIntegrator.Parser
                 throw new ArgumentException("Delimiter cannot be null");
             
             this.metricsFileManager = metricsFileManager;
-            this.delimiter = delimiter;
 
-            Mapping = new Dictionary<string, List<string>>();
             SourceCodeMetrics = new Dictionary<string, Metrics>();
             CodeCoverage = new Dictionary<string, Metrics>();
             CodeCoverageFieldKeys = new List<string>();
@@ -61,7 +57,6 @@ namespace MetricsIntegrator.Parser
         //---------------------------------------------------------------------
         //		Properties
         //---------------------------------------------------------------------
-        public IDictionary<string, List<string>> Mapping { get; private set; }
         public IDictionary<string, Metrics> SourceCodeMetrics { get; private set; }
         public IDictionary<string, Metrics> CodeCoverage { get; private set; }
         public List<string> CodeCoverageFieldKeys { get; private set; }
@@ -75,19 +70,8 @@ namespace MetricsIntegrator.Parser
         //---------------------------------------------------------------------
         public void Parse()
         {
-            DoMappingParser();
             DoCodeCoverageParsing();
-            DoSourceCodeMetricsParsing(Mapping);
-        }
-
-        private void DoMappingParser()
-        {
-            MappingMetricsParser mapParser = new MappingMetricsParser(
-                metricsFileManager.MapPath, 
-                delimiter
-            );
-
-            Mapping = mapParser.Parse();
+            DoSourceCodeMetricsParsing();
         }
 
         private void DoCodeCoverageParsing()
@@ -101,11 +85,10 @@ namespace MetricsIntegrator.Parser
             CodeCoverageIdentifierKey = tpParser.CodeCoverageIdentifierKey;
         }
 
-        private void DoSourceCodeMetricsParsing(IDictionary<string, List<string>> mapping)
+        private void DoSourceCodeMetricsParsing()
         {
             SourceCodeMetricsParser scmParser = new SourceCodeMetricsParser(
-                metricsFileManager.SourceCodePath, 
-                mapping
+                metricsFileManager.SourceCodePath
             );
             
             scmParser.Parse();
