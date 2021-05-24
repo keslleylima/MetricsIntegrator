@@ -23,8 +23,7 @@ namespace MetricsIntegrator.Parser
         //---------------------------------------------------------------------
         //		Constructor
         //---------------------------------------------------------------------
-        public SourceCodeMetricsParser(string filepath, 
-                                       IDictionary<string, List<string>> mapping)
+        public SourceCodeMetricsParser(string filepath)
         {
             if ((filepath == null) || filepath.Length == 0)
                 throw new ArgumentException("File path cannot be empty");

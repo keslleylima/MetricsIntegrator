@@ -14,7 +14,6 @@ namespace MetricsIntegrator.Export
         //---------------------------------------------------------------------
         private static readonly string DELIMITER = ";";
         private readonly string outputPath;
-        private readonly IDictionary<string, List<string>> mapping;
         private readonly IDictionary<string, Metrics> sourceCodeMetrics;
         private readonly FilterMetrics filterMetrics;
 
@@ -23,12 +22,10 @@ namespace MetricsIntegrator.Export
         //		Constructor
         //---------------------------------------------------------------------
         private MetricsExporterFactory(string outputPath,
-                                       IDictionary<string, List<string>> mapping,
                                        IDictionary<string, Metrics> sourceCodeMetrics,
                                        FilterMetrics filterMetrics)
         {
             this.outputPath = outputPath;
-            this.mapping = mapping;
             this.sourceCodeMetrics = sourceCodeMetrics;
             this.filterMetrics = filterMetrics;
         }
@@ -40,14 +37,12 @@ namespace MetricsIntegrator.Export
         public class Builder
         {
             private string outputPath;
-            private IDictionary<string, List<string>> mapping;
             private IDictionary<string, Metrics> sourceCodeMetrics;
             private FilterMetrics filterMetrics;
 
             public Builder()
             {
                 outputPath = default!;
-                mapping = default!;
                 sourceCodeMetrics = default!;
                 filterMetrics = default!;
             }
@@ -55,13 +50,6 @@ namespace MetricsIntegrator.Export
             public Builder OutputPath(string path)
             {
                 outputPath = path;
-
-                return this;
-            }
-
-            public Builder Mapping(IDictionary<string, List<string>> map)
-            {
-                mapping = map;
 
                 return this;
             }
@@ -86,7 +74,6 @@ namespace MetricsIntegrator.Export
 
                 return new MetricsExporterFactory(
                     outputPath,
-                    mapping,
                     sourceCodeMetrics,
                     filterMetrics
                 );
@@ -96,9 +83,6 @@ namespace MetricsIntegrator.Export
             {
                 if ((outputPath == null) || outputPath.Length == 0)
                     throw new ArgumentException("Output directory cannot be empty");
-
-                if (mapping == null)
-                    throw new ArgumentException("Mapping cannot be null");
 
                 if (sourceCodeMetrics == null)
                     throw new ArgumentException("Source code metrics cannot be null");

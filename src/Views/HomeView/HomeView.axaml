@@ -12,46 +12,15 @@
       <Image Height="80" Width="700" Source="/Assets/Images/header-700x80.png" />
     </StackPanel>
 
-    <ProgressBar  Minimum="0" 
-                  Maximum="100" 
-                  Value="1" 
-                  Foreground="#21b721" 
-                  Background="#3311B25A" 
+    <ProgressBar  Minimum="0"
+                  Maximum="100"
+                  Value="1"
+                  Foreground="#21b721"
+                  Background="#3311B25A"
     />
 
     <!-- Body -->
-    <StackPanel Margin="10 10 10 0">
-      <TextBlock  Text="Metrics file selection" 
-                  FontSize="40" 
-                  HorizontalAlignment="Center" 
-      />
-
-      <StackPanel Margin="0 20 0 20">
-        <TextBlock Text="Mapping file" FontSize="20" Margin="30 0 0 10" />
-        <Grid>
-          <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="*"/>
-            <ColumnDefinition Width="100"/>
-          </Grid.ColumnDefinitions>
-          <TextBox  Name="inMapping" 
-                    Watermark="File path" 
-                    Margin="0 0 10 0" 
-                    Grid.Column="0" 
-                    HorizontalAlignment="Stretch" 
-                    VerticalAlignment="Stretch" 
-                    IsEnabled="False" 
-          />
-          <Button Name="btnChooseMapping" 
-                  Click="OnChooseMapping"  
-                  Content="Select file" 
-                  Grid.Column="1" 
-                  HorizontalContentAlignment="Center" 
-                  HorizontalAlignment="Stretch" 
-                  VerticalAlignment="Stretch" 
-          />
-        </Grid>
-      </StackPanel>
-
+    <StackPanel Margin="10 80 10 80">
       <StackPanel Margin="0 20 0 20">
         <TextBlock Text="Source code metrics file" FontSize="20" Margin="30 0 0 10" />
         <Grid>
@@ -59,21 +28,21 @@
             <ColumnDefinition Width="*"/>
             <ColumnDefinition Width="100"/>
           </Grid.ColumnDefinitions>
-          <TextBox  Name="inSourceCode" 
-                    Watermark="File path" 
-                    Margin="0 0 10 0" 
-                    Grid.Column="0" 
-                    HorizontalAlignment="Stretch" 
-                    VerticalAlignment="Stretch" 
-                    IsEnabled="False" 
+          <TextBox  Name="inSourceCode"
+                    Watermark="File path"
+                    Margin="0 0 10 0"
+                    Grid.Column="0"
+                    HorizontalAlignment="Stretch"
+                    VerticalAlignment="Stretch"
+                    IsEnabled="False"
           />
-          <Button Name="btnChooseSource" 
-                  Click="OnChooseSourceCode" 
-                  Content="Select file" 
-                  Grid.Column="1" 
-                  HorizontalContentAlignment="Center" 
-                  HorizontalAlignment="Stretch" 
-                  VerticalAlignment="Stretch" 
+          <Button Name="btnChooseSource"
+                  Click="OnChooseSourceCode"
+                  Content="Select file"
+                  Grid.Column="1"
+                  HorizontalContentAlignment="Center"
+                  HorizontalAlignment="Stretch"
+                  VerticalAlignment="Stretch"
           />
         </Grid>
       </StackPanel>
@@ -85,46 +54,49 @@
             <ColumnDefinition Width="*"/>
             <ColumnDefinition Width="100"/>
           </Grid.ColumnDefinitions>
-          <TextBox  Name="inCodeCoverage" 
-                    Watermark="File path" 
-                    Margin="0 0 10 0" 
-                    Grid.Column="0" 
-                    HorizontalAlignment="Stretch" 
-                    VerticalAlignment="Stretch" 
-                    IsEnabled="False" 
+          <TextBox  Name="inCodeCoverage"
+                    Watermark="File path"
+                    Margin="0 0 10 0"
+                    Grid.Column="0"
+                    HorizontalAlignment="Stretch"
+                    VerticalAlignment="Stretch"
+                    IsEnabled="False"
           />
-          <Button Name="btnChooseCodeCoverage" 
-                  Click="OnChooseCodeCoverage" 
-                  Content="Select file" 
-                  Grid.Column="1" 
-                  HorizontalContentAlignment="Center" 
-                  HorizontalAlignment="Stretch" 
-                  VerticalAlignment="Stretch" 
+          <Button Name="btnChooseCodeCoverage"
+                  Click="OnChooseCodeCoverage"
+                  Content="Select file"
+                  Grid.Column="1"
+                  HorizontalContentAlignment="Center"
+                  HorizontalAlignment="Stretch"
+                  VerticalAlignment="Stretch"
           />
         </Grid>
       </StackPanel>
+    </StackPanel>
 
+    <!-- Footer -->
+    <StackPanel Margin="10 10 10 10">
       <Grid Margin="0 20 0 0">
         <Grid.ColumnDefinitions>
           <ColumnDefinition Width="*"/>
           <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
-        <Button Click="OnClear" 
-                Content="Clear" 
-                Margin="0 0 10 0" 
-                Grid.Column="0" 
-                HorizontalContentAlignment="Center" 
-                HorizontalAlignment="Stretch" 
+        <Button Click="OnClear"
+                Content="Clear"
+                Margin="0 0 10 0"
+                Grid.Column="0"
+                HorizontalContentAlignment="Center"
+                HorizontalAlignment="Stretch"
                 VerticalAlignment="Stretch"
         />
-        <Button Name="btnIntegrate" 
-                IsEnabled="False" 
-                Content="Integrate" 
-                HorizontalContentAlignment="Center" 
-                Margin="10 0 0 0" 
-                Grid.Column="1" 
+        <Button Name="btnIntegrate"
+                IsEnabled="False"
+                Content="Integrate"
+                HorizontalContentAlignment="Center"
+                Margin="10 0 0 0"
+                Grid.Column="1"
                 HorizontalAlignment="Stretch"
-                VerticalAlignment="Stretch" 
+                VerticalAlignment="Stretch"
         />
       </Grid>
     </StackPanel>
